@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -11,11 +12,11 @@ import router from './router'
 
 import './assets/main.css'
 
+const pinia = createPinia()
 const app = createApp(App)
 
-app.use(createPinia())
-app.use(router)
-app.use(Antd)
-app.component('Iconify', Icon)
-
-app.mount('#app')
+app.use(pinia)
+   .use(router)
+   .use(Antd)
+   .component('Iconify', Icon)
+   .mount('#app')
