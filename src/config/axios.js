@@ -1,16 +1,20 @@
 import axios from 'axios'
-import { useCommonStore } from '../stores/common'
+import { useCommonStore, useMessageStore } from '../stores'
 import {
   BASE_API_URL,
   COOKIE_PARAM,
   DEFAULT_HEADERS,
   HTTP_STATUS,
-  LOGIN_URL
-} from '../modules/constant'
+  LOGIN_URL,
+  WHITE_LIST_API_URL
+} from '../modules/http'
 import cookieUtil from '../modules/cookieUtil'
+import { MSG } from '../modules/constant'
 
 const instance = axios.create({
   baseURL: BASE_API_URL,
+  data: {},
+  params: {},
   headers: DEFAULT_HEADERS
 })
 
@@ -20,8 +24,10 @@ instance.interceptors.request.use(
     const commonStore = useCommonStore()
     commonStore.setLoading(true)
 
-    const token = cookieUtil.get(COOKIE_PARAM.TOKEN)
-    config.headers.Authorization = 'Bearer ' + token
+    if (!WHITE_LIST_API_URL.includes(config.url)) {
+      const token = cookieUtil.get(COOKIE_PARAM.TOKEN)
+      config.headers.Authorization = 'Bearer ' + token
+    } else config.headers.Authorization = ''
 
     return config
   },
@@ -37,7 +43,7 @@ instance.interceptors.response.use(
 
     if (response) {
       switch (response.status) {
-        case HTTP_STATUS.OK:
+        case HTTP_STATUS._200:
           commonStore.setLoading(false)
           break
       }
@@ -45,15 +51,19 @@ instance.interceptors.response.use(
     return response
   },
   function (error) {
+    const messageStore = useMessageStore()
     const commonStore = useCommonStore()
+
     commonStore.setLoading(false)
 
     if (error && error.response) {
       const { _401, _403 } = HTTP_STATUS
+      const { UNAUTHORIZED } = MSG
 
       switch (error.response.status) {
         case _401:
         case _403:
+          messageStore.setErrorMsg(UNAUTHORIZED)
           cookieUtil.unset('token')
           if (window.location.pathname !== LOGIN_URL) window.location.reload()
           break

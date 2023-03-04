@@ -19,6 +19,7 @@
   "devDependencies": {
     "@ant-design/icons-vue": "^6.1.0",
     "@iconify/vue": "^4.1.0",
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@rushstack/eslint-patch": "^1.2.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-prettier": "^7.1.0",

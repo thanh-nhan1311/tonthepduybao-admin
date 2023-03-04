@@ -1,19 +1,30 @@
 import { defineStore } from 'pinia'
-import authApi from '../api/authApi'
-import { COOKIE_PARAM } from '../modules/constant'
+import { ref } from 'vue'
+import { login } from '../api/authApi'
+import { COOKIE_PARAM, STORAGE_PARAM } from '../modules/http'
 import cookieUtil from '../modules/cookieUtil'
+import { ALL_BRANCH_OPTION } from '../modules/constant'
 
-export const useAuthStore = defineStore('auth', () => {
+export default defineStore('auth', () => {
   // State
+  const isAuth = ref(false)
 
   // Actions
-  function login(payload) {
-    return authApi.login(payload)
-  }
-
   function checkAuth() {
-    return !!cookieUtil.get(COOKIE_PARAM.TOKEN)
+    isAuth.value = !!cookieUtil.get(COOKIE_PARAM.TOKEN)
   }
 
-  return { checkAuth, login }
+  async function signIn(payload) {
+    if (!payload.username) return
+
+    const branchId = payload.branchId === ALL_BRANCH_OPTION.value ? null : payload.branchId
+    const res = await login({ ...payload, branchId })
+
+    localStorage.setItem(STORAGE_PARAM.USER, JSON.stringify(res.data.user))
+    cookieUtil.set(COOKIE_PARAM.TOKEN, res.data.accessToken)
+
+    window.location.reload()
+  }
+
+  return { isAuth, checkAuth, signIn }
 })

@@ -2,15 +2,15 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import Antd from 'ant-design-vue'
-import 'ant-design-vue/dist/antd.css'
-
 import { Icon } from '@iconify/vue'
+import Antd from 'ant-design-vue'
 
-import App from './App.vue'
 import router from './router'
+import App from './App.vue'
 
 import './assets/main.css'
+import 'ant-design-vue/dist/antd.css'
+
 
 const pinia = createPinia()
 const app = createApp(App)
