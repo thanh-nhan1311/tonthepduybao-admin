@@ -10,12 +10,18 @@
           v-model:value="userLogin.username"
           placeholder="Tên đăng nhập"
           class="mb-2"
+          @keypress.enter="authStore.login(userLogin)"
         >
           <template #prefix>
             <user-outlined />
           </template>
         </a-input>
-        <a-input-password v-model:value="userLogin.password" placeholder="Mật khẩu" class="mb-2">
+        <a-input-password
+          v-model:value="userLogin.password"
+          placeholder="Mật khẩu"
+          class="mb-2"
+          @keypress.enter="authStore.login(userLogin)"
+        >
           <template #prefix>
             <key-outlined />
           </template>
@@ -32,7 +38,7 @@
         </div>
 
         <div class="w-full flex justify-center">
-          <a-button type="primary" @click="authStore.signIn(userLogin)">Đăng nhập</a-button>
+          <a-button type="primary" @click="authStore.login(userLogin)">Đăng nhập</a-button>
         </div>
       </a-col>
     </a-row>

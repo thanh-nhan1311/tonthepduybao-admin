@@ -1,20 +1,23 @@
 <template>
-  <main>
-    <a-layout v-if="authStore.isAuth" style="min-height: 100vh">
+  <main v-if="authStore.isAuth">
+    <a-layout style="min-height: 100vh">
       <app-header />
 
       <a-layout>
         <app-sidebar />
 
-        <a-layout style="padding: 0 24px 24px">
+        <a-layout style="padding: 0 24px 24px; position: relative">
           <app-breadcrumb />
           <a-layout-content><router-view /></a-layout-content>
+
+          <AppLoading />
         </a-layout>
       </a-layout>
     </a-layout>
+  </main>
 
-    <router-view v-else />
-
+  <main v-else class="relative">
+    <router-view />
     <AppLoading />
   </main>
 </template>

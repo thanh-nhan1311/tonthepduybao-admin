@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getAllBranch } from '../api/branchApi'
-import { ALL_BRANCH_OPTION } from '../modules/constant'
+import { getAllBranchAPI } from '../../api/branchApi'
+import { ALL_BRANCH_OPTION } from '../../modules/constant'
 
 export default defineStore('branch', () => {
   // State
@@ -9,7 +9,7 @@ export default defineStore('branch', () => {
 
   // Function
   async function getBranchOptions() {
-    const allBranch = await getAllBranch()
+    const allBranch = await getAllBranchAPI()
     branchOptions.value = allBranch.data.map((item) => {
       return {
         value: item.id,
