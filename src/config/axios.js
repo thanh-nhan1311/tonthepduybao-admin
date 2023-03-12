@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { useCommonStore, useMessageStore } from '../stores'
+import { useCommonStore } from '~/stores/common'
+import { useMessageStore } from '~/stores/message'
 import {
   BASE_API_URL,
   COOKIE_PARAM,

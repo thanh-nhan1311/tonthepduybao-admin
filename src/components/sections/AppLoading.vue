@@ -11,7 +11,7 @@
 <script>
 import { LoadingOutlined } from '@ant-design/icons-vue'
 import { defineComponent, h } from 'vue'
-import { useCommonStore } from '../../stores'
+import { useCommonStore } from '~/stores/common'
 
 export default defineComponent({
   setup() {

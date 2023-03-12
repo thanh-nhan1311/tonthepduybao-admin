@@ -10,7 +10,7 @@
           v-model:value="userLogin.username"
           placeholder="Tên đăng nhập"
           class="mb-2"
-          @keypress.enter="authStore.login(userLogin)"
+          @keypress.enter="authComposition.login(userLogin)"
         >
           <template #prefix>
             <user-outlined />
@@ -20,7 +20,7 @@
           v-model:value="userLogin.password"
           placeholder="Mật khẩu"
           class="mb-2"
-          @keypress.enter="authStore.login(userLogin)"
+          @keypress.enter="authComposition.login(userLogin)"
         >
           <template #prefix>
             <key-outlined />
@@ -38,7 +38,7 @@
         </div>
 
         <div class="w-full flex justify-center">
-          <a-button type="primary" @click="authStore.login(userLogin)">Đăng nhập</a-button>
+          <a-button type="primary" @click="authComposition.login(userLogin)">Đăng nhập</a-button>
         </div>
       </a-col>
     </a-row>
@@ -46,17 +46,21 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, computed } from 'vue'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons-vue'
-import { useAuthStore, useBranchStore } from '../stores'
-import { ALL_BRANCH_OPTION } from '../modules/constant'
+import { useAuth } from '~/compositions'
+import { useBranchStore } from '~/stores/branch'
+import { ALL_BRANCH_OPTION } from '~/modules/constant'
 
 export default defineComponent({
   components: { UserOutlined, KeyOutlined },
   setup() {
     // Composition
     const branchStore = useBranchStore()
-    const authStore = useAuthStore()
+    const authComposition = useAuth()
+
+    // Computed
+    const branchOptions = computed(() => branchStore.branchOptions)
 
     // Data
     const selectedBranch = ref(ALL_BRANCH_OPTION.value)
@@ -70,7 +74,15 @@ export default defineComponent({
     function selectBranch(value) {
       selectedBranch.value = value
     }
-    return { authStore, branchStore, selectedBranch, userLogin, selectBranch }
+    return {
+      authComposition,
+      branchStore,
+
+      branchOptions,
+      selectedBranch,
+      userLogin,
+      selectBranch
+    }
   },
   mounted() {
     // Auto focus

@@ -1,5 +1,5 @@
 <template>
-  <a-layout-sider width="200" style="background: #fff">
+  <a-layout-sider style="background: #fff">
     <a-menu
       v-model:selectedKeys="selectedKeys"
       v-model:openKeys="openKeys"
@@ -8,16 +8,16 @@
     >
       <template v-for="item in Object.values(MENU)">
         <a-menu-item v-if="!item.subMenu" :key="item.id">
-          <router-link :to="item.path" class="flex items-center">
-            <Iconify :icon="item.icon" />
-            <span class="ml-2">{{ item.name }}</span>
-          </router-link>
+          <div class="flex items-center">
+            <Iconify :icon="item.icon" width="24px" />
+            <router-link :to="item.path" class="ml-2">{{ item.name }}</router-link>
+          </div>
         </a-menu-item>
 
         <a-sub-menu v-else :key="item.id + 1">
           <template #title>
             <div class="flex items-center">
-              <Iconify :icon="item.icon" />
+              <Iconify :icon="item.icon" width="24px" />
               <span class="ml-2">{{ item.name }}</span>
             </div>
           </template>
@@ -35,15 +35,17 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { MENU } from '@/modules/menu'
+import { MENU } from '~/modules/menu'
 
 export default defineComponent({
   setup() {
+    const selectedKeys = ref(['1'])
+    const openKeys = ref(['sub1'])
+
     return {
       MENU,
-      selectedKeys: ref(['1']),
-      collapsed: ref(false),
-      openKeys: ref(['sub1'])
+      selectedKeys,
+      openKeys
     }
   }
 })

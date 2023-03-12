@@ -34,6 +34,20 @@ export const MENU = {
       }
     }
   },
+  BRANCH: {
+    id: 'branch',
+    path: '/branch',
+    name: 'Chi nhánh',
+    icon: 'mdi:store-marker-outline',
+    subMenu: null
+  },
+  SETTING: {
+    id: 'setting',
+    path: '/setting',
+    name: 'Thiết lập',
+    icon: 'mdi:store-marker-outline',
+    subMenu: null
+  },
   PROFILE: {
     id: 'profile',
     path: '/profile',

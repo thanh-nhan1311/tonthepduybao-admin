@@ -1,5 +1,5 @@
 <template>
-  <a-layout-header class="flex items-center justify-between">
+  <a-layout-header class="flex items-center justify-between px-6">
     <router-link to="/" class="flex items-center">
       <a-image src="/img/white-logo.png" :width="100" :preview="false" />
     </router-link>
@@ -14,19 +14,27 @@
         <span class="text-white ml-2">Lê Kha</span>
       </router-link>
 
-      <button class="text-red-400 ml-8">Đăng xuất</button>
+      <a-button type="text" danger class="ml-8" @click="authComposition.logout()">
+        Đăng xuất
+      </a-button>
     </div>
   </a-layout-header>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { useAuth } from '~/compositions'
+import { useCommonStore } from '~/stores/common'
+
 export default defineComponent({
   name: 'AppHeader',
   setup() {
-    return {
-      selectedKeys: ref(['2'])
-    }
+    const authComposition = useAuth()
+    const commonStore = useCommonStore()
+
+    const selectedKeys = ref(['2'])
+
+    return { authComposition, commonStore, selectedKeys }
   }
 })
 </script>

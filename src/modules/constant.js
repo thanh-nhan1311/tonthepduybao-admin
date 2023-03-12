@@ -9,3 +9,8 @@ export const MSG = {
   UPDATE_SUCCESS: 'Cập nhật thành công!',
   DELETE_SUCCESS: 'Dữ liệu đã được xoá thành công!'
 }
+
+export const BRANCH_STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+}

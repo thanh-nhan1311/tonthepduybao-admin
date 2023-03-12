@@ -18,7 +18,8 @@
         </a-input>
       </a-col>
     </a-row>
-    <a-table :columns="columns" :data-source="siteContactStore.allContact">
+
+    <a-table :columns="SITE_CONTACT_TABLE_COLUMNS" :data-source="siteContactStore.allContact">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
         <template v-if="column.key === 'email'">
@@ -56,42 +57,12 @@
     </a-table>
   </section>
 </template>
-<script lang="ts">
+
+<script>
 import { SearchOutlined } from '@ant-design/icons-vue'
 import { defineComponent } from 'vue'
-import { useSiteContactStore } from '../../stores'
-
-const columns = [
-  {
-    title: 'No.',
-    dataIndex: 'no',
-    key: 'no'
-  },
-  {
-    title: 'Họ và tên',
-    dataIndex: 'fullName',
-    key: 'fullName'
-  },
-  {
-    title: 'Số điện thoại',
-    dataIndex: 'phone',
-    key: 'phone'
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email'
-  },
-  {
-    title: 'Trạng thái',
-    dataIndex: 'resolvedFlag',
-    key: 'resolvedFlag'
-  },
-  {
-    title: 'Thao tác',
-    key: 'action'
-  }
-]
+import { useSiteContactStore } from '~/stores/siteManagement/siteContact'
+import { SITE_CONTACT_TABLE_COLUMNS } from '~/modules/table'
 
 export default defineComponent({
   components: {
@@ -102,7 +73,7 @@ export default defineComponent({
 
     return {
       siteContactStore,
-      columns
+      SITE_CONTACT_TABLE_COLUMNS
     }
   },
 

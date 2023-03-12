@@ -1,8 +1,8 @@
 class CookieUtils {
   set(cname, cvalue, exdays) {
-    const d = new Date()
-    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000)
-    let expires = 'expires=' + d.toUTCString()
+    const date = new Date()
+    date.setTime(date.getTime() + exdays * 24 * 60 * 60 * 1000)
+    let expires = 'expires=' + date.toUTCString()
     document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/'
   }
 
@@ -21,8 +21,8 @@ class CookieUtils {
     return ''
   }
 
-  unset(name, path, domain, secure) {
-    this.set(name, '', new Date(0), path, domain, secure)
+  delete(name) {
+    this.set(name, '', 0)
   }
 }
 
