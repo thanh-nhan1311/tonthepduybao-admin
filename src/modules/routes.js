@@ -3,6 +3,7 @@ import Branch from '~/views/Branch.vue'
 import Login from '~/views/Login.vue'
 
 import SiteContact from '~/views/SiteManagement/SiteContact.vue'
+import SiteCategory from '~/views/SiteManagement/SiteCategory.vue'
 
 export default [
   {
@@ -10,11 +11,24 @@ export default [
     name: 'Dashboard',
     component: Dashboard
   },
+
+  // Site Management
   {
-    path: '/site-management/contact',
-    name: 'SiteContact',
-    component: SiteContact
+    name: 'SiteManagement',
+    children: [
+      {
+        path: '/sm/contact',
+        name: 'SiteContact',
+        component: SiteContact
+      },
+      {
+        path: '/sm/category',
+        name: 'SiteCategory',
+        component: SiteCategory
+      }
+    ]
   },
+
   {
     path: '/branch',
     name: 'Branch',

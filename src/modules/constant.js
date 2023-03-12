@@ -4,6 +4,7 @@ export const ALL_BRANCH_OPTION = {
 }
 
 export const MSG = {
+  SYSTEM_ERROR: 'Hệ thống xử lý lỗi, xin thử lại!',
   UNAUTHORIZED: 'Bạn không có quyền truy cập vào hệ thống, xin hãy đăng nhập!',
 
   UPDATE_SUCCESS: 'Cập nhật thành công!',

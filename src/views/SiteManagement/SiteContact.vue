@@ -7,13 +7,13 @@
       <a-col :span="8">
         <a-input
           ref="refUsername"
-          v-model:value="siteContactStore.search"
+          v-model:value="search"
           placeholder="Tìm kiếm liên hệ"
           class="mb-2 w-full"
-          @keypress.enter="siteContactStore.searchContact()"
+          @keypress.enter="siteContactStore.searchContact(search)"
         >
           <template #prefix>
-            <search-outlined @click="siteContactStore.searchContact()" />
+            <search-outlined @click="siteContactStore.searchContact(search)" />
           </template>
         </a-input>
       </a-col>
@@ -36,19 +36,10 @@
         </template>
         <template v-else-if="column.key === 'action'">
           <div>
-            <a-button
-              v-if="!record.resolvedFlag"
-              type="link"
-              @click="siteContactStore.resolveContact(record.id)"
-            >
+            <a-button v-if="!record.resolvedFlag" type="link" @click="resolveContact(record.id)">
               Đã xử lý
             </a-button>
-            <a-button
-              type="text"
-              danger
-              class="ml-4"
-              @click="siteContactStore.deleteContact(record.id)"
-            >
+            <a-button type="text" danger class="ml-4" @click="deleteContact(record.id)">
               Xoá
             </a-button>
           </div>
@@ -58,27 +49,38 @@
   </section>
 </template>
 
-<script>
+<script setup>
 import { SearchOutlined } from '@ant-design/icons-vue'
-import { defineComponent } from 'vue'
-import { useSiteContactStore } from '~/stores/siteManagement/siteContact'
+import { defineComponent, onMounted, ref } from 'vue'
+import { useSiteContactStore } from '@/stores/siteManagement/siteContact'
 import { SITE_CONTACT_TABLE_COLUMNS } from '~/modules/table'
 
+// Store
+const siteContactStore = useSiteContactStore()
+
+// State
+const search = ref('')
+
+// Methods
+const resolveContact = async (id) => {
+  await siteContactStore.resolveContact(id)
+  await siteContactStore.searchContact(search.value)
+}
+const deleteContact = async (id) => {
+  await siteContactStore.deleteContact(id)
+  await siteContactStore.searchContact(search.value)
+}
+
+// Hooks
+onMounted(() => {
+  siteContactStore.searchContact(search.value)
+})
+</script>
+
+<script>
 export default defineComponent({
   components: {
     SearchOutlined
-  },
-  setup() {
-    const siteContactStore = useSiteContactStore()
-
-    return {
-      siteContactStore,
-      SITE_CONTACT_TABLE_COLUMNS
-    }
-  },
-
-  mounted() {
-    this.siteContactStore.searchContact()
   }
 })
 </script>

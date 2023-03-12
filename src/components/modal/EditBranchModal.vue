@@ -69,7 +69,7 @@ import { defineEmits, defineProps, ref, toRef, watch } from 'vue'
 import { defBranchNameRule, defAddressRule, defPhoneRule, defManagerRule } from '~/modules/formRule'
 import { useBranchStore } from '~/stores/branch'
 import { mFormat } from '~/modules/momentUtil'
-import { isNil } from 'lodash'
+import { isNil, cloneDeep } from 'lodash'
 
 // Emits
 const emits = defineEmits(['close'])
@@ -126,7 +126,7 @@ watch(
   branchProp,
   (newValue) => {
     isShowModal.value = !isNil(newValue)
-    formState.value = newValue || initialFormState
+    formState.value = cloneDeep(newValue) || initialFormState
   },
   { deep: true }
 )

@@ -66,3 +66,35 @@ export const SITE_CONTACT_TABLE_COLUMNS = [
     key: 'action'
   }
 ]
+
+export const SITE_CATEGORY_TABLE_COLUMNS = [
+  {
+    title: 'No.',
+    dataIndex: 'no',
+    key: 'no'
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
+    title: 'SEO Url',
+    dataIndex: 'seoUrl',
+    key: 'seoUrl'
+  },
+  {
+    title: 'SL sản phảm',
+    dataIndex: 'totalProduct',
+    key: 'totalProduct'
+  },
+  {
+    title: 'Danh mục cha',
+    dataIndex: 'parent',
+    key: 'parent'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]

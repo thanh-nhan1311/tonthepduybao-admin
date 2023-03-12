@@ -1,5 +1,5 @@
 <template>
-  <a-layout-sider style="background: #fff">
+  <a-layout-sider style="background: #fff" width="240">
     <a-menu
       v-model:selectedKeys="selectedKeys"
       v-model:openKeys="openKeys"

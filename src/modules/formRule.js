@@ -4,6 +4,12 @@ export const defBranchNameRule = async (_rule, value) => {
   return Promise.resolve()
 }
 
+export const defCategoryNameRule = async (_rule, value) => {
+  if (!value || value.length > 255)
+    return Promise.reject('Tên danh mục không được để trống và vượt quá 500 kí tự')
+  return Promise.resolve()
+}
+
 export const defAddressRule = async (_rule, value) => {
   if (!value || value.length > 1000)
     return Promise.reject('Địa chỉ không được để trống và vượt quá 1000 kí tự')

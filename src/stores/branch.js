@@ -3,6 +3,8 @@ import { getAllBranchAPI, upsertBranchAPI } from '../api/branchApi'
 import { useMessage } from '../compositions'
 import { ALL_BRANCH_OPTION, MSG } from '../modules/constant'
 
+const mc = useMessage()
+
 export const useBranchStore = defineStore('branch', {
   state: () => ({
     allBranch: [],
@@ -28,7 +30,6 @@ export const useBranchStore = defineStore('branch', {
     },
 
     async upsertBranch(payload) {
-      const mc = useMessage()
       try {
         await upsertBranchAPI(payload)
         await this.getAllBranch()

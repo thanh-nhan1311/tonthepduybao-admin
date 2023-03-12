@@ -14,22 +14,27 @@ export const MENU = {
     subMenu: {
       SM_PRODUCT: {
         id: 'smProduct',
-        path: '/site-management/product',
+        path: '/sm/product',
         name: 'Sản phẩm'
+      },
+      SM_PRODUCT_CATEGORY: {
+        id: 'smProductCategory',
+        path: '/sm/category',
+        name: 'Danh mục sản phẩm'
       },
       SM_CONTACT: {
         id: 'smContact',
-        path: '/site-management/contact',
+        path: '/sm/contact',
         name: 'Liên hệ'
       },
       SM_PARTNER: {
         id: 'smPartner',
-        path: '/site-management/partner',
+        path: '/sm/partner',
         name: 'Đối tác'
       },
       SM_COMMON: {
         id: 'smCommon',
-        path: '/site-management/settings',
+        path: '/sm/settings',
         name: 'Cài đặt chung'
       }
     }
