@@ -1,10 +1,7 @@
 <template>
   <section>
     <a-row class="flex justify-end items-center mb-4">
-      <a-col :span="16">
-        <h2 class="text-2xl">Danh sách chi nhánh</h2>
-      </a-col>
-      <a-col :span="8">
+      <a-col :span="24">
         <h2 class="text-2xl">Danh sách chi nhánh</h2>
       </a-col>
     </a-row>
@@ -20,81 +17,70 @@
           </div>
         </template>
         <template v-else-if="column.key === 'status'">
-          <a-tag :color="record.status === BRANCH_STATUS.ACTIVE ? 'green' : 'danger'">
+          <a-tag :color="record.status === BRANCH_STATUS.ACTIVE ? 'green' : 'error'">
             {{ record.status === BRANCH_STATUS.ACTIVE ? 'Đang hoạt động' : 'Ngưng hoạt động' }}
           </a-tag>
         </template>
         <template v-else-if="column.key === 'action'">
           <div>
-            <a-button v-if="!record.resolvedFlag" type="link" @click="selectBranch(record.id)">
+            <a-button v-if="!record.resolvedFlag" type="link" @click="openModal(record.id)">
               Sửa
             </a-button>
             <a-button
-              type="text"
-              danger
+              :type="record.status === BRANCH_STATUS.ACTIVE ? 'text' : 'link'"
+              :danger="record.status === BRANCH_STATUS.ACTIVE"
               class="ml-4"
-              @click="siteContactStore.deleteContact(record.id)"
+              @click="updateBranchStatus(record)"
             >
-              Tạm ngưng
+              {{ record.status === 'ACTIVE' ? 'Tạm ngưng' : 'Kích hoạt' }}
             </a-button>
           </div>
         </template>
       </template>
     </a-table>
 
-    <a-modal
-      v-model:visible="showModal"
-      :footer="null"
-      centered
-      width="50vw"
-      title="Sửa thông tin chi nhánh"
-    >
-      <edit-branch-form :branch="selectedBranch" />
-    </a-modal>
+    <edit-branch-modal :branch="selectedBranch" @close="closeModal" />
   </section>
 </template>
 
-<script>
-import { defineComponent, reactive, ref } from 'vue'
-import EditBranchForm from '../components/forms/EditBranchForm.vue'
-import { BRANCH_STATUS } from '../modules/constant'
-import { BRANCH_TABLE_COLUMNS } from '../modules/table'
+<script setup>
+import { defineComponent, onMounted, ref } from 'vue'
+import EditBranchModal from '~/components/modal/EditBranchModal.vue'
+import { BRANCH_STATUS } from '~/modules/constant'
+import { BRANCH_TABLE_COLUMNS } from '~/modules/table'
 import { useBranchStore } from '~/stores/branch'
 
+// Store
+const branchStore = useBranchStore()
+
+// Data
+const selectedBranch = ref(null)
+
+// Methods
+const openModal = (id) => {
+  const findBranch = branchStore.allBranch.find((item) => item.id == id)
+  if (findBranch) selectedBranch.value = findBranch
+}
+const closeModal = () => {
+  selectedBranch.value = null
+}
+const updateBranchStatus = (branch) => {
+  if (!branch) return
+
+  branch.status =
+    branch.status === BRANCH_STATUS.ACTIVE ? BRANCH_STATUS.INACTIVE : BRANCH_STATUS.ACTIVE
+  branchStore.upsertBranch(branch)
+}
+
+// Hooks
+onMounted(() => {
+  branchStore.getAllBranch()
+})
+</script>
+
+<script>
 export default defineComponent({
-  components: { EditBranchForm },
-  setup() {
-    // Store
-    const branchStore = useBranchStore()
-
-    // Data
-    const showModal = ref(false)
-    let selectedBranch = reactive(null)
-
-    // Function
-    const openModal = () => (showModal.value = true)
-    const closeModal = () => (showModal.value = false)
-    function selectBranch(id) {
-      openModal()
-      selectedBranch = branchStore.allBranch.find((item) => item.id == id)
-    }
-
-    return {
-      BRANCH_STATUS,
-      BRANCH_TABLE_COLUMNS,
-      branchStore,
-
-      showModal,
-      selectedBranch,
-
-      openModal,
-      closeModal,
-      selectBranch
-    }
-  },
-
-  mounted() {
-    this.branchStore.getAllBranch()
-  }
+  name: 'BranchPage',
+  components: { EditBranchModal }
 })
 </script>

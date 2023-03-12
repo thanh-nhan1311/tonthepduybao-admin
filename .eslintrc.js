@@ -7,6 +7,7 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
+    'no-unused-vars': 'warn',
     'vue/no-v-html': 'off',
     'vue/multi-word-component-names': 'off',
     'prettier/prettier': 'error'

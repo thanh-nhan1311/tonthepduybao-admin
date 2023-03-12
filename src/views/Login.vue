@@ -87,7 +87,6 @@ export default defineComponent({
   mounted() {
     // Auto focus
     this.$refs.refUsername.focus()
-
     this.branchStore.getBranchOptions()
   }
 })

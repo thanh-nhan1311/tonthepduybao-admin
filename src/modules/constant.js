@@ -7,7 +7,10 @@ export const MSG = {
   UNAUTHORIZED: 'Bạn không có quyền truy cập vào hệ thống, xin hãy đăng nhập!',
 
   UPDATE_SUCCESS: 'Cập nhật thành công!',
-  DELETE_SUCCESS: 'Dữ liệu đã được xoá thành công!'
+  DELETE_SUCCESS: 'Dữ liệu đã được xoá thành công!',
+
+  UPDATE_FAILED: 'Cập nhật không thành công!',
+  DELETE_FAILED: 'Xoá không thành công!'
 }
 
 export const BRANCH_STATUS = {

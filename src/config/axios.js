@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useCommonStore } from '~/stores/common'
-import { useMessageStore } from '~/stores/message'
+import { useMessage } from '~/compositions'
 import {
   BASE_API_URL,
   COOKIE_PARAM,
@@ -52,7 +52,7 @@ instance.interceptors.response.use(
     return response
   },
   function (error) {
-    const messageStore = useMessageStore()
+    const mc = useMessage()
     const commonStore = useCommonStore()
 
     commonStore.setLoading(false)
@@ -64,8 +64,8 @@ instance.interceptors.response.use(
       switch (error.response.status) {
         case _401:
         case _403:
-          messageStore.setErrorMsg(UNAUTHORIZED)
-          cookieUtil.unset('token')
+          mc.error(UNAUTHORIZED)
+          cookieUtil.delete(COOKIE_PARAM.TOKEN)
           if (window.location.pathname !== LOGIN_URL) window.location.reload()
           break
       }

@@ -6,11 +6,7 @@
 
     <div class="flex items-center">
       <router-link to="/profile" class="flex items-center">
-        <a-avatar :size="42">
-          <template #icon>
-            <AntDesignOutlined />
-          </template>
-        </a-avatar>
+        <Iconify icon="carbon:user-avatar-filled-alt" width="50px" height="50px" color="#fff" />
         <span class="text-white ml-2">Lê Kha</span>
       </router-link>
 
