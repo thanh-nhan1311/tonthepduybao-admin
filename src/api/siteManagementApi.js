@@ -21,3 +21,16 @@ export async function upsertCategoryAPI(payload) {
 export async function deleteCategoryAPI(id) {
   return await instance.delete(`/sm/category/${id}`)
 }
+
+// Site Partner
+export async function searchPartnerAPI(params) {
+  return await instance.get('/sm/partner/search', { params })
+}
+export async function upsertPartnerAPI(payload) {
+  return await instance.post('/sm/partner/upsert', payload, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+export async function deletePartnerAPI(id) {
+  return await instance.delete(`/sm/partner/${id}`)
+}

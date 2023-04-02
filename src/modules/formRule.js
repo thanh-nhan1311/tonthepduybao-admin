@@ -5,8 +5,19 @@ export const defBranchNameRule = async (_rule, value) => {
 }
 
 export const defCategoryNameRule = async (_rule, value) => {
-  if (!value || value.length > 255)
+  if (!value || value.length > 500)
     return Promise.reject('Tên danh mục không được để trống và vượt quá 500 kí tự')
+  return Promise.resolve()
+}
+
+export const defPartnerNameRule = async (_rule, value) => {
+  if (!value || value.length > 500)
+    return Promise.reject('Tên đối tác không được để trống và vượt quá 500 kí tự')
+  return Promise.resolve()
+}
+
+export const defPartnerLogoRule = async (_rule, value) => {
+  if (!value) return Promise.reject('Logo đối tác chưa được chọn')
   return Promise.resolve()
 }
 

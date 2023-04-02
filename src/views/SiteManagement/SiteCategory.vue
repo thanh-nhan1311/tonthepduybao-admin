@@ -21,7 +21,10 @@
       </a-col>
     </a-row>
 
-    <a-table :columns="SITE_CATEGORY_TABLE_COLUMNS" :data-source="siteCategoryStore.allCategory">
+    <a-table
+      :columns="SITE_CATEGORY_TABLE_COLUMNS"
+      :data-source="siteCategoryStore.allCategoryTableData"
+    >
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
         <template v-else-if="column.key === 'action'">

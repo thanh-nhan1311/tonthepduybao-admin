@@ -21,7 +21,7 @@ export const useSiteContactStore = defineStore('siteContact', {
 
         mc.success(MSG.UPDATE_SUCCESS)
       } catch (err) {
-        mc.success(MSG.UPDATE_FAILED)
+        mc.error(MSG.UPDATE_FAILED)
       }
     },
     async deleteContact(id) {
@@ -30,7 +30,7 @@ export const useSiteContactStore = defineStore('siteContact', {
 
         mc.success(MSG.DELETE_SUCCESS)
       } catch (err) {
-        mc.success(MSG.DELETE_FAILED)
+        mc.error(MSG.DELETE_FAILED)
       }
     }
   }

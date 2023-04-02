@@ -11,6 +11,14 @@ export const useSiteCategoryStore = defineStore('siteCategory', {
     parentOptions: []
   }),
 
+  getters: {
+    allCategoryTableData: (state) =>
+      state.allCategory.map((item) => {
+        const parentCategory = state.allCategory.find((cateItem) => cateItem.id === item.parent)
+        return { ...item, parentName: parentCategory ? parentCategory.name : '' }
+      })
+  },
+
   actions: {
     async getCategoryOptions(excludeId = null) {
       const res = await searchCategoryAPI({ search: '' })
@@ -24,14 +32,14 @@ export const useSiteCategoryStore = defineStore('siteCategory', {
       const res = await searchCategoryAPI({ search: payload })
       this.allCategory = res.data
     },
-    async upsertCategory(id) {
+    async upsertCategory(payload) {
       try {
-        await upsertCategoryAPI(id)
+        await upsertCategoryAPI(payload)
         await this.searchCategory('')
 
         mc.success(MSG.UPDATE_SUCCESS)
       } catch (err) {
-        mc.success(MSG.UPDATE_FAILED)
+        mc.error(MSG.UPDATE_FAILED)
       }
     },
     async deleteCategory(id) {
@@ -41,7 +49,7 @@ export const useSiteCategoryStore = defineStore('siteCategory', {
 
         mc.success(MSG.DELETE_SUCCESS)
       } catch (err) {
-        mc.success(MSG.DELETE_FAILED)
+        mc.error(MSG.DELETE_FAILED)
       }
     }
   }

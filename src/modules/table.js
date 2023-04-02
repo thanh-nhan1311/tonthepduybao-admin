@@ -90,8 +90,25 @@ export const SITE_CATEGORY_TABLE_COLUMNS = [
   },
   {
     title: 'Danh mục cha',
-    dataIndex: 'parent',
-    key: 'parent'
+    dataIndex: 'parentName',
+    key: 'parentName'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]
+
+export const SITE_PARTNER_TABLE_COLUMNS = [
+  {
+    title: 'No.',
+    dataIndex: 'no',
+    key: 'no'
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name'
   },
   {
     title: 'Thao tác',

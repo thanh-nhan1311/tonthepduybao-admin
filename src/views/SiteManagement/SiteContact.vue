@@ -36,7 +36,15 @@
         </template>
         <template v-else-if="column.key === 'action'">
           <div>
-            <a-button v-if="!record.resolvedFlag" type="link" @click="resolveContact(record.id)">
+            <a :href="`mailto:${record.email}`" target="_blank" rel="noopener noreferrer">
+              Tư vấn
+            </a>
+            <a-button
+              v-if="!record.resolvedFlag"
+              type="link"
+              class="ml-4"
+              @click="resolveContact(record.id)"
+            >
               Đã xử lý
             </a-button>
             <a-button type="text" danger class="ml-4" @click="deleteContact(record.id)">

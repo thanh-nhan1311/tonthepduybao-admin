@@ -4,6 +4,7 @@ import Login from '~/views/Login.vue'
 
 import SiteContact from '~/views/SiteManagement/SiteContact.vue'
 import SiteCategory from '~/views/SiteManagement/SiteCategory.vue'
+import SitePartner from '~/views/SiteManagement/SitePartner.vue'
 
 export default [
   {
@@ -25,6 +26,11 @@ export default [
         path: '/sm/category',
         name: 'SiteCategory',
         component: SiteCategory
+      },
+      {
+        path: '/sm/partner',
+        name: 'SitePartner',
+        component: SitePartner
       }
     ]
   },
