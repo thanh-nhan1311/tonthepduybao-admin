@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { useMessage } from '~/compositions'
+import { useSiteManagementAPI } from '~/api'
 import { MSG } from '~/modules/constant'
-import { searchPartnerAPI, upsertPartnerAPI, deletePartnerAPI } from '~/api/siteManagementApi'
 
 const mc = useMessage()
+const siteManagementAPI = useSiteManagementAPI()
 
 export const useSitePartnerStore = defineStore('sitePartner', {
   state: () => ({
@@ -12,12 +13,12 @@ export const useSitePartnerStore = defineStore('sitePartner', {
 
   actions: {
     async searchPartner(payload) {
-      const res = await searchPartnerAPI({ search: payload })
+      const res = await siteManagementAPI.searchPartner({ search: payload })
       this.allPartner = res.data
     },
     async upsertPartner(payload) {
       try {
-        await upsertPartnerAPI(payload)
+        await siteManagementAPI.upsertPartner(payload)
         await this.searchPartner('')
 
         mc.success(MSG.UPDATE_SUCCESS)
@@ -28,7 +29,7 @@ export const useSitePartnerStore = defineStore('sitePartner', {
     },
     async deletePartner(id) {
       try {
-        await deletePartnerAPI(id)
+        await siteManagementAPI.deletePartner(id)
         await this.searchPartner('')
 
         mc.success(MSG.DELETE_SUCCESS)

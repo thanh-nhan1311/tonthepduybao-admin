@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useCommonStore } from '~/stores/common'
-import { useMessage } from '~/compositions'
+import { useMessage, useCookie } from '~/compositions'
 import {
   BASE_API_URL,
   COOKIE_PARAM,
@@ -8,9 +8,11 @@ import {
   HTTP_STATUS,
   LOGIN_URL,
   WHITE_LIST_API_URL
-} from '../modules/http'
-import cookieUtil from '../modules/cookieUtil'
-import { MSG } from '../modules/constant'
+} from '~/modules/http'
+import { MSG } from '~/modules/constant'
+
+const mc = useMessage()
+const cookie = useCookie()
 
 const instance = axios.create({
   baseURL: BASE_API_URL,
@@ -26,7 +28,7 @@ instance.interceptors.request.use(
     commonStore.setLoading(true)
 
     if (!WHITE_LIST_API_URL.includes(config.url)) {
-      const token = cookieUtil.get(COOKIE_PARAM.TOKEN)
+      const token = cookie.get(COOKIE_PARAM.TOKEN)
       config.headers.Authorization = 'Bearer ' + token
     } else config.headers.Authorization = ''
 
@@ -52,7 +54,6 @@ instance.interceptors.response.use(
     return response
   },
   function (error) {
-    const mc = useMessage()
     const commonStore = useCommonStore()
 
     commonStore.setLoading(false)
@@ -65,7 +66,7 @@ instance.interceptors.response.use(
         case _401:
         case _403:
           mc.error(UNAUTHORIZED)
-          cookieUtil.delete(COOKIE_PARAM.TOKEN)
+          cookie.remove(COOKIE_PARAM.TOKEN)
           if (window.location.pathname !== LOGIN_URL) window.location.reload()
           break
         case _500:

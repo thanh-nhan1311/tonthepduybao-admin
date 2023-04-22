@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { searchContactAPI, resolveContactAPI, deleteContactAPI } from '~/api/siteManagementApi'
 import { useMessage } from '~/compositions'
+import { useSiteManagementAPI } from '~/api'
 import { MSG } from '~/modules/constant'
 
 const mc = useMessage()
+const siteManagementAPI = useSiteManagementAPI()
 
 export const useSiteContactStore = defineStore('siteContact', {
   state: () => ({
@@ -12,12 +13,12 @@ export const useSiteContactStore = defineStore('siteContact', {
 
   actions: {
     async searchContact(payload) {
-      const res = await searchContactAPI({ search: payload })
+      const res = await siteManagementAPI.searchContact({ search: payload })
       this.allContact = res.data
     },
     async resolveContact(id) {
       try {
-        await resolveContactAPI(id)
+        await siteManagementAPI.resolveContact(id)
 
         mc.success(MSG.UPDATE_SUCCESS)
       } catch (err) {
@@ -26,7 +27,7 @@ export const useSiteContactStore = defineStore('siteContact', {
     },
     async deleteContact(id) {
       try {
-        await deleteContactAPI(id)
+        await siteManagementAPI.deleteContact(id)
 
         mc.success(MSG.DELETE_SUCCESS)
       } catch (err) {

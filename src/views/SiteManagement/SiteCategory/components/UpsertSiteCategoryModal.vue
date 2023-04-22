@@ -3,7 +3,7 @@
     v-model:visible="isShowModalProp"
     centered
     width="40vw"
-    :title="`${isEdit ? 'Sửa' : 'Thêm mới'} đối tác`"
+    :title="`${isEdit ? 'Sửa' : 'Thêm mới'} danh mục`"
     ok-text="Lưu"
     cancel-text="Đóng"
     @ok="submit"
@@ -19,12 +19,18 @@
       }"
       @finish="formSubmit"
     >
-      <a-form-item has-feedback label="Tên đối tác" name="name">
+      <a-form-item has-feedback label="Tên danh mục" name="name">
         <a-input v-model:value="formState.name" />
       </a-form-item>
 
-      <a-form-item has-feedback label="Logo" name="logoFile">
-        <image-picker :src="formState.logo" @change="selectImage" />
+      <a-form-item has-feedback label="Chọn thư mục cha" name="parent">
+        <a-select
+          v-model:value="formState.parent"
+          show-search
+          placeholder="Chọn thư mục cha"
+          :options="siteCategoryStore.parentOptions"
+          :filter-option="filterParentOptions"
+        ></a-select>
       </a-form-item>
 
       <a-form-item :wrapper-col="{ span: 14, offset: 4 }" class="hidden">
@@ -35,11 +41,10 @@
 </template>
 
 <script setup>
-import { defineComponent, defineEmits, defineProps, ref, toRef, watch } from 'vue'
-import { defPartnerNameRule, defPartnerLogoRule } from '~/modules/formRule'
+import { defineEmits, defineProps, ref, toRef, watch } from 'vue'
+import { defEmptyCategoryName } from '~/modules/formRule'
+import { useSiteCategoryStore } from '~/stores/siteManagement/siteCategory'
 import { isNil, cloneDeep } from 'lodash'
-import ImagePicker from '~/components/ImagePicker.vue'
-import { useSitePartnerStore } from '~/stores/siteManagement/sitePartner'
 
 // Emits
 const emits = defineEmits(['close'])
@@ -51,27 +56,27 @@ const props = defineProps({
     required: false,
     default: false
   },
-  partner: {
+  category: {
     type: Object,
     default: null
   }
 })
 const isShowModalProp = toRef(props, 'isShowModal')
-const partnerProp = toRef(props, 'partner')
+const categoryProp = toRef(props, 'category')
 
 // Store
-const sitePartnerStore = useSitePartnerStore()
+const siteCategoryStore = useSiteCategoryStore()
 
 // State
 const initialFormState = {
   id: null,
   name: '',
-  logo: '',
-  logoFile: null
+  seoUrl: '',
+  totalProduct: 0,
+  parent: null
 }
 const formRules = {
-  name: [{ required: true, validator: defPartnerNameRule, trigger: 'change' }],
-  logoFile: [{ required: true, validator: defPartnerLogoRule, trigger: 'change' }]
+  name: [{ required: true, validator: defEmptyCategoryName, trigger: 'change' }]
 }
 let btnEditRef = ref()
 let formRef = ref()
@@ -80,14 +85,7 @@ const formState = ref(initialFormState)
 
 // Methods
 const formSubmit = () => {
-  const { id, name, logoFile } = formState.value
-
-  const formData = new FormData()
-  if (id) formData.append('id', id)
-  formData.append('name', name)
-  formData.append('logoFile', logoFile)
-
-  sitePartnerStore.upsertPartner(formData)
+  siteCategoryStore.upsertCategory(formState.value)
   reset()
   emits('close')
 }
@@ -96,26 +94,26 @@ const reset = () => {
   formState.value = cloneDeep(initialFormState)
   formRef.value.resetFields()
 }
-const selectImage = (data) => {
-  const { src, file } = data
-  formState.value.logo = src
-  formState.value.logoFile = file
+const filterParentOptions = (input, option) => {
+  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
 }
 
 // Watcher
 watch(
-  partnerProp,
+  categoryProp,
   (newProp) => {
     isEdit.value = !isNil(newProp)
-    if (isEdit.value) formState.value = cloneDeep(newProp)
-    else reset()
+
+    if (isEdit.value) {
+      siteCategoryStore.getCategoryOptions(newProp.id)
+      formState.value = cloneDeep(newProp)
+    } else siteCategoryStore.getCategoryOptions()
   },
   { deep: true }
 )
-</script>
 
-<script>
-export default defineComponent({
-  components: { ImagePicker }
+watch(isShowModalProp, (newProp) => {
+  if (newProp) siteCategoryStore.getCategoryOptions()
+  else reset()
 })
 </script>

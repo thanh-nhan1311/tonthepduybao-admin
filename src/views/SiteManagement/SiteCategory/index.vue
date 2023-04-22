@@ -53,11 +53,9 @@
 </template>
 
 <script setup>
-import { SearchOutlined } from '@ant-design/icons-vue'
-import UpsertSiteCategoryModal from '~/components/modal/UpsertSiteCategoryModal.vue'
 import { defineComponent, onMounted, ref } from 'vue'
-import { SITE_CATEGORY_TABLE_COLUMNS } from '~/modules/table'
 import { useSiteCategoryStore } from '~/stores/siteManagement/siteCategory'
+import { SITE_CATEGORY_TABLE_COLUMNS } from '~/modules/table'
 
 // Store
 const siteCategoryStore = useSiteCategoryStore()
@@ -92,6 +90,9 @@ onMounted(() => {
 </script>
 
 <script>
+import { SearchOutlined } from '@ant-design/icons-vue'
+import UpsertSiteCategoryModal from './components/UpsertSiteCategoryModal.vue'
+
 export default defineComponent({
   components: {
     SearchOutlined,

@@ -3,7 +3,7 @@
     v-model:visible="isShowModal"
     centered
     width="50vw"
-    :title="`Sửa thông tin chi nhánh - Cập nhật lúc: ${mFormat(formState.updatedAt)}`"
+    :title="`Sửa thông tin chi nhánh - Cập nhật lúc: ${moment.mFormat(formState.updatedAt)}`"
     ok-text="Chỉnh sửa"
     cancel-text="Đóng"
     @ok="submit"
@@ -66,9 +66,14 @@
 
 <script setup>
 import { defineEmits, defineProps, ref, toRef, watch } from 'vue'
-import { defBranchNameRule, defAddressRule, defPhoneRule, defManagerRule } from '~/modules/formRule'
+import {
+  defEmptyBranchName,
+  defEmptyAddress,
+  defEmptyPhone,
+  defEmptyManager
+} from '~/modules/formRule'
 import { useBranchStore } from '~/stores/branch'
-import { mFormat } from '~/modules/momentUtil'
+import { useMoment } from '~/compositions'
 import { isNil, cloneDeep } from 'lodash'
 
 // Emits
@@ -82,9 +87,11 @@ const props = defineProps({
   }
 })
 const branchProp = toRef(props, 'branch')
+// Store
+const branchStore = useBranchStore()
 
 // Composition API
-const branchStore = useBranchStore()
+const moment = useMoment()
 
 // State
 const initialFormState = {
@@ -101,10 +108,10 @@ const initialFormState = {
   updatedAt: ''
 }
 const formRules = {
-  name: [{ required: true, validator: defBranchNameRule, trigger: 'change' }],
-  address: [{ required: true, validator: defAddressRule, trigger: 'change' }],
-  phone: [{ required: true, validator: defPhoneRule, trigger: 'change' }],
-  manager: [{ required: true, validator: defManagerRule, trigger: 'change' }]
+  name: [{ required: true, validator: defEmptyBranchName, trigger: 'change' }],
+  address: [{ required: true, validator: defEmptyAddress, trigger: 'change' }],
+  phone: [{ required: true, validator: defEmptyPhone, trigger: 'change' }],
+  manager: [{ required: true, validator: defEmptyManager, trigger: 'change' }]
 }
 const isShowModal = ref(false)
 let btnEditRef = ref()

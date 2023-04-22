@@ -26,7 +26,7 @@
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
         <template v-else-if="column.key === 'name'">
           <div class="flex items-center">
-            <a-image :width="100" :height="100" :src="record.logo" />
+            <a-image :width="100" :src="record.logo" :fallback="FALLBACK_IMAGE" :preview="false" />
             <span class="ml-2">{{ record.name }}</span>
           </div>
         </template>
@@ -50,10 +50,9 @@
 </template>
 
 <script setup>
-import { SearchOutlined } from '@ant-design/icons-vue'
-import UpsertSitePartnerModal from '~/components/modal/UpsertSitePartnerModal.vue'
 import { defineComponent, onMounted, ref } from 'vue'
 import { SITE_PARTNER_TABLE_COLUMNS } from '~/modules/table'
+import { FALLBACK_IMAGE } from '~/modules/constant'
 import { useSitePartnerStore } from '~/stores/siteManagement/sitePartner'
 
 // Store
@@ -89,6 +88,9 @@ onMounted(() => {
 </script>
 
 <script>
+import { SearchOutlined } from '@ant-design/icons-vue'
+import UpsertSitePartnerModal from './components/UpsertSitePartnerModal.vue'
+
 export default defineComponent({
   components: {
     SearchOutlined,

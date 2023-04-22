@@ -34,7 +34,7 @@ export const MENU = {
       },
       SM_COMMON: {
         id: 'smCommon',
-        path: '/sm/settings',
+        path: '/sm/setting',
         name: 'Cài đặt chung'
       }
     }
@@ -50,7 +50,7 @@ export const MENU = {
     id: 'setting',
     path: '/setting',
     name: 'Thiết lập',
-    icon: 'mdi:store-marker-outline',
+    icon: 'ic:baseline-settings',
     subMenu: null
   },
   PROFILE: {

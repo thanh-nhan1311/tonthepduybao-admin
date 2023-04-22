@@ -11,9 +11,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vueup/vue-quill": "^1.1.1",
     "axios": "^1.3.4",
     "moment": "^2.29.4",
     "pinia": "^2.0.32",
+    "quill-image-uploader": "^1.2.4",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },

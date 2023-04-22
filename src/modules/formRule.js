@@ -1,40 +1,39 @@
-export const defBranchNameRule = async (_rule, value) => {
-  if (!value || value.length > 255)
-    return Promise.reject('Tên chi nhánh không được để trống và vượt quá 255 kí tự')
+export const defStringRule = async (_rule, value, cb, label = '', length = 255) => {
+  if (!value || value.length > length) {
+    const message = `${label} không được để trống và vượt quá ${length} kí tự`
+    return Promise.reject(message)
+  }
   return Promise.resolve()
 }
 
-export const defCategoryNameRule = async (_rule, value) => {
-  if (!value || value.length > 500)
-    return Promise.reject('Tên danh mục không được để trống và vượt quá 500 kí tự')
+export const defEmptyRule = async (_rule, value, cb, message) => {
+  if (!value) return Promise.reject(message)
   return Promise.resolve()
 }
 
-export const defPartnerNameRule = async (_rule, value) => {
-  if (!value || value.length > 500)
-    return Promise.reject('Tên đối tác không được để trống và vượt quá 500 kí tự')
-  return Promise.resolve()
-}
+export const defEmptyBranchName = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Tên chi nhánh')
 
-export const defPartnerLogoRule = async (_rule, value) => {
-  if (!value) return Promise.reject('Logo đối tác chưa được chọn')
-  return Promise.resolve()
-}
+export const defEmptyCategoryName = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Tên danh mục', 500)
 
-export const defAddressRule = async (_rule, value) => {
-  if (!value || value.length > 1000)
-    return Promise.reject('Địa chỉ không được để trống và vượt quá 1000 kí tự')
-  return Promise.resolve()
-}
+export const defEmptyPartnerName = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Tên đối tác', 500)
 
-export const defPhoneRule = async (_rule, value) => {
-  if (!value || value.length > 20)
-    return Promise.reject('Số điện thoại không được để trống và vượt quá 20 kí tự')
-  return Promise.resolve()
-}
+export const defEmptyAddress = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Địa chỉ', 1000)
 
-export const defManagerRule = async (_rule, value) => {
-  if (!value || value.length > 255)
-    return Promise.reject('Tên người đại diện không được để trống và vượt quá 255 kí tự')
-  return Promise.resolve()
-}
+export const defEmptyPhone = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Số điện thoại', 20)
+
+export const defEmptyManager = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Tên người đại diện', 255)
+
+export const defEmptyPartnerLogo = async (_rule, value, cb) =>
+  defEmptyRule(_rule, value, cb, 'Logo đối tác chưa được chọn')
+
+export const defEmptyCategory = async (_rule, value, cb) =>
+  defEmptyRule(_rule, value, cb, 'Tên danh mục chưa được chọn')
+
+export const defEmptyCategoryImage = async (_rule, value, cb) =>
+  defEmptyRule(_rule, value, cb, 'Hình ảnh cho danh mục sản phẩm chưa được chọn')

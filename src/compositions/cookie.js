@@ -1,12 +1,12 @@
-class CookieUtils {
-  set(cname, cvalue, exdays) {
+export default () => {
+  const set = (cname, cvalue, exdays) => {
     const date = new Date()
     date.setTime(date.getTime() + exdays * 24 * 60 * 60 * 1000)
     let expires = 'expires=' + date.toUTCString()
     document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/'
   }
 
-  get(cname) {
+  const get = (cname) => {
     let name = cname + '='
     let ca = document.cookie.split(';')
     for (let i = 0; i < ca.length; i++) {
@@ -21,9 +21,13 @@ class CookieUtils {
     return ''
   }
 
-  delete(name) {
-    this.set(name, '', 0)
+  const remove = (name) => {
+    set(name, '', 0)
+  }
+
+  return {
+    set,
+    get,
+    remove
   }
 }
-
-export default new CookieUtils()

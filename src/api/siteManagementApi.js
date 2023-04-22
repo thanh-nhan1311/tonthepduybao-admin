@@ -1,36 +1,63 @@
 import instance from '../config/axios'
 
-// Site Contact
-export async function searchContactAPI(params) {
-  return await instance.get('/sm/contact/search', { params })
-}
-export async function resolveContactAPI(id) {
-  return await instance.put(`/sm/contact/resolve/${id}`)
-}
-export async function deleteContactAPI(id) {
-  return await instance.delete(`/sm/contact/${id}`)
-}
+export default () => {
+  // Site Contact
+  const searchContact = async (params) => {
+    return await instance.get('/sm/contact/search', { params })
+  }
+  const resolveContact = async (id) => {
+    return await instance.put(`/sm/contact/resolve/${id}`)
+  }
+  const deleteContact = async (id) => {
+    return await instance.delete(`/sm/contact/${id}`)
+  }
 
-// Site Category
-export async function searchCategoryAPI(params) {
-  return await instance.get('/sm/category/search', { params })
-}
-export async function upsertCategoryAPI(payload) {
-  return await instance.post('/sm/category/upsert', payload)
-}
-export async function deleteCategoryAPI(id) {
-  return await instance.delete(`/sm/category/${id}`)
-}
+  // Site Category
+  const searchCategory = async (params) => {
+    return await instance.get('/sm/category/search', { params })
+  }
+  const upsertCategory = async (payload) => {
+    return await instance.post('/sm/category/upsert', payload)
+  }
+  const deleteCategory = async (id) => {
+    return await instance.delete(`/sm/category/${id}`)
+  }
 
-// Site Partner
-export async function searchPartnerAPI(params) {
-  return await instance.get('/sm/partner/search', { params })
-}
-export async function upsertPartnerAPI(payload) {
-  return await instance.post('/sm/partner/upsert', payload, {
-    headers: { 'Content-Type': 'multipart/form-data' }
-  })
-}
-export async function deletePartnerAPI(id) {
-  return await instance.delete(`/sm/partner/${id}`)
+  // Site Partner
+  const searchPartner = async (params) => {
+    return await instance.get('/sm/partner/search', { params })
+  }
+  const upsertPartner = async (payload) => {
+    return await instance.post('/sm/partner/upsert', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  }
+  const deletePartner = async (id) => {
+    return await instance.delete(`/sm/partner/${id}`)
+  }
+
+  // Site Setting
+  const getAllSetting = async () => {
+    return await instance.get('/sm/setting')
+  }
+  const saveSetting = async (payload) => {
+    return await instance.post('/sm/setting', payload)
+  }
+
+  return {
+    searchContact,
+    resolveContact,
+    deleteContact,
+
+    searchCategory,
+    upsertCategory,
+    deleteCategory,
+
+    searchPartner,
+    upsertPartner,
+    deletePartner,
+
+    getAllSetting,
+    saveSetting
+  }
 }

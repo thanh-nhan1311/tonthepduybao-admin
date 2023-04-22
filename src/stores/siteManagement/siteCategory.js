@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { useMessage } from '~/compositions'
+import { useSiteManagementAPI } from '~/api'
 import { MSG } from '~/modules/constant'
-import { searchCategoryAPI, upsertCategoryAPI, deleteCategoryAPI } from '~/api/siteManagementApi'
 
 const mc = useMessage()
+const siteManagementAPI = useSiteManagementAPI()
 
 export const useSiteCategoryStore = defineStore('siteCategory', {
   state: () => ({
@@ -21,7 +22,7 @@ export const useSiteCategoryStore = defineStore('siteCategory', {
 
   actions: {
     async getCategoryOptions(excludeId = null) {
-      const res = await searchCategoryAPI({ search: '' })
+      const res = await siteManagementAPI.searchCategory({ search: '' })
       this.parentOptions = res.data
         .filter((item) => item.id !== excludeId)
         .map((item) => {
@@ -29,12 +30,12 @@ export const useSiteCategoryStore = defineStore('siteCategory', {
         })
     },
     async searchCategory(payload) {
-      const res = await searchCategoryAPI({ search: payload })
+      const res = await siteManagementAPI.searchCategory({ search: payload })
       this.allCategory = res.data
     },
     async upsertCategory(payload) {
       try {
-        await upsertCategoryAPI(payload)
+        await siteManagementAPI.upsertCategory(payload)
         await this.searchCategory('')
 
         mc.success(MSG.UPDATE_SUCCESS)
@@ -44,7 +45,7 @@ export const useSiteCategoryStore = defineStore('siteCategory', {
     },
     async deleteCategory(id) {
       try {
-        await deleteCategoryAPI(id)
+        await siteManagementAPI.deleteCategory(id)
         await this.searchCategory('')
 
         mc.success(MSG.DELETE_SUCCESS)

@@ -45,7 +45,6 @@
 
 <script setup>
 import { defineComponent, onMounted, ref } from 'vue'
-import EditBranchModal from '~/components/modal/EditBranchModal.vue'
 import { BRANCH_STATUS } from '~/modules/constant'
 import { BRANCH_TABLE_COLUMNS } from '~/modules/table'
 import { useBranchStore } from '~/stores/branch'
@@ -79,8 +78,9 @@ onMounted(() => {
 </script>
 
 <script>
+import EditBranchModal from './components/EditBranchModal.vue'
+
 export default defineComponent({
-  name: 'BranchPage',
   components: { EditBranchModal }
 })
 </script>

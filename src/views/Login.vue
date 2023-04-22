@@ -3,14 +3,14 @@
     <a-row class="w-full flex justify-center">
       <a-col :span="6" class="bg-white p-8 rounded-md">
         <div class="w-full flex justify-center mb-10">
-          <a-image src="/img/logo.png" :width="200" />
+          <a-image src="/img/logo.png" :width="200" :preview="false" />
         </div>
         <a-input
-          ref="refUsername"
+          ref="usernameRef"
           v-model:value="userLogin.username"
           placeholder="Tên đăng nhập"
           class="mb-2"
-          @keypress.enter="authComposition.login(userLogin)"
+          @keypress.enter="authStore.login(userLogin)"
         >
           <template #prefix>
             <user-outlined />
@@ -20,7 +20,7 @@
           v-model:value="userLogin.password"
           placeholder="Mật khẩu"
           class="mb-2"
-          @keypress.enter="authComposition.login(userLogin)"
+          @keypress.enter="authStore.login(userLogin)"
         >
           <template #prefix>
             <key-outlined />
@@ -38,56 +38,52 @@
         </div>
 
         <div class="w-full flex justify-center">
-          <a-button type="primary" @click="authComposition.login(userLogin)">Đăng nhập</a-button>
+          <a-button type="primary" @click="authStore.login(userLogin)">Đăng nhập</a-button>
         </div>
       </a-col>
     </a-row>
   </main>
 </template>
 
-<script>
-import { defineComponent, reactive, ref, computed } from 'vue'
+<script setup>
+import { defineComponent, reactive, ref, onMounted } from 'vue'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons-vue'
-import { useAuth } from '~/compositions'
+import { useAuthStore } from '~/stores/auth'
 import { useBranchStore } from '~/stores/branch'
 import { ALL_BRANCH_OPTION } from '~/modules/constant'
 
-export default defineComponent({
-  components: { UserOutlined, KeyOutlined },
-  setup() {
-    // Composition
-    const branchStore = useBranchStore()
-    const authComposition = useAuth()
+// Store
+const branchStore = useBranchStore()
+const authStore = useAuthStore()
 
-    // Computed
-    const branchOptions = computed(() => branchStore.branchOptions)
+// State
+const usernameRef = ref()
+const selectedBranch = ref(ALL_BRANCH_OPTION.value)
+const userLogin = reactive({
+  username: '',
+  password: '',
+  branchId: null
+})
 
-    // Data
-    const selectedBranch = ref(ALL_BRANCH_OPTION.value)
-    const userLogin = reactive({
-      username: '',
-      password: '',
-      branchId: null
-    })
+// Function
+const selectBranch = (value) => {
+  selectedBranch.value = value
+}
 
-    // Function
-    function selectBranch(value) {
-      selectedBranch.value = value
+onMounted(() => {
+  const childrens = usernameRef.value.$el.children
+  for (let child of childrens) {
+    if (child.tagName.toLowerCase() === 'input') {
+      child.focus()
     }
-    return {
-      authComposition,
-      branchStore,
-
-      branchOptions,
-      selectedBranch,
-      userLogin,
-      selectBranch
-    }
-  },
-  mounted() {
-    // Auto focus
-    this.$refs.refUsername.focus()
-    this.branchStore.getBranchOptions()
   }
+
+  branchStore.getBranchOptions()
+})
+</script>
+
+<script>
+export default defineComponent({
+  components: { UserOutlined, KeyOutlined }
 })
 </script>

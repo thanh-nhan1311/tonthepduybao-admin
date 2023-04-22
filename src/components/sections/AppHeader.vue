@@ -10,27 +10,13 @@
         <span class="text-white ml-2">Lê Kha</span>
       </router-link>
 
-      <a-button type="text" danger class="ml-8" @click="authComposition.logout()">
-        Đăng xuất
-      </a-button>
+      <a-button type="text" danger class="ml-8" @click="authStore.logout()"> Đăng xuất </a-button>
     </div>
   </a-layout-header>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
-import { useAuth } from '~/compositions'
-import { useCommonStore } from '~/stores/common'
+<script setup>
+import { useAuthStore } from '~/stores/auth'
 
-export default defineComponent({
-  name: 'AppHeader',
-  setup() {
-    const authComposition = useAuth()
-    const commonStore = useCommonStore()
-
-    const selectedKeys = ref(['2'])
-
-    return { authComposition, commonStore, selectedKeys }
-  }
-})
+const authStore = useAuthStore()
 </script>
