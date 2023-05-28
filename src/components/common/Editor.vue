@@ -2,7 +2,7 @@
   <div>
     <div class="flex items-center justify-between">
       <h4 class="font-semibold">{{ title }}</h4>
-      <a-button type="link" class="w-24" @click="save">
+      <a-button type="link" @click="emits('save', content)">
         <SaveFilled />
         <span>Lưu</span>
       </a-button>
@@ -14,15 +14,14 @@
       toolbar="full"
       @change="(val) => (content = val)"
     />
-    <a-textarea v-else v-model:value="content" :rows="3" />
+    <a-textarea v-else v-model:value="content" :rows="5" />
   </div>
 </template>
 
 <script setup>
-import { defineComponent, defineProps, ref, watch } from 'vue'
-import { useSiteSettingStore } from '~/stores/siteManagement/siteSetting'
+import { defineComponent, ref, watch } from 'vue'
 
-// Props
+const emits = defineEmits(['save'])
 const props = defineProps({
   title: {
     type: String,
@@ -33,15 +32,6 @@ const props = defineProps({
     type: String,
     required: true
   },
-  settingMasterKey: {
-    type: String,
-    required: true
-  },
-  settingKey: {
-    type: String,
-    required: false,
-    default: ''
-  },
   editor: {
     type: Boolean,
     required: false,
@@ -49,20 +39,8 @@ const props = defineProps({
   }
 })
 
-// Store
-const siteSettingStore = useSiteSettingStore()
-
 // State
 const content = ref(props.value)
-
-// Methods
-const save = async () => {
-  await siteSettingStore.saveSetting({
-    masterKey: props.settingMasterKey,
-    key: props.settingKey || null,
-    value: content.value
-  })
-}
 
 // Watch
 watch(

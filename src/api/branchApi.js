@@ -1,16 +1,16 @@
 import instance from '../config/axios'
 
 export default () => {
-  const getAllBranch = async () => {
+  const getAll = async () => {
     return await instance.get('/branch/public/all')
   }
 
-  const upsertBranch = async (payload) => {
+  const upsert = async (payload) => {
     await instance.post('/branch/upsert', payload)
   }
 
   return {
-    getAllBranch,
-    upsertBranch
+    getAll,
+    upsert
   }
 }

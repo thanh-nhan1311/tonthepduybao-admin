@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-size: 10px;
+}
+
 .ant-layout-content {
   background: #fff;
   padding: 24px;

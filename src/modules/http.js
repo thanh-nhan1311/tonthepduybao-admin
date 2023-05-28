@@ -1,4 +1,5 @@
 export const BASE_API_URL = import.meta.env.VITE_BASE_API_URL
+export const S3_URL = import.meta.env.VITE_S3_URL
 export const LOGIN_URL = '/login'
 
 export const WHITE_LIST_API_URL = ['/auth/login', '/branch/public/all']

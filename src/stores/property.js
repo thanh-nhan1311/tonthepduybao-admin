@@ -1,38 +1,26 @@
 import { defineStore } from 'pinia'
 import { useBranchAPI } from '../api'
 import { useMessage } from '../composables'
-import { ALL_BRANCH_OPTION, MSG } from '../modules/constant'
+import { MSG } from '../modules/constant'
 
 const mc = useMessage()
 const branchAPI = useBranchAPI()
 
 export const useBranchStore = defineStore('branch', {
   state: () => ({
-    allBranch: [],
-    branchOptions: []
+    properties: []
   }),
 
   actions: {
     // Function
-    async getAllBranch() {
-      const res = await branchAPI.getAll()
+    async getAll() {
+      const res = await branchAPI.getAllBranch()
       this.allBranch = res.data
-    },
-
-    async getBranchOptions() {
-      const res = await branchAPI.getAll()
-      this.branchOptions = res.data.map((item) => {
-        return {
-          value: item.id,
-          label: item.name
-        }
-      })
-      this.branchOptions.unshift(ALL_BRANCH_OPTION)
     },
 
     async upsertBranch(payload) {
       try {
-        await branchAPI.upsert(payload)
+        await branchAPI.upsertBranch(payload)
         await this.getAllBranch()
 
         mc.success(MSG.UPDATE_SUCCESS)

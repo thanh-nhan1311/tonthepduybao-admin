@@ -1,8 +1,8 @@
 export const MENU = {
-  DASHBOARD: {
-    id: 'dashboard',
+  HOME: {
+    id: 'home',
     path: '/',
-    name: 'Tổng quan',
+    name: 'Trang chủ',
     icon: 'ant-design:home-outlined',
     subMenu: null
   },
@@ -39,18 +39,36 @@ export const MENU = {
       }
     }
   },
+  DEBT: {
+    id: 'debt',
+    path: null,
+    name: 'Công nợ',
+    icon: 'mdi:file-document-multiple',
+    subMenu: {
+      LIST_DEBT: {
+        id: 'listDebt',
+        path: '/debt/list',
+        name: 'Danh sách công nợ'
+      },
+      ADD_DEBT: {
+        id: 'addDebt',
+        path: '/debt/add',
+        name: 'Thêm công nợ'
+      }
+    }
+  },
+  PROPERTY: {
+    id: 'property',
+    path: '/property',
+    name: 'Thiết lập thuộc tính',
+    icon: 'ic:baseline-settings',
+    subMenu: null
+  },
   BRANCH: {
     id: 'branch',
     path: '/branch',
     name: 'Chi nhánh',
     icon: 'mdi:store-marker-outline',
-    subMenu: null
-  },
-  SETTING: {
-    id: 'setting',
-    path: '/setting',
-    name: 'Thiết lập',
-    icon: 'ic:baseline-settings',
     subMenu: null
   },
   PROFILE: {

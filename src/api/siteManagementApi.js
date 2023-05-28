@@ -37,6 +37,9 @@ export default () => {
   }
 
   // Site Setting
+  const deleteSetting = async (payload) => {
+    await instance.delete(`/sm/setting/${payload}`)
+  }
   const getAllSetting = async () => {
     return await instance.get('/sm/setting')
   }
@@ -57,6 +60,7 @@ export default () => {
     upsertPartner,
     deletePartner,
 
+    deleteSetting,
     getAllSetting,
     saveSetting
   }

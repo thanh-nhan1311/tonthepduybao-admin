@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useMessage } from '~/compositions'
+import { useMessage } from '~/composables'
 import { useSiteManagementAPI } from '~/api'
 import { MSG } from '~/modules/constant'
 

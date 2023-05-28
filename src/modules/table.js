@@ -79,11 +79,6 @@ export const SITE_CATEGORY_TABLE_COLUMNS = [
     key: 'name'
   },
   {
-    title: 'SEO Url',
-    dataIndex: 'seoUrl',
-    key: 'seoUrl'
-  },
-  {
     title: 'SL sản phảm',
     dataIndex: 'totalProduct',
     key: 'totalProduct'
@@ -92,6 +87,23 @@ export const SITE_CATEGORY_TABLE_COLUMNS = [
     title: 'Danh mục cha',
     dataIndex: 'parentName',
     key: 'parentName'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]
+
+export const SITE_HOME_PRODUCT_CATEGORY_TABLE_COLUMNS = [
+  {
+    title: 'No.',
+    dataIndex: 'no',
+    key: 'no'
+  },
+  {
+    title: 'Danh mục sản phẩm',
+    dataIndex: 'category',
+    key: 'category'
   },
   {
     title: 'Thao tác',
@@ -109,6 +121,29 @@ export const SITE_PARTNER_TABLE_COLUMNS = [
     title: 'Tên',
     dataIndex: 'name',
     key: 'name'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]
+
+export const PROPERTY_TABLE_COLUMNS = [
+  {
+    title: 'No.',
+    dataIndex: 'no',
+    key: 'no',
+    width: 100
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
+    title: 'Thuộc tính',
+    dataIndex: 'properties',
+    key: 'properties'
   },
   {
     title: 'Thao tác',

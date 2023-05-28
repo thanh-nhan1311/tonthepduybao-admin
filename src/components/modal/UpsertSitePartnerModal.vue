@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    v-model:visible="isShowModalProp"
+    v-model:visible="visible"
     centered
     width="40vw"
     :title="`${isEdit ? 'Sửa' : 'Thêm mới'} đối tác`"
@@ -23,7 +23,7 @@
         <a-input v-model:value="formState.name" />
       </a-form-item>
 
-      <a-form-item has-feedback label="Logo" name="logoFile">
+      <a-form-item has-feedback label="Logo" name="logo">
         <image-picker
           :src="formState.logo ? [formState.logo] : null"
           width="50%"
@@ -39,34 +39,27 @@
 </template>
 
 <script setup>
-import { defineComponent, defineEmits, defineProps, ref, toRef, watch } from 'vue'
+import { defineComponent, onMounted, ref, toRef } from 'vue'
 import { defEmptyPartnerName, defEmptyPartnerLogo } from '~/modules/formRule'
 import { isNil, cloneDeep } from 'lodash'
 import ImagePicker from '~/components/ImagePicker.vue'
 import { useSitePartnerStore } from '~/stores/siteManagement/sitePartner'
+import { S3_URL } from '~/modules/http'
 
-// Emits
 const emits = defineEmits(['close'])
-
-// Props
 const props = defineProps({
-  isShowModal: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
   partner: {
     type: Object,
     default: null
   }
 })
-const isShowModalProp = toRef(props, 'isShowModal')
 const partnerProp = toRef(props, 'partner')
 
 // Store
 const sitePartnerStore = useSitePartnerStore()
 
 // State
+const visible = true
 const initialFormState = {
   id: null,
   name: '',
@@ -80,18 +73,19 @@ const formRules = {
 let btnEditRef = ref()
 let formRef = ref()
 const isEdit = ref(false)
-const formState = ref(initialFormState)
+const formState = ref(cloneDeep(initialFormState))
 
 // Methods
-const formSubmit = () => {
-  const { id, name, logoFile } = formState.value
+const formSubmit = async () => {
+  const { id, name, logo, logoFile } = formState.value
 
   const formData = new FormData()
   if (id) formData.append('id', id)
   formData.append('name', name)
-  formData.append('logoFile', logoFile)
+  if (isEdit.value && !logoFile) formData.append('logo', logo.replace(S3_URL, ''))
+  if (logoFile) formData.append('logoFile', logoFile)
 
-  sitePartnerStore.upsertPartner(formData)
+  await sitePartnerStore.upsertPartner(formData)
   reset()
   emits('close')
 }
@@ -101,22 +95,19 @@ const reset = () => {
   formRef.value.resetFields()
 }
 const selectImage = (data) => {
-  console.log(data)
   const { src, file } = data
   formState.value.logo = src
   formState.value.logoFile = file
 }
 
-// Watcher
-watch(
-  partnerProp,
-  (newProp) => {
-    isEdit.value = !isNil(newProp)
-    if (isEdit.value) formState.value = cloneDeep(newProp)
-    else reset()
-  },
-  { deep: true }
-)
+// Hooks
+onMounted(() => {
+  isEdit.value = !isNil(partnerProp.value)
+  if (isEdit.value) {
+    formState.value = cloneDeep(partnerProp.value)
+    formState.value.logo = S3_URL + formState.value.logo
+  } else reset()
+})
 </script>
 
 <script>

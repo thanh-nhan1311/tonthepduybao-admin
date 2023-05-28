@@ -10,7 +10,7 @@
         <a-menu-item v-if="!item.subMenu" :key="item.id">
           <div class="flex items-center">
             <Iconify :icon="item.icon" width="24px" />
-            <router-link :to="item.path" class="ml-2">{{ item.name }}</router-link>
+            <router-link :to="item.path" class="ml-2 text-lg">{{ item.name }}</router-link>
           </div>
         </a-menu-item>
 
@@ -18,12 +18,12 @@
           <template #title>
             <div class="flex items-center">
               <Iconify :icon="item.icon" width="24px" />
-              <span class="ml-2">{{ item.name }}</span>
+              <span class="ml-2 text-lg">{{ item.name }}</span>
             </div>
           </template>
 
           <a-menu-item v-for="subItem in Object.values(item.subMenu)" :key="subItem.id">
-            <router-link :to="subItem.path" class="flex items-center">
+            <router-link :to="subItem.path" class="flex items-center text-lg">
               {{ subItem.name }}
             </router-link>
           </a-menu-item>

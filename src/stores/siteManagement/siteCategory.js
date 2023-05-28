@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useMessage } from '~/compositions'
+import { useMessage } from '~/composables'
 import { useSiteManagementAPI } from '~/api'
 import { MSG } from '~/modules/constant'
 
@@ -23,6 +23,7 @@ export const useSiteCategoryStore = defineStore('siteCategory', {
   actions: {
     async getCategoryOptions(excludeId = null) {
       const res = await siteManagementAPI.searchCategory({ search: '' })
+      this.allCategory = res.data
       this.parentOptions = res.data
         .filter((item) => item.id !== excludeId)
         .map((item) => {

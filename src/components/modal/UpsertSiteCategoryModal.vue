@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    v-model:visible="isShowModalProp"
+    v-model:visible="visible"
     centered
     width="40vw"
     :title="`${isEdit ? 'Sửa' : 'Thêm mới'} danh mục`"
@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps, ref, toRef, watch } from 'vue'
+import { ref, toRef, watch } from 'vue'
 import { defEmptyCategoryName } from '~/modules/formRule'
 import { useSiteCategoryStore } from '~/stores/siteManagement/siteCategory'
 import { isNil, cloneDeep } from 'lodash'
@@ -51,11 +51,6 @@ const emits = defineEmits(['close'])
 
 // Props
 const props = defineProps({
-  isShowModal: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
   category: {
     type: Object,
     default: null
@@ -68,6 +63,7 @@ const categoryProp = toRef(props, 'category')
 const siteCategoryStore = useSiteCategoryStore()
 
 // State
+const visible = true
 const initialFormState = {
   id: null,
   name: '',

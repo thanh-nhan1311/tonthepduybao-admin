@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useCommonStore } from '~/stores/common'
-import { useMessage, useCookie } from '~/compositions'
+import { useMessage, useCookie } from '~/composables'
 import {
   BASE_API_URL,
   COOKIE_PARAM,

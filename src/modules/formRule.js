@@ -37,3 +37,9 @@ export const defEmptyCategory = async (_rule, value, cb) =>
 
 export const defEmptyCategoryImage = async (_rule, value, cb) =>
   defEmptyRule(_rule, value, cb, 'Hình ảnh cho danh mục sản phẩm chưa được chọn')
+
+export const defEmptyPropertyName = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Tên thuộc tính', 500)
+
+export const defEmptyPropertyDetailName = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Tên giá trị thuộc tính', 500)

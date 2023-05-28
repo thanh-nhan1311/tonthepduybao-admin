@@ -8,7 +8,7 @@
   />
 </template>
 <script setup>
-import { computed, defineComponent, defineEmits } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import ImageUploader from 'quill-image-uploader'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'

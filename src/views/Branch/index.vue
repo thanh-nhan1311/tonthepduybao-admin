@@ -1,10 +1,6 @@
 <template>
   <section>
-    <a-row class="flex justify-end items-center mb-4">
-      <a-col :span="24">
-        <h2 class="text-2xl">Danh sách chi nhánh</h2>
-      </a-col>
-    </a-row>
+    <heading title="Danh sách chi nhánh"></heading>
 
     <a-table :columns="BRANCH_TABLE_COLUMNS" :data-source="branchStore.allBranch">
       <template #bodyCell="{ column, record }">
@@ -23,7 +19,7 @@
         </template>
         <template v-else-if="column.key === 'action'">
           <div>
-            <a-button v-if="!record.resolvedFlag" type="link" @click="openModal(record.id)">
+            <a-button v-if="!record.resolvedFlag" type="link" @click="selectedBranch = record">
               Sửa
             </a-button>
             <a-button
@@ -56,10 +52,6 @@ const branchStore = useBranchStore()
 const selectedBranch = ref(null)
 
 // Methods
-const openModal = (id) => {
-  const findBranch = branchStore.allBranch.find((item) => item.id == id)
-  if (findBranch) selectedBranch.value = findBranch
-}
 const closeModal = () => {
   selectedBranch.value = null
 }

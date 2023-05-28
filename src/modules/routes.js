@@ -1,4 +1,4 @@
-import Dashboard from '~/views/Dashboard.vue'
+import Home from '~/views/Home.vue'
 import Branch from '~/views/Branch/index.vue'
 import Login from '~/views/Login.vue'
 
@@ -7,13 +7,16 @@ import SiteCategory from '~/views/SiteManagement/SiteCategory/index.vue'
 import SitePartner from '~/views/SiteManagement/SitePartner/index.vue'
 import SiteSetting from '~/views/SiteManagement/SiteSetting/index.vue'
 
-import Setting from '~/views/Setting/index.vue'
+import Property from '~/views/Property/index.vue'
+
+import AddDebt from '~/views/Debt/AddDebt/index.vue'
+import ListDebt from '~/views/Debt/ListDebt/index.vue'
 
 export default [
   {
     path: '/',
-    name: 'Dashboard',
-    component: Dashboard
+    name: 'Home',
+    component: Home
   },
 
   // Site Management
@@ -43,9 +46,24 @@ export default [
     ]
   },
   {
-    path: '/setting',
-    name: 'Setting',
-    component: Setting
+    name: 'Debt',
+    children: [
+      {
+        path: '/debt/add',
+        name: 'AddDebt',
+        component: AddDebt
+      },
+      {
+        path: '/debt/list',
+        name: 'ListDebt',
+        component: ListDebt
+      }
+    ]
+  },
+  {
+    path: '/property',
+    name: 'Property',
+    component: Property
   },
   {
     path: '/branch',

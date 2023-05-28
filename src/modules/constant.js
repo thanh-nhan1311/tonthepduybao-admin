@@ -16,7 +16,13 @@ export const MSG = {
 
   UPDATE_FAILED: 'Cập nhật không thành công!',
   DELETE_FAILED: 'Xoá không thành công!',
-  SAVE_FAILED: 'Lưu dữ liệu không thành công!'
+  SAVE_FAILED: 'Lưu dữ liệu không thành công!',
+
+  UPLOAD_SUCCESS: 'Tải tệp lên thành công!',
+  UPLOAD_FAILED: 'Tải tệp lên thất bại!',
+
+  DELETE_UPLOAD_SUCCESS: 'Xoá tệp thành công!',
+  DELETE_UPLOAD_FAILED: 'Xoá tệp thất bại!'
 }
 
 export const BRANCH_STATUS = {

@@ -1,23 +1,18 @@
 <template>
   <section>
-    <a-row class="flex justify-end items-center mb-4">
-      <a-col :span="16">
-        <h2 class="text-2xl">Danh sách liên hệ</h2>
-      </a-col>
-      <a-col :span="8">
-        <a-input
-          ref="refUsername"
-          v-model:value="search"
-          placeholder="Tìm kiếm liên hệ"
-          class="mb-2 w-full"
-          @keypress.enter="siteContactStore.searchContact(search)"
-        >
-          <template #prefix>
-            <search-outlined @click="siteContactStore.searchContact(search)" />
-          </template>
-        </a-input>
-      </a-col>
-    </a-row>
+    <heading title="Danh sách liên hệ">
+      <a-input
+        ref="refUsername"
+        v-model:value="search"
+        placeholder="Tìm kiếm liên hệ"
+        class="mb-2 w-[400px]"
+        @keypress.enter="siteContactStore.searchContact(search)"
+      >
+        <template #prefix>
+          <Iconify icon="ic:outline-search" @click="siteContactStore.searchContact(search)" />
+        </template>
+      </a-input>
+    </heading>
 
     <a-table :columns="SITE_CONTACT_TABLE_COLUMNS" :data-source="siteContactStore.allContact">
       <template #bodyCell="{ column, record, index }">
@@ -58,8 +53,7 @@
 </template>
 
 <script setup>
-import { SearchOutlined } from '@ant-design/icons-vue'
-import { defineComponent, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useSiteContactStore } from '@/stores/siteManagement/siteContact'
 import { SITE_CONTACT_TABLE_COLUMNS } from '~/modules/table'
 
@@ -82,13 +76,5 @@ const deleteContact = async (id) => {
 // Hooks
 onMounted(() => {
   siteContactStore.searchContact(search.value)
-})
-</script>
-
-<script>
-export default defineComponent({
-  components: {
-    SearchOutlined
-  }
 })
 </script>

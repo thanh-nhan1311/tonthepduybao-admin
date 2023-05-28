@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAuthAPI } from '~/api'
-import { useCookie } from '~/compositions'
+import { useCookie } from '~/composables'
 import { COOKIE_PARAM, STORAGE_PARAM } from '~/modules/http'
 import { ALL_BRANCH_OPTION } from '~/modules/constant'
 

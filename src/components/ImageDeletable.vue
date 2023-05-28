@@ -3,7 +3,7 @@
     <a-image :src="src" class="shadow-md w-full h-full" :fallback="FALLBACK_IMAGE" />
 
     <span
-      class="absolute -top-4 -right-4 text-2xl text-red-500 z-10 cursor-pointer"
+      class="absolute -top-4 -right-4 text-5xl bg-white rounded-full text-red-500 z-10 cursor-pointer"
       @click="emits('delete')"
     >
       <close-circle-filled />
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
 import { FALLBACK_IMAGE } from '~/modules/constant'
 
 defineProps({
