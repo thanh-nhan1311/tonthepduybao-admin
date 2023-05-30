@@ -67,7 +67,7 @@ import { cloneDeep } from 'lodash'
 const emits = defineEmits(['close'])
 
 // State
-const visible = true
+const visible = ref(true)
 const initialFormState = {
   id: null,
   name: null,

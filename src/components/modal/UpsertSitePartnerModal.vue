@@ -59,7 +59,7 @@ const partnerProp = toRef(props, 'partner')
 const sitePartnerStore = useSitePartnerStore()
 
 // State
-const visible = true
+const visible = ref(true)
 const initialFormState = {
   id: null,
   name: '',

@@ -61,7 +61,7 @@ const siteSettingStore = useSiteSettingStore()
 const uploadStore = useUploadStore()
 
 // State
-const visible = true
+const visible = ref(true)
 const initialFormState = {
   id: null,
   categoryId: null,

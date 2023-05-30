@@ -63,7 +63,7 @@ const categoryProp = toRef(props, 'category')
 const siteCategoryStore = useSiteCategoryStore()
 
 // State
-const visible = true
+const visible = ref(true)
 const initialFormState = {
   id: null,
   name: '',
