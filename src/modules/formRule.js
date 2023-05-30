@@ -43,3 +43,6 @@ export const defEmptyPropertyName = async (_rule, value, cb) =>
 
 export const defEmptyPropertyDetailName = async (_rule, value, cb) =>
   defStringRule(_rule, value, cb, 'Tên giá trị thuộc tính', 500)
+
+export const defEmptyCustomerName = async (_rule, value, cb) =>
+  defStringRule(_rule, value, cb, 'Tên khách hàng', 500)

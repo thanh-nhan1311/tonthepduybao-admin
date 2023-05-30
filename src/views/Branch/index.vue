@@ -6,11 +6,16 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'name'">
           <div>
-            <h3>{{ record.name }}</h3>
+            <h3 class="mb-1">{{ record.name }}</h3>
             <a :href="record.mapUrl" target="_blank" rel="noopener noreferrer">
               {{ record.address }}
             </a>
           </div>
+        </template>
+        <template v-else-if="column.key === 'phone' || column.key === 'zalo'">
+          <a :href="`tel:${record.phone}`" target="_blank" rel="noopener noreferrer">
+            {{ record.phone }}
+          </a>
         </template>
         <template v-else-if="column.key === 'status'">
           <a-tag :color="record.status === BRANCH_STATUS.ACTIVE ? 'green' : 'error'">
@@ -70,7 +75,7 @@ onMounted(() => {
 </script>
 
 <script>
-import EditBranchModal from './components/EditBranchModal.vue'
+import EditBranchModal from '@/components/modal/EditBranchModal.vue'
 
 export default defineComponent({
   components: { EditBranchModal }

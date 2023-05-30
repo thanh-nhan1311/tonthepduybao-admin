@@ -35,6 +35,38 @@ export const BRANCH_TABLE_COLUMNS = [
   }
 ]
 
+export const CUSTOMER_TABLE_COLUMNS = [
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id'
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
+    title: 'Điện thoại',
+    dataIndex: 'phone',
+    key: 'phone'
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+    key: 'email'
+  },
+  {
+    title: 'Địa chỉ',
+    dataIndex: 'address',
+    key: 'address'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]
+
 export const SITE_CONTACT_TABLE_COLUMNS = [
   {
     title: 'No.',

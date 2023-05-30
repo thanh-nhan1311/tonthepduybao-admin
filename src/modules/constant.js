@@ -5,6 +5,11 @@ export const ALL_BRANCH_OPTION = {
   label: 'Tất cả chi nhánh'
 }
 
+export const ALL_CUSTOMER_OPTION = {
+  value: -1,
+  label: 'Chọn khách hàng'
+}
+
 export const MSG = {
   SYSTEM_ERROR: 'Hệ thống xử lý lỗi, xin thử lại!',
   UNAUTHORIZED: 'Bạn không có quyền truy cập vào hệ thống, xin hãy đăng nhập!',

@@ -1,5 +1,6 @@
 import Home from '~/views/Home.vue'
 import Branch from '~/views/Branch/index.vue'
+import Customer from '~/views/Customer/index.vue'
 import Login from '~/views/Login.vue'
 
 import SiteContact from '~/views/SiteManagement/SiteContact/index.vue'
@@ -59,6 +60,11 @@ export default [
         component: ListDebt
       }
     ]
+  },
+  {
+    path: '/customer',
+    name: 'Customer',
+    component: Customer
   },
   {
     path: '/property',

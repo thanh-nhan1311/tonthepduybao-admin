@@ -19,8 +19,6 @@
         wrapperCol: { span: 18 }
       }"
       @finish="formSubmit"
-      @validate="validate"
-      @finish-failed="submitError"
     >
       <a-form-item has-feedback label="Tên chi nhánh" name="name">
         <a-input v-model:value="formState.name" />
@@ -113,9 +111,9 @@ const formRules = {
   phone: [{ required: true, validator: defEmptyPhone, trigger: 'change' }],
   manager: [{ required: true, validator: defEmptyManager, trigger: 'change' }]
 }
-const isShowModal = ref(false)
 let btnEditRef = ref()
 let formRef = ref()
+const isShowModal = ref(false)
 const formState = ref(initialFormState)
 
 // Methods
@@ -125,8 +123,6 @@ const formSubmit = () => {
   emits('close', null)
 }
 const submit = () => btnEditRef.value.$el.click()
-const submitError = () => {}
-const validate = () => {}
 
 // Watcher
 watch(

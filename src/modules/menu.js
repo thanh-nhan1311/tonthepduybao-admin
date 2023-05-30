@@ -57,6 +57,13 @@ export const MENU = {
       }
     }
   },
+  CUSTOMER: {
+    id: 'customer',
+    path: '/customer',
+    name: 'Khách hàng',
+    icon: 'heroicons:user-group-solid',
+    subMenu: null
+  },
   PROPERTY: {
     id: 'property',
     path: '/property',
