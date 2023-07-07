@@ -88,7 +88,7 @@ const customerProp = toRef(props, 'customer')
 const customerStore = useCustomerStore()
 
 // State
-const visible =ref(true)
+const visible = ref(true)
 const initialFormState = {
   id: null,
   name: '',

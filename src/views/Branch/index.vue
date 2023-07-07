@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { defineComponent, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { BRANCH_STATUS } from '~/modules/constant'
 import { BRANCH_TABLE_COLUMNS } from '~/modules/table'
 import { useBranchStore } from '~/stores/branch'
@@ -73,11 +73,11 @@ onMounted(() => {
   branchStore.getAllBranch()
 })
 </script>
-
+<!-- 
 <script>
 import EditBranchModal from '@/components/modal/EditBranchModal.vue'
 
 export default defineComponent({
   components: { EditBranchModal }
 })
-</script>
+</script> -->

@@ -8,8 +8,10 @@ import Antd from 'ant-design-vue'
 import router from './router'
 import App from './App.vue'
 
-import './assets/main.css'
 import 'ant-design-vue/dist/antd.css'
+
+import './assets/main.css'
+import './assets/main.scss'
 
 
 const pinia = createPinia()

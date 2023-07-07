@@ -1,27 +1,50 @@
 import { defineStore } from 'pinia'
-import { useBranchAPI } from '../api'
+import { usePropertyAPI } from '../api'
 import { useMessage } from '../composables'
 import { MSG } from '../modules/constant'
 
 const mc = useMessage()
-const branchAPI = useBranchAPI()
+const propertyAPI = usePropertyAPI()
 
-export const useBranchStore = defineStore('branch', {
+export const usePropertyStore = defineStore('property', {
   state: () => ({
+    search: '',
     properties: []
   }),
 
   actions: {
     // Function
-    async getAll() {
-      const res = await branchAPI.getAllBranch()
-      this.allBranch = res.data
+    async getAll(payload) {
+      const res = await propertyAPI.getAll(payload)
+      this.properties = res.data
     },
 
-    async upsertBranch(payload) {
+    async delete(payload) {
       try {
-        await branchAPI.upsertBranch(payload)
-        await this.getAllBranch()
+        await propertyAPI.del(payload)
+        await this.getAll({ search: this.search })
+
+        mc.success(MSG.DELETE_SUCCESS)
+      } catch (error) {
+        mc.error(MSG.DELETE_FAILED)
+      }
+    },
+
+    async create(payload) {
+      try {
+        await propertyAPI.create(payload)
+        await this.getAll({ search: this.search })
+
+        mc.success(MSG.UPDATE_SUCCESS)
+      } catch (error) {
+        mc.error(MSG.UPDATE_FAILED)
+      }
+    },
+
+    async update(payload) {
+      try {
+        await propertyAPI.update(payload)
+        await this.getAll({ search: this.search })
 
         mc.success(MSG.UPDATE_SUCCESS)
       } catch (error) {

@@ -1,0 +1,68 @@
+.ant-menu-submenu {
+  &.ant-menu-submenu-popup {
+    .ant-menu-item {
+      padding: 8px 16px;
+      height: auto;
+    }
+  }
+}
+
+.ant-menu-inline-collapsed-tooltip .ant-tooltip-inner {
+  display: flex;
+  align-items: center;
+}
+
+.ant-menu {
+  .ant-menu-submenu.collapsed-close .ant-menu-submenu-title {
+    padding: 0 20px !important;
+  }
+
+  .ant-menu-submenu-title {
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ant-menu-title-content {
+    display: flex;
+    align-items: center;
+
+    .tooltip {
+      display: none;
+    }
+  }
+
+  .ant-menu-sub.ant-menu-inline {
+    background-color: transparent;
+
+    & > .ant-menu-item {
+      height: 30px !important;
+      line-height: 30px !important;
+    }
+  }
+}
+
+
+.ant-layout-content {
+  background: #fff;
+  padding: 24px;
+  margin: 0;
+}
+
+td.ant-table-cell {
+  vertical-align: top;
+}
+
+.ant-table-cell {
+  padding: 8px 12px !important;
+}
+
+.ant-form {
+  .ant-form-item-explain-error {
+    font-size: 1.2rem;
+  }
+  .ant-form-item {
+    margin-bottom: 8px;
+  }
+}

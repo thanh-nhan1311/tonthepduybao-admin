@@ -178,6 +178,11 @@ export const PROPERTY_TABLE_COLUMNS = [
     key: 'properties'
   },
   {
+    title: 'Chỉnh sửa gần đây',
+    dataIndex: 'last_modified',
+    key: 'last_modified'
+  },
+  {
     title: 'Thao tác',
     key: 'action'
   }

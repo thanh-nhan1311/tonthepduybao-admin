@@ -11,6 +11,7 @@ import SiteSetting from '~/views/SiteManagement/SiteSetting/index.vue'
 import Property from '~/views/Property/index.vue'
 
 import AddDebt from '~/views/Debt/AddDebt/index.vue'
+import AddDebtSteel from '~/views/Debt/AddDebt/AddDebtSteel.vue'
 import ListDebt from '~/views/Debt/ListDebt/index.vue'
 
 export default [
@@ -53,6 +54,11 @@ export default [
         path: '/debt/add',
         name: 'AddDebt',
         component: AddDebt
+      },
+      {
+        path: '/debt/add/steel',
+        name: 'AddDebtSteel',
+        component: AddDebtSteel
       },
       {
         path: '/debt/list',

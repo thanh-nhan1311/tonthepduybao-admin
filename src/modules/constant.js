@@ -1,5 +1,31 @@
 export const FALLBACK_IMAGE = '/img/fallback.png'
 
+export const PROP_DEF = {
+  OBJECT: {
+    type: Object,
+    required: false,
+    default: null
+  },
+  OBJECT_REQUIRED: {
+    type: Object,
+    required: true
+  },
+  STRING: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  STRING_REQUIRED: {
+    type: String,
+    required: true
+  },
+  BOOLEAN: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
+}
+
 export const ALL_BRANCH_OPTION = {
   value: -1,
   label: 'Tất cả chi nhánh'

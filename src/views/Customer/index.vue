@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { defineComponent, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { CUSTOMER_TABLE_COLUMNS } from '~/modules/table'
 import { useCustomerStore } from '~/stores/customer'
 
@@ -77,13 +77,5 @@ const deleteCustomer = () => {}
 // Hooks
 onMounted(() => {
   customerStore.search({ search: '' })
-})
-</script>
-
-<script>
-import UpsertCustomerModal from '@/components/modal/UpsertCustomerModal.vue'
-
-export default defineComponent({
-  components: { UpsertCustomerModal }
 })
 </script>

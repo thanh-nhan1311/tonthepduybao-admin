@@ -1,5 +1,5 @@
 export const defStringRule = async (_rule, value, cb, label = '', length = 255) => {
-  if (!value || value.length > length) {
+  if (!value || value.trim().length > length) {
     const message = `${label} không được để trống và vượt quá ${length} kí tự`
     return Promise.reject(message)
   }
