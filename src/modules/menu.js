@@ -1,3 +1,5 @@
+import { DEBT_TYPE } from './constant'
+
 export const MENU = {
   HOME: {
     id: 'home',
@@ -61,19 +63,19 @@ export const MENU = {
       ADD_DEBT: {
         id: 'addDebt',
         path: '/debt/add',
-        name: 'Thêm công nợ',
+        name: 'Tạo công nợ',
         implicit: false
       },
       ADD_DEBT_STEEL: {
-        id: 'addDebt',
-        path: '/debt/add/steel',
-        name: 'Thêm công nợ: Tôn - Sắt - Thép',
+        id: 'addDebtSteel',
+        path: '/debt/add/' + DEBT_TYPE.STEEL.toLowerCase(),
+        name: 'Tạo công nợ: Tôn - Sắt - Thép',
         implicit: true
       },
       ADD_DEBT_SCREW: {
-        id: 'addDebt',
-        path: '/debt/add/screw',
-        name: 'Thêm công nợ: Sản phẩm khác',
+        id: 'addDebtScrew',
+        path: '/debt/add/' + DEBT_TYPE.SCREW.toLowerCase(),
+        name: 'Tạo công nợ: Sản phẩm khác',
         implicit: true
       }
     }

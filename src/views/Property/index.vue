@@ -27,7 +27,7 @@
       </div>
     </heading>
 
-    <a-table :columns="PROPERTY_TABLE_COLUMNS" :data-source="propertyStore.properties">
+    <a-table :columns="PROPERTY_TABLE_COLUMNS" :data-source="propertyStore.allProperty">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
         <template v-else-if="column.key === 'last_modified'">
@@ -85,7 +85,7 @@ const selectedProperty = ref(null)
 // Methods
 const openModal = (id = null) => {
   if (id) {
-    selectedProperty.value = propertyStore.properties.find((item) => item.id == id)
+    selectedProperty.value = propertyStore.allProperty.find((item) => item.id == id)
   }
   isShowModal.value = true
 }

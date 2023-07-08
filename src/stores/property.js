@@ -6,17 +6,17 @@ import { MSG } from '../modules/constant'
 const mc = useMessage()
 const propertyAPI = usePropertyAPI()
 
-export const usePropertyStore = defineStore('property', {
+export const usePropertyStore = defineStore('propertyStore', {
   state: () => ({
     search: '',
-    properties: []
+    allProperty: []
   }),
 
   actions: {
     // Function
-    async getAll(payload) {
+    async getAll(payload = { search: '' }) {
       const res = await propertyAPI.getAll(payload)
-      this.properties = res.data
+      this.allProperty = res.data
     },
 
     async delete(payload) {

@@ -1,3 +1,4 @@
+// Menu
 .ant-menu-submenu {
   &.ant-menu-submenu-popup {
     .ant-menu-item {
@@ -42,6 +43,7 @@
     }
   }
 }
+// End menu
 
 
 .ant-layout-content {
@@ -50,15 +52,29 @@
   margin: 0;
 }
 
-td.ant-table-cell {
-  vertical-align: top;
+// Table
+.ant-table {
+  border: 1px solid #f0f0f0;
+  border-bottom: 0;
+
+  td.ant-table-cell {
+    vertical-align: top;
+  }
+  
+  .ant-table-cell {
+    padding: 8px 12px !important;
+  }
 }
 
-.ant-table-cell {
-  padding: 8px 12px !important;
-}
+// End table
 
+
+// Form
 .ant-form {
+  &.ant-form-vertical .ant-form-item-label {
+    padding-bottom: 2px;
+  }
+
   .ant-form-item-explain-error {
     font-size: 1.2rem;
   }
@@ -66,3 +82,16 @@ td.ant-table-cell {
     margin-bottom: 8px;
   }
 }
+// End form
+
+// Modal
+.ant-modal {
+  .ant-modal-body {
+    padding: 20px;
+
+    .ant-modal-confirm-btns {
+      margin-top: 16px;
+    }
+  }
+}
+// End modal

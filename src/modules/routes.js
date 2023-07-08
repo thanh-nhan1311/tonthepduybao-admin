@@ -10,8 +10,8 @@ import SiteSetting from '~/views/SiteManagement/SiteSetting/index.vue'
 
 import Property from '~/views/Property/index.vue'
 
+import SelectAddDebt from '~/views/Debt/SelectAddDebt/index.vue'
 import AddDebt from '~/views/Debt/AddDebt/index.vue'
-import AddDebtSteel from '~/views/Debt/AddDebt/AddDebtSteel.vue'
 import ListDebt from '~/views/Debt/ListDebt/index.vue'
 
 export default [
@@ -52,13 +52,13 @@ export default [
     children: [
       {
         path: '/debt/add',
-        name: 'AddDebt',
-        component: AddDebt
+        name: 'SelectAddDebt',
+        component: SelectAddDebt
       },
       {
-        path: '/debt/add/steel',
-        name: 'AddDebtSteel',
-        component: AddDebtSteel
+        path: '/debt/add/:type',
+        name: 'AddDebt',
+        component: AddDebt
       },
       {
         path: '/debt/list',

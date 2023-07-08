@@ -74,10 +74,7 @@ import { useBranchStore } from '~/stores/branch'
 import { useMoment } from '~/composables'
 import { isNil, cloneDeep } from 'lodash'
 
-// Emits
 const emits = defineEmits(['close'])
-
-// Props
 const props = defineProps({
   branch: {
     type: Object,
@@ -85,11 +82,10 @@ const props = defineProps({
   }
 })
 const branchProp = toRef(props, 'branch')
-// Store
-const branchStore = useBranchStore()
 
-// Composition API
+// Store & composables
 const moment = useMoment()
+const branchStore = useBranchStore()
 
 // State
 const initialFormState = {

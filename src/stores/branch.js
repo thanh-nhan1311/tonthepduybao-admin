@@ -6,7 +6,7 @@ import { ALL_BRANCH_OPTION, MSG } from '../modules/constant'
 const mc = useMessage()
 const branchAPI = useBranchAPI()
 
-export const useBranchStore = defineStore('branch', {
+export const useBranchStore = defineStore('branchStore', {
   state: () => ({
     allBranch: [],
     branchOptions: []
@@ -21,12 +21,10 @@ export const useBranchStore = defineStore('branch', {
 
     async getBranchOptions() {
       const res = await branchAPI.getAll()
-      this.branchOptions = res.data.map((item) => {
-        return {
-          value: item.id,
-          label: item.name
-        }
-      })
+      this.branchOptions = res.data.map((item) => ({
+        value: item.id,
+        label: item.name
+      }))
       this.branchOptions.unshift(ALL_BRANCH_OPTION)
     },
 

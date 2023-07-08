@@ -1,8 +1,8 @@
 import instance from '../config/axios'
 
 export default () => {
-  const search = async (payload) => {
-    return await instance.get('/customer/search', { params: payload })
+  const getAll = async (payload) => {
+    return await instance.get('/customer/all', { params: payload })
   }
 
   const upsert = async (payload) => {
@@ -10,7 +10,7 @@ export default () => {
   }
 
   return {
-    search,
+    getAll,
     upsert
   }
 }

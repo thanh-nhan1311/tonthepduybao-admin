@@ -37,9 +37,9 @@ export const BRANCH_TABLE_COLUMNS = [
 
 export const CUSTOMER_TABLE_COLUMNS = [
   {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id'
+    title: 'No',
+    dataIndex: 'no',
+    key: 'no'
   },
   {
     title: 'Tên',
@@ -47,23 +47,24 @@ export const CUSTOMER_TABLE_COLUMNS = [
     key: 'name'
   },
   {
-    title: 'Điện thoại',
-    dataIndex: 'phone',
-    key: 'phone'
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    key: 'email'
-  },
-  {
     title: 'Địa chỉ',
     dataIndex: 'address',
     key: 'address'
   },
   {
+    title: 'Liên hệ',
+    dataIndex: 'contact',
+    key: 'contact'
+  },
+  {
+    title: 'Phân loại',
+    dataIndex: 'type',
+    key: 'type'
+  },
+  {
     title: 'Thao tác',
-    key: 'action'
+    key: 'action',
+    width: 200
   }
 ]
 
@@ -185,5 +186,67 @@ export const PROPERTY_TABLE_COLUMNS = [
   {
     title: 'Thao tác',
     key: 'action'
+  }
+]
+
+export const ADD_DEBT_TABLE_COLUMNS = [
+  {
+    title: 'No.',
+    dataIndex: 'no',
+    key: 'no',
+    width: 75
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name',
+    width: 240
+  },
+  {
+    title: 'Nơi SX',
+    dataIndex: 'producer',
+    key: 'producer',
+    width: 160
+  },
+  {
+    title: 'Ghi chú',
+    dataIndex: 'note',
+    key: 'note',
+    width: 160
+  },
+  {
+    title: 'Thuộc tính',
+    dataIndex: 'properties',
+    key: 'properties',
+    width: 160
+  },
+  {
+    title: 'Số KG',
+    dataIndex: 'weight',
+    key: 'weight',
+    width: 120
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity',
+    width: 120
+  },
+  {
+    title: 'TT TB',
+    dataIndex: 'avgProportion',
+    key: 'avgProportion',
+    width: 100
+  },
+  {
+    title: 'Đơn giá',
+    dataIndex: 'unitPrice',
+    key: 'unitPrice',
+    width: 120
+  },
+  {
+    title: 'Thao tác',
+    key: 'action',
+    width: 100
   }
 ]

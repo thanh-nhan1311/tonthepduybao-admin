@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
 import { useCustomerAPI } from '../api'
 import { useMessage } from '../composables'
-import { ALL_CUSTOMER_OPTION, MSG } from '../modules/constant'
+import { MSG } from '../modules/constant'
 
 const mc = useMessage()
 const customerAPI = useCustomerAPI()
 
 export const useCustomerStore = defineStore('customerStore', {
   state: () => ({
-    allCustomer: [],
-    customerOptions: []
+    search: '',
+    type: '',
+    allCustomer: []
   }),
 
   getters: {
@@ -25,26 +26,15 @@ export const useCustomerStore = defineStore('customerStore', {
 
   actions: {
     // Function
-    async search(payload = { search: '' }) {
-      const { data } = await customerAPI.search(payload)
+    async getAll(payload = { search: '', type: '' }) {
+      const { data } = await customerAPI.getAll(payload)
       this.allCustomer = data
-    },
-
-    async getOptions() {
-      const res = await customerAPI.search()
-      this.customerOptions = res.data.map((item) => {
-        return {
-          value: item.id,
-          label: item.name
-        }
-      })
-      this.customerOptions.unshift(ALL_CUSTOMER_OPTION)
     },
 
     async upsert(payload) {
       try {
         await customerAPI.upsert(payload)
-        await this.search()
+        await this.getAll({ search: this.search, type: this.type })
 
         mc.success(MSG.UPDATE_SUCCESS)
       } catch (error) {

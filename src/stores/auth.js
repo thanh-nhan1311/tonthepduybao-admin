@@ -7,7 +7,7 @@ import { ALL_BRANCH_OPTION } from '~/modules/constant'
 const authAPI = useAuthAPI()
 const cookie = useCookie()
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore('authStore', {
   state: () => ({
     isAuth: false
   }),

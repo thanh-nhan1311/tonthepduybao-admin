@@ -24,6 +24,10 @@
         <a-input v-model:value="formState.name" />
       </a-form-item>
 
+      <a-form-item has-feedback label="Phân loại" name="type">
+        <a-radio-group v-model:value="formState.type" :options="customerTypeOptions" />
+      </a-form-item>
+
       <div v-for="(item, index) in formState.phone" :key="index" class="flex mb-2">
         <a-form-item
           :label="`Số điện thoại ${index + 1}`"
@@ -71,9 +75,10 @@
 
 <script setup>
 import { ref, toRef, onMounted } from 'vue'
-import { defEmptyCustomerName } from '~/modules/formRule'
+import { defEmptyCustomerName, defEmptyCustomerType } from '~/modules/formRule'
 import { isNil, cloneDeep } from 'lodash'
 import { useCustomerStore } from '~/stores/customer'
+import { CUSTOMER_TYPE } from '~/modules/constant'
 
 const emits = defineEmits(['close'])
 const props = defineProps({
@@ -88,17 +93,23 @@ const customerProp = toRef(props, 'customer')
 const customerStore = useCustomerStore()
 
 // State
+const customerTypeOptions = [
+  { label: 'Khách hàng', value: CUSTOMER_TYPE.CUSTOMER },
+  { label: 'Nhà cung cấp', value: CUSTOMER_TYPE.SUPPLIER }
+]
 const visible = ref(true)
 const initialFormState = {
   id: null,
   name: '',
+  type: CUSTOMER_TYPE.CUSTOMER,
   phone: [],
   email: '',
   address: '',
   updatedAt: ''
 }
 const formRules = {
-  name: [{ required: true, validator: defEmptyCustomerName, trigger: 'change' }]
+  name: [{ required: true, validator: defEmptyCustomerName, trigger: 'change' }],
+  type: [{ required: true, validator: defEmptyCustomerType, trigger: 'change' }]
 }
 let btnSubmitRef = ref()
 let formRef = ref()
