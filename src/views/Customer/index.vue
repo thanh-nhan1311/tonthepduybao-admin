@@ -15,7 +15,7 @@
           :options="customerTypeOptions"
           :show-search="true"
           placeholder="Chọn khách hàng"
-          class="w-[240px] mr-4"
+          class="w-[200px] mr-4"
           @change="customerStore.getAll({ search, type })"
         />
 

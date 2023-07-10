@@ -1,4 +1,5 @@
 export const FALLBACK_IMAGE = '/img/fallback.png'
+export const NOT_FOUND_PATH = '/404'
 
 export const PROP_DEF = {
   OBJECT: {

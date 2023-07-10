@@ -17,6 +17,11 @@
       }
     }
   }
+  &__table {
+    &--error td {
+      background-color: rgb(240, 187, 187);
+    }
+  }
 }
 
 .delete-property-confirm-modal {

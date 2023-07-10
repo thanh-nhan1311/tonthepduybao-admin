@@ -61,8 +61,8 @@ export const MENU = {
         implicit: false
       },
       ADD_DEBT: {
-        id: 'addDebt',
-        path: '/debt/add',
+        id: 'SelectDebtType',
+        path: '/debt/select-type',
         name: 'Tạo công nợ',
         implicit: false
       },

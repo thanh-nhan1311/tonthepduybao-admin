@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { LOGIN_URL } from '../modules/http'
-import routes from '../modules/routes'
+import routes from './routes'
 import { useAuthStore } from '~/stores/auth'
 
 const router = createRouter({

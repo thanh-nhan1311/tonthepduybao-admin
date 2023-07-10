@@ -203,12 +203,6 @@ export const ADD_DEBT_TABLE_COLUMNS = [
     width: 240
   },
   {
-    title: 'Nơi SX',
-    dataIndex: 'producer',
-    key: 'producer',
-    width: 160
-  },
-  {
     title: 'Ghi chú',
     dataIndex: 'note',
     key: 'note',
@@ -218,7 +212,7 @@ export const ADD_DEBT_TABLE_COLUMNS = [
     title: 'Thuộc tính',
     dataIndex: 'properties',
     key: 'properties',
-    width: 160
+    width: 200
   },
   {
     title: 'Số KG',

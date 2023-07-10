@@ -4,6 +4,7 @@ import useSiteManagementAPI from './siteManagementApi'
 import useUploadAPI from './uploadApi'
 import useCustomerAPI from './customerApi'
 import usePropertyAPI from './propertyApi'
+import useDebtAPI from './debtApi'
 
 export {
   useAuthAPI,
@@ -11,5 +12,6 @@ export {
   useSiteManagementAPI,
   useUploadAPI,
   useCustomerAPI,
-  usePropertyAPI
+  usePropertyAPI,
+  useDebtAPI
 }
