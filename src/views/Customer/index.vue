@@ -1,22 +1,13 @@
 <template>
   <section>
-    <heading :title="title">
+    <heading :title="pageTitle">
       <div class="flex items-center">
         <a-input-search
           ref="refUsername"
           v-model:value="search"
           placeholder="Tìm kiếm ..."
           class="mr-4 w-[400px]"
-          @keypress.enter="customerStore.getAll({ search, type })"
-        />
-
-        <a-select
-          v-model:value="type"
-          :options="customerTypeOptions"
-          :show-search="true"
-          placeholder="Chọn khách hàng"
-          class="w-[200px] mr-4"
-          @change="customerStore.getAll({ search, type })"
+          @keypress.enter="init"
         />
 
         <a-button type="primary" class="flex items-center" @click="isShowModal = true">
@@ -31,6 +22,24 @@
       :data-source="customerStore.allCustomerTableData"
       class="mt-8"
     >
+      <template #headerCell="{ title, column }">
+        <template v-if="column.key === 'type'">
+          <div class="flex items-center">
+            <a-popover trigger="click" placement="bottom">
+              <template #content>
+                <a-checkbox-group
+                  v-model:value="type"
+                  :options="customerTypeOptions"
+                  class="flex flex-col"
+                  @change="init"
+                />
+              </template>
+              <Iconify icon="mdi:filter" class="cursor-pointer outline-none" width="14px" />
+            </a-popover>
+            <span class="ml-4">{{ title }}</span>
+          </div>
+        </template>
+      </template>
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
         <template v-else-if="column.key === 'contact'">
@@ -89,7 +98,6 @@ const customerStore = useCustomerStore()
 
 // State
 const customerTypeOptions = [
-  { label: 'Chọn tất cả', value: '' },
   { label: 'Khách hàng', value: CUSTOMER_TYPE.CUSTOMER },
   { label: 'Nhà cung cấp', value: CUSTOMER_TYPE.SUPPLIER }
 ]
@@ -97,7 +105,7 @@ const search = toRef(customerStore, 'search')
 const type = toRef(customerStore, 'type')
 const selectedCustomer = ref(null)
 const isShowModal = ref(false)
-const title = computed(() => {
+const pageTitle = computed(() => {
   let suffix = 'khách hàng/nhà cung cấp'
 
   if (type.value === CUSTOMER_TYPE.CUSTOMER) suffix = 'khách hàng'
@@ -107,6 +115,12 @@ const title = computed(() => {
 })
 
 // Methods
+const init = async () => {
+  await customerStore.getAll({
+    search: search.value,
+    type: type.value.join(',')
+  })
+}
 const openModal = (customer) => {
   selectedCustomer.value = customer
   isShowModal.value = true
@@ -118,7 +132,7 @@ const closeModal = () => {
 const deleteCustomer = () => {}
 
 // Hooks
-onMounted(() => {
-  customerStore.getAll()
+onMounted(async () => {
+  await init()
 })
 </script>

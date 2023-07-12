@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { useBranchAPI } from '../api'
-import { useMessage } from '../composables'
-import { ALL_BRANCH_OPTION, MSG } from '../modules/constant'
+import { ALL_BRANCH_OPTION } from '../modules/constant'
 
-const mc = useMessage()
 const branchAPI = useBranchAPI()
 
 export const useBranchStore = defineStore('branchStore', {
@@ -29,14 +27,8 @@ export const useBranchStore = defineStore('branchStore', {
     },
 
     async upsertBranch(payload) {
-      try {
-        await branchAPI.upsert(payload)
-        await this.getAllBranch()
-
-        mc.success(MSG.UPDATE_SUCCESS)
-      } catch (error) {
-        mc.error(MSG.UPDATE_FAILED)
-      }
+      await branchAPI.upsert(payload)
+      await this.getAllBranch()
     }
   }
 })

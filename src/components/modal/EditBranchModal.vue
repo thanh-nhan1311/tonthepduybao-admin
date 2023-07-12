@@ -71,8 +71,9 @@ import {
   defEmptyManager
 } from '~/modules/formRule'
 import { useBranchStore } from '~/stores/branch'
-import { useMoment } from '~/composables'
+import { useMessage, useMoment } from '~/composables'
 import { isNil, cloneDeep } from 'lodash'
+import { MSG } from '~/modules/constant'
 
 const emits = defineEmits(['close'])
 const props = defineProps({
@@ -84,6 +85,7 @@ const props = defineProps({
 const branchProp = toRef(props, 'branch')
 
 // Store & composables
+const mc = useMessage()
 const moment = useMoment()
 const branchStore = useBranchStore()
 
@@ -113,10 +115,16 @@ const isShowModal = ref(false)
 const formState = ref(initialFormState)
 
 // Methods
-const formSubmit = () => {
-  branchStore.upsertBranch(formState.value)
-  formRef.value.resetFields()
-  emits('close', null)
+const formSubmit = async () => {
+  try {
+    await branchStore.upsertBranch(formState.value)
+    formRef.value.resetFields()
+    emits('close', null)
+
+    mc.success(MSG.UPDATE_SUCCESS)
+  } catch (error) {
+    mc.error(MSG.UPDATE_FAILED)
+  }
 }
 const submit = () => btnEditRef.value.$el.click()
 

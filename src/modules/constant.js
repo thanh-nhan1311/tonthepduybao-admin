@@ -1,6 +1,11 @@
 export const FALLBACK_IMAGE = '/img/fallback.png'
 export const NOT_FOUND_PATH = '/404'
 
+export const PAGING = {
+  DEFAULT_PAGE: 1,
+  DEFAULT_PAGE_SIZE: 25
+}
+
 export const PROP_DEF = {
   OBJECT: {
     type: Object,

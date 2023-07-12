@@ -180,8 +180,8 @@ export const PROPERTY_TABLE_COLUMNS = [
   },
   {
     title: 'Chỉnh sửa gần đây',
-    dataIndex: 'last_modified',
-    key: 'last_modified'
+    dataIndex: 'lastModified',
+    key: 'lastModified'
   },
   {
     title: 'Thao tác',
@@ -189,12 +189,68 @@ export const PROPERTY_TABLE_COLUMNS = [
   }
 ]
 
-export const ADD_DEBT_TABLE_COLUMNS = [
+export const ADD_DEBT_STEEL_TABLE_COLUMNS = [
   {
-    title: 'No.',
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name',
+    width: 200
+  },
+  {
+    title: 'Ghi chú',
+    dataIndex: 'note',
+    key: 'note',
+    width: 120
+  },
+  {
+    title: 'Thuộc tính',
+    dataIndex: 'properties',
+    key: 'properties',
+    width: 200
+  },
+  {
+    title: 'Số KG',
+    dataIndex: 'weight',
+    key: 'weight',
+    width: 100
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity',
+    width: 100
+  },
+  {
+    title: 'TT TB',
+    dataIndex: 'avgProportion',
+    key: 'avgProportion',
+    width: 70
+  },
+  {
+    title: 'Đơn giá',
+    dataIndex: 'unitPrice',
+    key: 'unitPrice',
+    width: 120
+  },
+  {
+    title: 'Đơn giá cây/mét',
+    dataIndex: 'totalUnitPrice',
+    key: 'totalUnitPrice',
+    width: 140
+  },
+  {
+    title: 'Thao tác',
+    key: 'action',
+    width: 100
+  }
+]
+
+export const DEBT_DETAIL_STEEL_TABLE_COLUMNS = [
+  {
+    title: 'No',
     dataIndex: 'no',
     key: 'no',
-    width: 75
+    width: 70
   },
   {
     title: 'Tên',
@@ -210,37 +266,80 @@ export const ADD_DEBT_TABLE_COLUMNS = [
   },
   {
     title: 'Thuộc tính',
-    dataIndex: 'properties',
-    key: 'properties',
+    dataIndex: 'propertyDetails',
+    key: 'propertyDetails',
     width: 200
   },
   {
     title: 'Số KG',
     dataIndex: 'weight',
-    key: 'weight',
-    width: 120
+    key: 'weight'
   },
   {
     title: 'Số lượng',
     dataIndex: 'quantity',
-    key: 'quantity',
-    width: 120
+    key: 'quantity'
   },
   {
     title: 'TT TB',
     dataIndex: 'avgProportion',
     key: 'avgProportion',
-    width: 100
+    width: 70
   },
   {
     title: 'Đơn giá',
     dataIndex: 'unitPrice',
-    key: 'unitPrice',
+    key: 'unitPrice'
+  },
+  {
+    title: 'Đơn giá cây/mét',
+    dataIndex: 'totalUnitPrice',
+    key: 'totalUnitPrice'
+  },
+  {
+    title: 'Tổng nhập',
+    dataIndex: 'totalPrice',
+    key: 'totalPrice'
+  }
+]
+
+export const LIST_DEBT_TABLE_COLUMNS = [
+  {
+    title: 'Mã ',
+    dataIndex: 'id',
+    key: 'id',
+    width: 75
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name',
+    width: 240
+  },
+  {
+    title: 'Ngày tạo',
+    dataIndex: 'date',
+    key: 'date',
     width: 120
   },
   {
-    title: 'Thao tác',
-    key: 'action',
-    width: 100
+    title: 'Nhà cung cấp',
+    dataIndex: 'customer',
+    key: 'customer'
+  },
+  {
+    title: 'Phân loại',
+    dataIndex: 'type',
+    key: 'type'
+  },
+  {
+    title: 'Tổng nhập/xuất',
+    dataIndex: 'totalPrice',
+    key: 'totalPrice'
+  },
+  {
+    title: 'Chỉnh sửa gần đây',
+    dataIndex: 'lastModified',
+    key: 'lastModified'
   }
 ]

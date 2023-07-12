@@ -1,24 +1,38 @@
 import { defineStore } from 'pinia'
 import { useDebtAPI } from '../api'
-import { useMessage } from '../composables'
-import { MSG } from '../modules/constant'
+import { PAGING } from '~/modules/constant'
 
-const mc = useMessage()
 const debtAPI = useDebtAPI()
 
 export const useDebtStore = defineStore('debtStore', {
-  state: () => ({}),
+  state: () => ({
+    debt: null,
+    allDebt: {
+      data: [],
+      page: PAGING.DEFAULT_PAGE,
+      pageSize: PAGING.DEFAULT_PAGE_SIZE,
+      totalPages: 0,
+      totalItems: 0
+    }
+  }),
 
   actions: {
-    // Function
-    async create(payload) {
-      try {
-        await debtAPI.create(payload)
+    async get(payload) {
+      const { data } = await debtAPI.get(payload)
+      this.debt = data
+    },
 
-        mc.success(MSG.SAVE_SUCCESS)
-      } catch (error) {
-        mc.error(MSG.SAVE_FAILED)
-      }
+    async getAll(payload) {
+      const { data } = await debtAPI.getAll(payload)
+      this.allDebt = data
+    },
+
+    async create(payload) {
+      await debtAPI.create(payload)
+    },
+
+    async delete(payload) {
+      await debtAPI.del(payload)
     }
   }
 })

@@ -2,8 +2,14 @@ import moment from 'moment'
 
 export default () => {
   const MOMENT_FORMAT = {
+    YYYYMMDD: 'YYYYMMDD',
     YYYYMMDDHHmmss: 'YYYYMMDDHHmmss',
+    YYYY_MM_DD: 'DD/MM/YYYY',
     YYYY_MM_DD_HH_mm_ss: 'DD/MM/YYYY HH:mm:ss'
+  }
+
+  const dFormat = (value) => {
+    return moment(value, MOMENT_FORMAT.YYYYMMDD).format(MOMENT_FORMAT.YYYY_MM_DD)
   }
 
   const mFormat = (value) => {
@@ -16,6 +22,7 @@ export default () => {
 
   return {
     MOMENT_FORMAT,
+    dFormat,
     mFormat,
     mBuild
   }

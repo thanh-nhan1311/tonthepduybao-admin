@@ -28,7 +28,7 @@ const debtItems = [
   },
   {
     icon: '/img/screw.png',
-    name: 'Sản Phẩm Khác',
+    name: 'Vật liệu',
     path: MENU.DEBT.subMenu.ADD_DEBT_SCREW.path
   }
 ]

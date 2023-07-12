@@ -1,15 +1,12 @@
 import { defineStore } from 'pinia'
 import { useCustomerAPI } from '../api'
-import { useMessage } from '../composables'
-import { MSG } from '../modules/constant'
 
-const mc = useMessage()
 const customerAPI = useCustomerAPI()
 
 export const useCustomerStore = defineStore('customerStore', {
   state: () => ({
     search: '',
-    type: '',
+    type: [],
     allCustomer: []
   }),
 
@@ -32,14 +29,8 @@ export const useCustomerStore = defineStore('customerStore', {
     },
 
     async upsert(payload) {
-      try {
-        await customerAPI.upsert(payload)
-        await this.getAll({ search: this.search, type: this.type })
-
-        mc.success(MSG.UPDATE_SUCCESS)
-      } catch (error) {
-        mc.error(MSG.UPDATE_FAILED)
-      }
+      await customerAPI.upsert(payload)
+      await this.getAll({ search: this.search, type: this.type })
     }
   }
 })

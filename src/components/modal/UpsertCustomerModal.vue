@@ -78,7 +78,8 @@ import { ref, toRef, onMounted } from 'vue'
 import { defEmptyCustomerName, defEmptyCustomerType } from '~/modules/formRule'
 import { isNil, cloneDeep } from 'lodash'
 import { useCustomerStore } from '~/stores/customer'
-import { CUSTOMER_TYPE } from '~/modules/constant'
+import { CUSTOMER_TYPE, MSG } from '~/modules/constant'
+import { useMessage } from '~/composables'
 
 const emits = defineEmits(['close'])
 const props = defineProps({
@@ -90,6 +91,7 @@ const props = defineProps({
 const customerProp = toRef(props, 'customer')
 
 // Store
+const mc = useMessage()
 const customerStore = useCustomerStore()
 
 // State
@@ -118,17 +120,22 @@ const formState = ref(initialFormState)
 
 // Methods
 const formSubmit = async () => {
-  const phone =
-    formState.value.phone && formState.value.phone.length !== 0
-      ? formState.value.phone.join(',')
-      : ''
-  const payload = {
-    ...formState.value,
-    phone
+  try {
+    const phone =
+      formState.value.phone && formState.value.phone.length !== 0
+        ? formState.value.phone.join(',')
+        : ''
+    const payload = {
+      ...formState.value,
+      phone
+    }
+    await customerStore.upsert(payload)
+    reset()
+    emits('close')
+    mc.success(MSG.UPDATE_SUCCESS)
+  } catch (error) {
+    mc.error(MSG.UPDATE_FAILED)
   }
-  await customerStore.upsert(payload)
-  reset()
-  emits('close')
 }
 const submit = () => btnSubmitRef.value.$el.click()
 const reset = () => {

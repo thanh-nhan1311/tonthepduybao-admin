@@ -13,6 +13,7 @@ import Property from '~/views/Property/index.vue'
 
 import SelectDebtType from '~/views/Debt/SelectDebtType/index.vue'
 import AddDebtSteel from '~/views/Debt/AddDebtSteel/index.vue'
+import DebtDetail from '~/views/Debt/DebtDetail/index.vue'
 import ListDebt from '~/views/Debt/ListDebt/index.vue'
 import { DEBT_TYPE } from '~/modules/constant'
 
@@ -56,6 +57,11 @@ export default [
         path: '/debt/select-type',
         name: 'SelectDebtType',
         component: SelectDebtType
+      },
+      {
+        path: '/debt/:id',
+        name: 'DebtDetail',
+        component: DebtDetail
       },
       {
         path: '/debt/add/' + DEBT_TYPE.STEEL.toLowerCase(),

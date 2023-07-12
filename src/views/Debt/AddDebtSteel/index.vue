@@ -1,7 +1,10 @@
 <template>
   <section class="add-debt">
-    <p class="w-full text-right italic mb-0 text-xl text-red-500">(*) Là các trường bắt buộc</p>
-    <div class="grid grid-cols-12 gap-x-8">
+    <heading :title="MENU.DEBT.subMenu.ADD_DEBT_STEEL.name">
+      <p class="text-right italic mb-0 text-xl text-red-500">(*) Là các trường bắt buộc</p>
+    </heading>
+
+    <div class="grid grid-cols-12 gap-x-8 mt-8">
       <div class="col-span-12 mb-6">
         <label for="name"><span class="text-red-500">*</span> Tên công nợ</label>
         <a-input
@@ -23,8 +26,8 @@
           id="date"
           v-model:value="formState.date"
           placeholder="Chọn ngày"
-          format="DD/MM/YYYY"
-          value-format="YYYYMMDD"
+          :format="moment.MOMENT_FORMAT.YYYY_MM_DD"
+          :value-format="moment.MOMENT_FORMAT.YYYYMMDD"
           class="w-full mt-1"
           @change="clearValidate('date')"
         />
@@ -48,7 +51,7 @@
         </p>
       </div>
 
-      <div class="col-span-4 mb-4">
+      <div class="col-span-3 mb-4">
         <label for="propertyIds"><span class="text-red-500">*</span> Thuộc tính</label>
         <a-select
           id="propertyIds"
@@ -67,9 +70,9 @@
         </p>
       </div>
 
-      <div class="col-span-2 flex justify-end pt-[24px]">
+      <div class="col-span-3 flex justify-end pt-[24px]">
         <a-button type="primary" ghost class="min-w-[120px] flex items-center" @click="addDebtItem">
-          <Iconify icon="mdi:plus-circle" width="28px" />
+          <Iconify icon="mdi:plus-circle" width="16px" />
           <span class="ml-2">Thêm sản phẩm</span>
         </a-button>
         <a-button
@@ -98,22 +101,22 @@
           Một trong số các trường bắt buộc của sản phẩm chưa được nhập
         </p>
       </div>
-      <table class="add-debt__summary-table">
+      <table class="summary-table">
         <tbody>
           <tr>
             <td>Tổng nhập cây/mét</td>
-            <td class="text-red-500">{{ formatCurrency(totalUnitPrice) }}</td>
+            <td>{{ formatCurrency(totalUnitPrice) }}</td>
           </tr>
           <tr>
             <td>Tổng nhập</td>
-            <td class="text-red-500">{{ formatCurrency(totalPrice) }}</td>
+            <td>{{ formatCurrency(totalPrice) }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <a-table
-      :columns="ADD_DEBT_TABLE_COLUMNS"
+      :columns="ADD_DEBT_STEEL_TABLE_COLUMNS"
       :data-source="formState.items"
       :scroll="{ x: 'max-content' }"
       :pagination="false"
@@ -127,13 +130,16 @@
           {{ title }}
         </template>
       </template>
+
       <template #bodyCell="{ column, record, index }">
-        <template v-if="column.key === 'no'">{{ index + 1 }}</template>
-        <template v-else-if="column.key === 'name'">
-          <a-input
-            v-model:value="formState.items[index].name"
-            @change="clearValidate('items', index)"
-          />
+        <template v-if="column.key === 'name'">
+          <div class="flex items-center">
+            <span class="mr-4">{{ index + 1 }}.</span>
+            <a-input
+              v-model:value="formState.items[index].name"
+              @change="clearValidate('items', index)"
+            />
+          </div>
         </template>
         <template v-else-if="column.key === 'note'">
           <a-input v-model:value="formState.items[index].note" />
@@ -147,7 +153,6 @@
             :show-search="true"
             :placeholder="`Chọn ${prop.name}`"
             :class="['w-full', propIndex !== 0 && 'mt-2']"
-            style="width: 100%"
           />
         </template>
         <template v-else-if="column.key === 'weight'">
@@ -155,7 +160,7 @@
             v-model:value="formState.items[index].weight"
             type="number"
             :min="0"
-            @change="calAvgProportion(index)"
+            @change="onChangeAvgProportion(index)"
           />
         </template>
         <template v-else-if="column.key === 'quantity'">
@@ -163,7 +168,7 @@
             v-model:value="formState.items[index].quantity"
             type="number"
             :min="0"
-            @change="calAvgProportion(index)"
+            @change="onChangeAvgProportion(index)"
           />
         </template>
         <template v-else-if="column.key === 'unitPrice'">
@@ -171,21 +176,21 @@
             v-model:value="formState.items[index].unitPrice"
             type="number"
             :min="0"
-            @change="
-              () => {
-                calPrice()
-                clearValidate('items', index)
-              }
-            "
+            @change="onChangeUnitPrice(index)"
           />
         </template>
+        <template v-else-if="column.key === 'totalUnitPrice'">
+          <span class="font-medium text-red-400">{{ formatCurrency(record.totalUnitPrice) }}</span>
+        </template>
         <template v-else-if="column.key === 'action'">
-          <a-button type="link" danger @click="deleteDebtItem(index, record)">
-            <Iconify icon="mdi:trash-can" width="20px" />
-          </a-button>
-          <a-button type="link" @click="duplicateDebtItem(index)">
-            <Iconify icon="mdi:content-duplicate" width="20px" />
-          </a-button>
+          <div class="flex items-center">
+            <a-button type="link" danger @click="deleteDebtItem(index, record)">
+              <Iconify icon="mdi:trash-can" width="20px" />
+            </a-button>
+            <a-button type="link" @click="duplicateDebtItem(index)">
+              <Iconify icon="mdi:content-duplicate" width="20px" />
+            </a-button>
+          </div>
         </template>
       </template>
     </a-table>
@@ -196,13 +201,13 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { Modal } from 'ant-design-vue'
 import { createVNode, onMounted, ref } from 'vue'
-import { ADD_DEBT_TABLE_COLUMNS } from '~/modules/table'
+import { ADD_DEBT_STEEL_TABLE_COLUMNS } from '~/modules/table'
 import { useCustomerStore } from '~/stores/customer'
 import { usePropertyStore } from '~/stores/property'
 import { useDebtStore } from '~/stores/debt'
 import { isEmpty, cloneDeep } from 'lodash'
-import { useMessage } from '~/composables'
-import { CUSTOMER_TYPE, DEBT_TYPE } from '~/modules/constant'
+import { useMessage, useMoment } from '~/composables'
+import { CUSTOMER_TYPE, DEBT_TYPE, MSG } from '~/modules/constant'
 import { formatCurrency } from '~/modules/utils'
 import { useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
@@ -211,6 +216,7 @@ const router = useRouter()
 
 // Store
 const mc = useMessage()
+const moment = useMoment()
 const propertyStore = usePropertyStore()
 const customerStore = useCustomerStore()
 const debtStore = useDebtStore()
@@ -223,6 +229,7 @@ const debtItem = {
   weight: 0,
   avgProportion: 0,
   unitPrice: 0,
+  totalUnitPrice: 0,
   properties: {} // dynamic property
 }
 const formState = ref({
@@ -301,13 +308,19 @@ const deselectProperty = (propId) => {
   })
 }
 
-const calAvgProportion = (index) => {
-  const weight = formState.value.items[index].weight
-  const quantity = formState.value.items[index].quantity
+const onChangeUnitPrice = (index) => {
+  const { avgProportion, unitPrice } = formState.value.items[index]
+  formState.value.items[index].totalUnitPrice = avgProportion * unitPrice
 
-  formState.value.items[index].avgProportion = quantity > 0 ? (weight / quantity).toFixed(2) : 0
   calPrice()
   clearValidate('items', index)
+}
+
+const onChangeAvgProportion = (index) => {
+  const { weight, quantity } = formState.value.items[index]
+  formState.value.items[index].avgProportion = quantity > 0 ? (weight / quantity).toFixed(2) : 0
+
+  onChangeUnitPrice(index)
 }
 
 const calPrice = () => {
@@ -386,15 +399,20 @@ const submit = async () => {
       }
     })
 
-    await debtStore.create({
-      name,
-      date,
-      customerId,
-      propertyIds,
-      type: DEBT_TYPE.STEEL,
-      items
-    })
-    router.push(MENU.DEBT.subMenu.LIST_DEBT.path)
+    try {
+      await debtStore.create({
+        name,
+        date,
+        customerId,
+        propertyIds,
+        type: DEBT_TYPE.STEEL,
+        items
+      })
+      mc.success(MSG.SAVE_SUCCESS)
+      router.push(MENU.DEBT.subMenu.LIST_DEBT.path)
+    } catch (error) {
+      mc.error(MSG.SAVE_FAILED)
+    }
   }
 }
 

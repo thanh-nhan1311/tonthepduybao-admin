@@ -30,7 +30,7 @@
     <a-table :columns="PROPERTY_TABLE_COLUMNS" :data-source="propertyStore.allProperty">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
-        <template v-else-if="column.key === 'last_modified'">
+        <template v-else-if="column.key === 'lastModified'">
           <div class="mb-1 flex items-center">
             <Iconify icon="mdi:account" />
             <span class="ml-2">{{ record.updatedBy }}</span>

@@ -46,26 +46,34 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { BRANCH_STATUS } from '~/modules/constant'
+import { useMessage } from '~/composables'
+import { BRANCH_STATUS, MSG } from '~/modules/constant'
 import { BRANCH_TABLE_COLUMNS } from '~/modules/table'
 import { useBranchStore } from '~/stores/branch'
 
 // Store
+const mc = useMessage()
 const branchStore = useBranchStore()
 
-// Data
+// State
 const selectedBranch = ref(null)
 
 // Methods
 const closeModal = () => {
   selectedBranch.value = null
 }
-const updateBranchStatus = (branch) => {
-  if (!branch) return
+const updateBranchStatus = async (branch) => {
+  try {
+    if (!branch) return
 
-  branch.status =
-    branch.status === BRANCH_STATUS.ACTIVE ? BRANCH_STATUS.INACTIVE : BRANCH_STATUS.ACTIVE
-  branchStore.upsertBranch(branch)
+    branch.status =
+      branch.status === BRANCH_STATUS.ACTIVE ? BRANCH_STATUS.INACTIVE : BRANCH_STATUS.ACTIVE
+    await branchStore.upsertBranch(branch)
+
+    mc.success(MSG.UPDATE_SUCCESS)
+  } catch (error) {
+    mc.error(MSG.UPDATE_FAILED)
+  }
 }
 
 // Hooks
@@ -73,11 +81,3 @@ onMounted(() => {
   branchStore.getAllBranch()
 })
 </script>
-<!-- 
-<script>
-import EditBranchModal from '@/components/modal/EditBranchModal.vue'
-
-export default defineComponent({
-  components: { EditBranchModal }
-})
-</script> -->

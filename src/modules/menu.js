@@ -60,11 +60,17 @@ export const MENU = {
         name: 'Danh sách công nợ',
         implicit: false
       },
-      ADD_DEBT: {
+      SELECT_DEBT_TYPE: {
         id: 'SelectDebtType',
         path: '/debt/select-type',
         name: 'Tạo công nợ',
         implicit: false
+      },
+      DEBT_DETAIL: {
+        id: 'debtDetail',
+        path: '/debt/',
+        name: 'Thông tin công nợ',
+        implicit: true
       },
       ADD_DEBT_STEEL: {
         id: 'addDebtSteel',
@@ -75,7 +81,7 @@ export const MENU = {
       ADD_DEBT_SCREW: {
         id: 'addDebtScrew',
         path: '/debt/add/' + DEBT_TYPE.SCREW.toLowerCase(),
-        name: 'Tạo công nợ: Sản phẩm khác',
+        name: 'Tạo công nợ: Vật liệu',
         implicit: true
       }
     }
