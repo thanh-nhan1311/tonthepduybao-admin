@@ -8,56 +8,29 @@
     </a-breadcrumb-item>
 
     <a-breadcrumb-item
-      v-for="(item, index) of breadcrumb"
+      v-for="(item, index) of breadcrumbs"
       :key="index"
       class="flex items-center w-auto"
     >
-      <span>{{ item.name }}</span>
+      <router-link v-if="index !== breadcrumbs.length - 1" :to="item.path">
+        {{ item.name }}
+      </router-link>
+      <span v-else>{{ item.name }}</span>
     </a-breadcrumb-item>
   </a-breadcrumb>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { MENU } from '~/modules/menu'
+import { useCommonStore } from '~/stores/common'
 
 const route = useRoute()
 
+// Store
+const commonStore = useCommonStore()
+
 // State
-const breadcrumb = ref([])
-
-// Method
-const findBreadcrumb = (fullPath) => {
-  breadcrumb.value = []
-
-  if (fullPath === MENU.HOME.path) return
-
-  for (const menu of Object.values(MENU)) {
-    const { path, subMenu } = menu
-
-    if (!path && subMenu) {
-      const subMenuItem = Object.values(subMenu).find((subItem) => subItem.path === fullPath)
-      if (subMenuItem) {
-        breadcrumb.value.push(menu)
-        breadcrumb.value.push(subMenuItem)
-        break
-      }
-    } else if (path === fullPath) {
-      breadcrumb.value.push(menu)
-      break
-    }
-  }
-}
-
-// Hook
-watch(
-  () => route.fullPath,
-  (fullPath) => findBreadcrumb(fullPath),
-  { immediate: true }
-)
-
-onMounted(() => {
-  findBreadcrumb(route.fullPath)
-})
+const breadcrumbs = computed(() => route.meta.breadcrumbs || commonStore.breadcrumbs)
 </script>

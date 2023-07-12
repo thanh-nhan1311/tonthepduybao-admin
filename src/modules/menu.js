@@ -2,7 +2,7 @@ import { DEBT_TYPE } from './constant'
 
 export const MENU = {
   HOME: {
-    id: 'home',
+    id: 'Home',
     path: '/',
     name: 'Trang chủ',
     icon: 'ant-design:home-outlined',
@@ -10,38 +10,38 @@ export const MENU = {
     implicit: false
   },
   SITE_MANAGEMENT: {
-    id: 'siteManagement',
+    id: 'SiteManagement',
     path: null,
     name: 'Quản lý trang',
     icon: 'ant-design:global-outlined',
     implicit: false,
     subMenu: {
       SM_PRODUCT: {
-        id: 'smProduct',
+        id: 'SiteContact',
         path: '/sm/product',
         name: 'Sản phẩm',
         implicit: false
       },
       SM_PRODUCT_CATEGORY: {
-        id: 'smProductCategory',
-        path: '/sm/category',
+        id: 'SiteProductCategory',
+        path: '/sm/product-category',
         name: 'Danh mục sản phẩm',
         implicit: false
       },
       SM_CONTACT: {
-        id: 'smContact',
+        id: 'SiteContact',
         path: '/sm/contact',
         name: 'Liên hệ',
         implicit: false
       },
       SM_PARTNER: {
-        id: 'smPartner',
+        id: 'SitePartner',
         path: '/sm/partner',
         name: 'Đối tác',
         implicit: false
       },
-      SM_COMMON: {
-        id: 'smCommon',
+      SM_SETTING: {
+        id: 'SiteSetting',
         path: '/sm/setting',
         name: 'Cài đặt chung',
         implicit: false
@@ -49,45 +49,33 @@ export const MENU = {
     }
   },
   DEBT: {
-    id: 'debt',
-    path: null,
+    id: 'DebtList',
+    path: '/debt/list',
     name: 'Công nợ',
     icon: 'mdi:file-document-multiple',
-    subMenu: {
-      LIST_DEBT: {
-        id: 'listDebt',
-        path: '/debt/list',
-        name: 'Danh sách công nợ',
-        implicit: false
-      },
-      SELECT_DEBT_TYPE: {
-        id: 'SelectDebtType',
-        path: '/debt/select-type',
-        name: 'Tạo công nợ',
-        implicit: false
-      },
-      DEBT_DETAIL: {
-        id: 'debtDetail',
-        path: '/debt/',
-        name: 'Thông tin công nợ',
-        implicit: true
-      },
-      ADD_DEBT_STEEL: {
-        id: 'addDebtSteel',
-        path: '/debt/add/' + DEBT_TYPE.STEEL.toLowerCase(),
-        name: 'Tạo công nợ: Tôn - Sắt - Thép',
-        implicit: true
-      },
-      ADD_DEBT_SCREW: {
-        id: 'addDebtScrew',
-        path: '/debt/add/' + DEBT_TYPE.SCREW.toLowerCase(),
-        name: 'Tạo công nợ: Vật liệu',
-        implicit: true
-      }
-    }
+    subMenu: null,
+    implicit: false
+  },
+  DEBT_DETAIL: {
+    id: 'DebtDetail',
+    path: '/debt/detail/',
+    name: 'Thông tin công nợ',
+    implicit: true
+  },
+  ADD_DEBT_STEEL: {
+    id: 'AddDebtSteel',
+    path: '/debt/add/' + DEBT_TYPE.STEEL.toLowerCase(),
+    name: 'Tạo công nợ: Tôn - Sắt - Thép',
+    implicit: true
+  },
+  ADD_DEBT_SCREW: {
+    id: 'AddDebtScrew',
+    path: '/debt/add/' + DEBT_TYPE.SCREW.toLowerCase(),
+    name: 'Tạo công nợ: Vật liệu',
+    implicit: true
   },
   CUSTOMER: {
-    id: 'customer',
+    id: 'Customer',
     path: '/customer',
     name: 'Khách hàng',
     icon: 'heroicons:user-group-solid',
@@ -95,7 +83,7 @@ export const MENU = {
     implicit: false
   },
   PROPERTY: {
-    id: 'property',
+    id: 'Property',
     path: '/property',
     name: 'Thiết lập thuộc tính',
     icon: 'ic:baseline-settings',
@@ -103,7 +91,7 @@ export const MENU = {
     implicit: false
   },
   BRANCH: {
-    id: 'branch',
+    id: 'Branch',
     path: '/branch',
     name: 'Chi nhánh',
     icon: 'mdi:store-marker-outline',

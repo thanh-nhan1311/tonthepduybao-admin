@@ -1,6 +1,6 @@
 <template>
   <section class="add-debt">
-    <heading :title="MENU.DEBT.subMenu.ADD_DEBT_STEEL.name">
+    <heading :title="MENU.ADD_DEBT_STEEL.name">
       <p class="text-right italic mb-0 text-xl text-red-500">(*) Là các trường bắt buộc</p>
     </heading>
 
@@ -217,9 +217,9 @@ const router = useRouter()
 // Store
 const mc = useMessage()
 const moment = useMoment()
+const debtStore = useDebtStore()
 const propertyStore = usePropertyStore()
 const customerStore = useCustomerStore()
-const debtStore = useDebtStore()
 
 // State
 const debtItem = {
@@ -409,7 +409,7 @@ const submit = async () => {
         items
       })
       mc.success(MSG.SAVE_SUCCESS)
-      router.push(MENU.DEBT.subMenu.LIST_DEBT.path)
+      router.push(MENU.DEBT.path)
     } catch (error) {
       mc.error(MSG.SAVE_FAILED)
     }

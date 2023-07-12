@@ -168,6 +168,7 @@ import { NOT_FOUND_PATH, DEBT_TYPE, MSG } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { DEBT_DETAIL_STEEL_TABLE_COLUMNS } from '~/modules/table'
 import { formatCurrency, normalize } from '~/modules/utils'
+import { useCommonStore } from '~/stores/common'
 import { useDebtStore } from '~/stores/debt'
 
 const route = useRoute()
@@ -177,6 +178,7 @@ const router = useRouter()
 const mc = useMessage()
 const moment = useMoment()
 const debtStore = useDebtStore()
+const commonStore = useCommonStore()
 
 // State
 const search = ref('')
@@ -197,7 +199,7 @@ const deleteDebt = async () => {
     isShowConfirm.value = false
 
     mc.success(MSG.DELETE_SUCCESS)
-    router.push(MENU.DEBT.subMenu.LIST_DEBT.path)
+    router.push(MENU.DEBT.path)
   } catch (error) {
     mc.error(MSG.DELETE_FAILED)
   }
@@ -210,8 +212,13 @@ onMounted(async () => {
 
   try {
     await debtStore.get(id)
+
+    commonStore.setBreadcrumbs([
+      MENU.DEBT,
+      { name: debt.value.name, path: MENU.DEBT_DETAIL + debt.value.id }
+    ])
   } catch (error) {
-    router.push(MENU.DEBT.subMenu.LIST_DEBT.path)
+    router.push(MENU.DEBT.path)
   }
 })
 </script>

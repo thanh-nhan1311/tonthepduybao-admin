@@ -5,17 +5,17 @@ import Login from '~/views/Login.vue'
 import NotFound from '~/views/NotFound.vue'
 
 import SiteContact from '~/views/SiteManagement/SiteContact/index.vue'
-import SiteCategory from '~/views/SiteManagement/SiteCategory/index.vue'
+import SiteProductCategory from '~/views/SiteManagement/SiteProductCategory/index.vue'
 import SitePartner from '~/views/SiteManagement/SitePartner/index.vue'
 import SiteSetting from '~/views/SiteManagement/SiteSetting/index.vue'
 
 import Property from '~/views/Property/index.vue'
 
-import SelectDebtType from '~/views/Debt/SelectDebtType/index.vue'
 import AddDebtSteel from '~/views/Debt/AddDebtSteel/index.vue'
 import DebtDetail from '~/views/Debt/DebtDetail/index.vue'
 import ListDebt from '~/views/Debt/ListDebt/index.vue'
 import { DEBT_TYPE } from '~/modules/constant'
+import { MENU } from '~/modules/menu'
 
 export default [
   {
@@ -23,8 +23,6 @@ export default [
     name: 'Home',
     component: Home
   },
-
-  // Site Management
   {
     name: 'SiteManagement',
     children: [
@@ -34,9 +32,9 @@ export default [
         component: SiteContact
       },
       {
-        path: '/sm/category',
-        name: 'SiteCategory',
-        component: SiteCategory
+        path: '/sm/product-category',
+        name: 'SiteProductCategory',
+        component: SiteProductCategory
       },
       {
         path: '/sm/partner',
@@ -54,41 +52,41 @@ export default [
     name: 'Debt',
     children: [
       {
-        path: '/debt/select-type',
-        name: 'SelectDebtType',
-        component: SelectDebtType
+        path: '/debt/list',
+        name: 'DebtList',
+        component: ListDebt,
+        meta: { breadcrumbs: [MENU.DEBT] }
       },
       {
-        path: '/debt/:id',
+        path: '/debt/detail/:id',
         name: 'DebtDetail',
         component: DebtDetail
       },
       {
         path: '/debt/add/' + DEBT_TYPE.STEEL.toLowerCase(),
         name: 'AddDebtSteel',
-        component: AddDebtSteel
-      },
-      {
-        path: '/debt/list',
-        name: 'DebtList',
-        component: ListDebt
+        component: AddDebtSteel,
+        meta: { breadcrumbs: [MENU.DEBT, MENU.ADD_DEBT_STEEL] }
       }
     ]
   },
   {
     path: '/customer',
     name: 'Customer',
-    component: Customer
+    component: Customer,
+    meta: { breadcrumbs: [MENU.CUSTOMER] }
   },
   {
     path: '/property',
     name: 'Property',
-    component: Property
+    component: Property,
+    meta: { breadcrumbs: [MENU.PROPERTY] }
   },
   {
     path: '/branch',
     name: 'Branch',
-    component: Branch
+    component: Branch,
+    meta: { breadcrumbs: [MENU.BRANCH] }
   },
   {
     path: '/login',

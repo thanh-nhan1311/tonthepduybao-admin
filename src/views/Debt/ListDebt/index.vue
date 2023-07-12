@@ -1,6 +1,6 @@
 <template>
   <section class="list-debt">
-    <heading :title="MENU.DEBT.subMenu.LIST_DEBT.name">
+    <heading title="Danh sách công nợ">
       <div class="flex items-center">
         <a-input-search
           v-model:value="search"
@@ -12,7 +12,7 @@
         <a-button
           type="primary"
           class="flex items-center"
-          @click="router.push(MENU.DEBT.subMenu.SELECT_DEBT_TYPE.path)"
+          @click="commonStore.setShowSelectDebtTypeModal(true)"
         >
           <Iconify icon="mdi:plus-circle" width="16px" />
           <span class="ml-2">Tạo công nợ</span>
@@ -87,7 +87,7 @@
       }"
       :custom-row="
         (record) => ({
-          onClick: () => router.push(MENU.DEBT.subMenu.DEBT_DETAIL.path + record.id)
+          onClick: () => router.push(MENU.DEBT_DETAIL.path + record.id)
         })
       "
       :data-source="debts"
@@ -215,6 +215,7 @@ import { DEBT_TYPE, PAGING } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { LIST_DEBT_TABLE_COLUMNS } from '~/modules/table'
 import { formatCurrency } from '~/modules/utils'
+import { useCommonStore } from '~/stores/common'
 import { useCustomerStore } from '~/stores/customer'
 import { useDebtStore } from '~/stores/debt'
 
@@ -223,6 +224,7 @@ const router = useRouter()
 // Store
 const moment = useMoment()
 const debtStore = useDebtStore()
+const commonStore = useCommonStore()
 const customerStore = useCustomerStore()
 
 // State

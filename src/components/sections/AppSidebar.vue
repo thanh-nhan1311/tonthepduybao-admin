@@ -8,7 +8,7 @@
     >
       <template v-for="item in Object.values(MENU).filter((item) => !item.implicit)">
         <a-menu-item
-          v-if="!item.subMenu"
+          v-if="!hasSubMenu(item.subMenu)"
           :key="item.id"
           :class="['flex justify-center items-center', collapsed ? 'px-0' : 'px-8']"
           @click="routeTo(item.path)"
@@ -19,8 +19,10 @@
 
         <a-sub-menu v-else :key="item.id + 1" :class="!collapsed && 'collapsed-close'">
           <template #title>
-            <Iconify :icon="item.icon" width="20px" />
-            <span v-if="!collapsed" class="ml-2 text-lg">{{ item.name }}</span>
+            <div class="flex items-center">
+              <Iconify :icon="item.icon" width="20px" />
+              <span v-if="!collapsed" class="ml-2 text-lg">{{ item.name }}</span>
+            </div>
           </template>
 
           <a-menu-item
@@ -51,4 +53,8 @@ const collapsed = ref(true)
 
 // Methods
 const routeTo = (path) => router.push(path)
+const hasSubMenu = (subMenu) => {
+  const subMenuItems = subMenu ? Object.values(subMenu).filter((item) => !item.implicit) : []
+  return subMenu && subMenuItems.length !== 0
+}
 </script>
