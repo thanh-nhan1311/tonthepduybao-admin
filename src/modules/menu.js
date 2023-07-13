@@ -9,6 +9,7 @@ export const MENU = {
     subMenu: null,
     implicit: false
   },
+
   SITE_MANAGEMENT: {
     id: 'SiteManagement',
     path: null,
@@ -48,6 +49,7 @@ export const MENU = {
       }
     }
   },
+
   DEBT: {
     id: 'DebtList',
     path: '/debt/list',
@@ -64,16 +66,23 @@ export const MENU = {
   },
   ADD_DEBT_STEEL: {
     id: 'AddDebtSteel',
-    path: '/debt/add/' + DEBT_TYPE.STEEL.toLowerCase(),
+    path: `/debt/add/${DEBT_TYPE.STEEL.toLowerCase()}`,
     name: 'Tạo công nợ: Tôn - Sắt - Thép',
+    implicit: true
+  },
+  EDIT_DEBT_STEEL: {
+    id: 'EditDebtSteel',
+    path: `/debt/edit/${DEBT_TYPE.STEEL.toLowerCase()}/`,
+    name: 'Chỉnh sửa công nợ',
     implicit: true
   },
   ADD_DEBT_SCREW: {
     id: 'AddDebtScrew',
-    path: '/debt/add/' + DEBT_TYPE.SCREW.toLowerCase(),
+    path: `/debt/add/${DEBT_TYPE.SCREW.toLowerCase()}`,
     name: 'Tạo công nợ: Vật liệu',
     implicit: true
   },
+
   CUSTOMER: {
     id: 'Customer',
     path: '/customer',

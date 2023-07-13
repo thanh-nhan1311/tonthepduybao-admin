@@ -12,6 +12,7 @@ import SiteSetting from '~/views/SiteManagement/SiteSetting/index.vue'
 import Property from '~/views/Property/index.vue'
 
 import AddDebtSteel from '~/views/Debt/AddDebtSteel/index.vue'
+import EditDebtSteel from '~/views/Debt/EditDebtSteel/index.vue'
 import DebtDetail from '~/views/Debt/DebtDetail/index.vue'
 import ListDebt from '~/views/Debt/ListDebt/index.vue'
 import { DEBT_TYPE } from '~/modules/constant'
@@ -63,10 +64,15 @@ export default [
         component: DebtDetail
       },
       {
-        path: '/debt/add/' + DEBT_TYPE.STEEL.toLowerCase(),
+        path: `/debt/add/${DEBT_TYPE.STEEL.toLowerCase()}`,
         name: 'AddDebtSteel',
         component: AddDebtSteel,
         meta: { breadcrumbs: [MENU.DEBT, MENU.ADD_DEBT_STEEL] }
+      },
+      {
+        path: `/debt/edit/${DEBT_TYPE.STEEL.toLowerCase()}/:id`,
+        name: 'EditDebtSteel',
+        component: EditDebtSteel
       }
     ]
   },

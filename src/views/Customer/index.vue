@@ -106,12 +106,12 @@ const type = toRef(customerStore, 'type')
 const selectedCustomer = ref(null)
 const isShowModal = ref(false)
 const pageTitle = computed(() => {
-  let suffix = 'khách hàng/nhà cung cấp'
+  if (type.value.length === 1) {
+    if (type.value.includes(CUSTOMER_TYPE.CUSTOMER)) return 'Danh sách khách hàng'
+    else if (type.value.includes(CUSTOMER_TYPE.SUPPLIER)) return 'Danh sách nhà cung cấp'
+  }
 
-  if (type.value === CUSTOMER_TYPE.CUSTOMER) suffix = 'khách hàng'
-  else if (type.value === CUSTOMER_TYPE.SUPPLIER) suffix = 'nhà cung cấp'
-
-  return `Danh sách ${suffix}`
+  return 'Danh sách khách hàng/nhà cung cấp'
 })
 
 // Methods

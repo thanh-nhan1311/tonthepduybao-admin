@@ -1,6 +1,6 @@
 <template>
-  <section class="add-debt">
-    <heading :title="MENU.ADD_DEBT_STEEL.name">
+  <section v-if="debt" class="add-debt">
+    <heading :title="`${MENU.EDIT_DEBT_STEEL.name}: ${debt.name}`">
       <p class="text-right italic mb-0 text-xl text-red-500">(*) Là các trường bắt buộc</p>
     </heading>
 
@@ -81,7 +81,7 @@
           @click="submit"
         >
           <Iconify icon="mdi:content-save" />
-          <span class="ml-2">Tạo</span>
+          <span class="ml-2">Cập nhật</span>
         </a-button>
       </div>
     </div>
@@ -117,7 +117,7 @@
 
     <a-table
       :columns="ADD_DEBT_STEEL_TABLE_COLUMNS"
-      :data-source="formState.items"
+      :data-source="items"
       :scroll="{ x: 'max-content' }"
       :pagination="false"
       :row-class-name="getTableRowClassName"
@@ -200,18 +200,20 @@
 <script setup>
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { Modal } from 'ant-design-vue'
-import { createVNode, onMounted, ref } from 'vue'
+import { computed, createVNode, onMounted, onUnmounted, ref } from 'vue'
 import { ADD_DEBT_STEEL_TABLE_COLUMNS } from '~/modules/table'
 import { useCustomerStore } from '~/stores/customer'
 import { usePropertyStore } from '~/stores/property'
 import { useDebtStore } from '~/stores/debt'
 import { isEmpty, cloneDeep } from 'lodash'
 import { useMessage, useMoment } from '~/composables'
-import { CUSTOMER_TYPE, DEBT_TYPE, MSG } from '~/modules/constant'
+import { CUSTOMER_TYPE, DEBT_TYPE, MSG, NOT_FOUND_PATH } from '~/modules/constant'
 import { formatCurrency } from '~/modules/utils'
-import { useRouter } from 'vue-router'
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
+import { useCommonStore } from '~/stores/common'
 
+const route = useRoute()
 const router = useRouter()
 
 // Store
@@ -220,9 +222,11 @@ const moment = useMoment()
 const debtStore = useDebtStore()
 const propertyStore = usePropertyStore()
 const customerStore = useCustomerStore()
+const commonStore = useCommonStore()
 
 // State
 const debtItem = {
+  id: null,
   name: '',
   note: '',
   quantity: 0,
@@ -230,9 +234,11 @@ const debtItem = {
   avgProportion: 0,
   unitPrice: 0,
   totalUnitPrice: 0,
-  properties: {} // dynamic property
+  properties: {}, // dynamic property,
+  deleted: false
 }
 const formState = ref({
+  id: null,
   name: '',
   date: '',
   customerId: null,
@@ -245,6 +251,10 @@ const totalPrice = ref(0)
 const totalUnitPrice = ref(0)
 const propertyOptions = ref([])
 const customerOptions = ref([])
+const isSubmitted = ref(false)
+
+const debt = computed(() => debtStore.debt)
+const items = computed(() => formState.value.items.filter((item) => !item.deleted))
 
 // Methods
 const getTableRowClassName = (_record, index) => {
@@ -266,15 +276,28 @@ const addDebtItem = () => {
   }
 }
 
-const deleteDebtItem = (index) => {
-  formState.value.items.splice(index, 1)
+const deleteDebtItem = (index, record) => {
+  formState.value.items = formState.value.items
+    .map((item, itemIndex) => {
+      if (!item.deleted) {
+        if (!record.id && item.id === record.id) item.deleted = true
+        else if (index === itemIndex) return null
+      }
+
+      return item
+    })
+    .filter((item) => !!item)
+
+  console.log(index, record.id, formState.value.items)
 
   validateItems()
   calPrice()
 }
 
 const duplicateDebtItem = (index) => {
-  formState.value.items.push(cloneDeep(formState.value.items[index]))
+  const nonDeletedItems = formState.value.items.filter((item) => !item.deleted)
+  formState.value.items.push({ ...nonDeletedItems[index], id: null })
+
   calPrice()
 }
 
@@ -386,21 +409,24 @@ const submit = async () => {
   const isValid = validate()
 
   if (isValid) {
-    const { name, date, customerId, propertyIds } = formState.value
+    const { id, name, date, customerId, propertyIds } = formState.value
 
     const items = cloneDeep(formState.value.items).map((item) => {
       return {
+        id: item.id,
         name: item.name,
         note: item.note,
         properties: item.properties,
         weight: item.weight,
         quantity: item.quantity,
-        unitPrice: item.unitPrice
+        unitPrice: item.unitPrice,
+        deleted: item.deleted
       }
     })
 
     try {
-      await debtStore.create({
+      await debtStore.update({
+        id,
         name,
         date,
         customerId,
@@ -408,9 +434,12 @@ const submit = async () => {
         type: DEBT_TYPE.STEEL,
         items
       })
+
+      isSubmitted.value = true
       mc.success(MSG.SAVE_SUCCESS)
       router.push(MENU.DEBT.path)
     } catch (error) {
+      console.log(error)
       mc.error(MSG.SAVE_FAILED)
     }
   }
@@ -418,6 +447,9 @@ const submit = async () => {
 
 // Hooks
 onMounted(async () => {
+  const { id } = route.params
+  if (!id) router.push(NOT_FOUND_PATH)
+
   await propertyStore.getAll()
   await customerStore.getAll({ search: '', type: CUSTOMER_TYPE.SUPPLIER })
 
@@ -429,6 +461,75 @@ onMounted(async () => {
     value: item.id,
     label: item.name
   }))
+
+  try {
+    await debtStore.get(id)
+
+    // Update breadcrumb
+    commonStore.setBreadcrumbs([
+      MENU.DEBT,
+      { name: MENU.EDIT_DEBT_STEEL.name, path: MENU.EDIT_DEBT_STEEL.path + debt.value.id }
+    ])
+
+    // Init form state
+    const {
+      name,
+      date,
+      customer,
+      properties,
+      debtDetails,
+      totalImportPrice,
+      totalImportUnitPrice
+    } = debt.value
+
+    totalPrice.value = totalImportPrice
+    totalUnitPrice.value = totalImportUnitPrice
+    selectedProperties.value = properties
+      .map((item) => propertyStore.allProperty.find((prop) => prop.id === item.id))
+      .filter((item) => item !== undefined)
+
+    const items = debtDetails.map((item) => {
+      const itemProperties = {}
+      item.propertyDetails.forEach((propDetail) => {
+        itemProperties[propDetail.property.id] = propDetail.id
+      })
+
+      return {
+        id: item.id,
+        name: item.name,
+        note: item.node || '',
+        quantity: item.quantity,
+        weight: item.weight,
+        avgProportion: item.avgProportion,
+        unitPrice: item.unitPrice,
+        totalUnitPrice: item.totalUnitPrice,
+        properties: itemProperties,
+        deleted: false
+      }
+    })
+
+    formState.value = {
+      id: debt.value.id,
+      name,
+      date,
+      customerId: customer.id,
+      propertyIds: properties.map((item) => item.id),
+      items
+    }
+  } catch (error) {
+    router.push(MENU.DEBT.path)
+  }
+})
+
+onUnmounted(() => {
+  commonStore.setBreadcrumbs([])
+})
+
+onBeforeRouteLeave((to, from, next) => {
+  if (!isSubmitted.value) {
+    if (confirm('Bạn có chắc muốn rời khỏi trang này không?')) next()
+    else next(false)
+  } else next()
 })
 </script>
 

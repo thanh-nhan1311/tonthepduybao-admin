@@ -12,7 +12,11 @@
           <span class="ml-2">Xoá</span>
         </a-button>
 
-        <a-button type="primary" class="flex items-center px-8 ml-4">
+        <a-button
+          type="primary"
+          class="flex items-center px-8 ml-4"
+          @click="router.push(MENU.EDIT_DEBT_STEEL.path + debt.id)"
+        >
           <Iconify icon="mdi:pencil-box-outline" />
           <span class="ml-2">Sửa</span>
         </a-button>
@@ -161,7 +165,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
 import { NOT_FOUND_PATH, DEBT_TYPE, MSG } from '~/modules/constant'
@@ -215,11 +219,15 @@ onMounted(async () => {
 
     commonStore.setBreadcrumbs([
       MENU.DEBT,
-      { name: debt.value.name, path: MENU.DEBT_DETAIL + debt.value.id }
+      { name: debt.value.name, path: MENU.DEBT_DETAIL.path + debt.value.id }
     ])
   } catch (error) {
     router.push(MENU.DEBT.path)
   }
+})
+
+onUnmounted(() => {
+  commonStore.setBreadcrumbs([])
 })
 </script>
 

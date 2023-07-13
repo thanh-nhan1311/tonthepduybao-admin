@@ -10,7 +10,11 @@ export default () => {
   }
 
   const create = async (data) => {
-    await instance.post('/debt/create', data)
+    await instance.post('/debt', data)
+  }
+
+  const update = async (data) => {
+    await instance.put('/debt', data)
   }
 
   const del = async (id) => {
@@ -21,6 +25,7 @@ export default () => {
     get,
     getAll,
     create,
+    update,
     del
   }
 }
