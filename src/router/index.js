@@ -12,6 +12,10 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  if (from.name === 'AddDebtSteel') {
+    console.log('this fires on page reload only, not every route change')
+  }
+
   const authStore = useAuthStore()
   authStore.checkAuth()
 

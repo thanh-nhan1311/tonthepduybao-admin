@@ -1,10 +1,29 @@
 <template>
   <section v-if="debt" class="add-debt">
     <heading :title="`${MENU.EDIT_DEBT_STEEL.name}: ${debt.name}`">
-      <p class="text-right italic mb-0 text-xl text-red-500">(*) Là các trường bắt buộc</p>
+      <div class="flex items-center mb-4">
+        <a-button
+          type="default"
+          class="w-[120px] mr-0 flex items-center justify-center"
+          @click="router.back()"
+        >
+          Huỷ bỏ
+        </a-button>
+
+        <a-button
+          type="primary"
+          class="w-[120px] ml-4 mr-0 flex items-center justify-center"
+          @click="submit"
+        >
+          <Iconify icon="mdi:content-save" />
+          <span class="ml-2">Cập nhật</span>
+        </a-button>
+      </div>
     </heading>
 
-    <div class="grid grid-cols-12 gap-x-8 mt-8">
+    <p class="text-right italic mb-0 mt-2 text-xl text-red-500">(*) Là các trường bắt buộc</p>
+
+    <div class="grid grid-cols-12 gap-x-8 mt-2">
       <div class="col-span-12 mb-6">
         <label for="name"><span class="text-red-500">*</span> Tên công nợ</label>
         <a-input
@@ -71,17 +90,18 @@
       </div>
 
       <div class="col-span-3 flex justify-end pt-[24px]">
-        <a-button type="primary" ghost class="min-w-[120px] flex items-center" @click="addDebtItem">
-          <Iconify icon="mdi:plus-circle" width="16px" />
-          <span class="ml-2">Thêm sản phẩm</span>
+        <a-button type="primary" ghost @click="initFormOptions">
+          <Iconify icon="bx:reset" width="16px" />
+          <span class="ml-2">Làm mới</span>
         </a-button>
         <a-button
           type="primary"
-          class="w-[120px] ml-4 flex items-center justify-center"
-          @click="submit"
+          ghost
+          class="min-w-[120px] flex items-center ml-4"
+          @click="addDebtItem"
         >
-          <Iconify icon="mdi:content-save" />
-          <span class="ml-2">Cập nhật</span>
+          <Iconify icon="mdi:plus-circle" width="16px" />
+          <span class="ml-2">Thêm sản phẩm</span>
         </a-button>
       </div>
     </div>
@@ -150,6 +170,7 @@
             :key="prop.id"
             v-model:value="formState.items[index].properties[prop.id]"
             :options="prop.items.map((item) => ({ label: item.name, value: item.id }))"
+            :allow-clear="true"
             :show-search="true"
             :placeholder="`Chọn ${prop.name}`"
             :class="['w-full', propIndex !== 0 && 'mt-2']"
@@ -257,6 +278,20 @@ const debt = computed(() => debtStore.debt)
 const items = computed(() => formState.value.items.filter((item) => !item.deleted))
 
 // Methods
+const initFormOptions = async () => {
+  await propertyStore.getAll()
+  await customerStore.getAll({ search: '', type: CUSTOMER_TYPE.SUPPLIER })
+
+  propertyOptions.value = propertyStore.allProperty.map((item) => ({
+    value: item.id,
+    label: item.name
+  }))
+  customerOptions.value = customerStore.allCustomer.map((item) => ({
+    value: item.id,
+    label: item.name
+  }))
+}
+
 const getTableRowClassName = (_record, index) => {
   return formErrors.value.items &&
     formErrors.value.items.length !== 0 &&
@@ -450,17 +485,7 @@ onMounted(async () => {
   const { id } = route.params
   if (!id) router.push(NOT_FOUND_PATH)
 
-  await propertyStore.getAll()
-  await customerStore.getAll({ search: '', type: CUSTOMER_TYPE.SUPPLIER })
-
-  propertyOptions.value = propertyStore.allProperty.map((item) => ({
-    value: item.id,
-    label: item.name
-  }))
-  customerOptions.value = customerStore.allCustomer.map((item) => ({
-    value: item.id,
-    label: item.name
-  }))
+  await initFormOptions()
 
   try {
     await debtStore.get(id)
@@ -496,7 +521,7 @@ onMounted(async () => {
 
       return {
         id: item.id,
-        name: item.name,
+        name: item.name.trim(),
         note: item.node || '',
         quantity: item.quantity,
         weight: item.weight,
@@ -510,7 +535,7 @@ onMounted(async () => {
 
     formState.value = {
       id: debt.value.id,
-      name,
+      name: name.trim(),
       date,
       customerId: customer.id,
       propertyIds: properties.map((item) => item.id),
@@ -519,10 +544,15 @@ onMounted(async () => {
   } catch (error) {
     router.push(MENU.DEBT.path)
   }
+
+  window.onbeforeunload = function () {
+    return 'Bạn có chắc muốn reload lại trang này không?'
+  }
 })
 
 onUnmounted(() => {
   commonStore.setBreadcrumbs([])
+  window.onbeforeunload = null
 })
 
 onBeforeRouteLeave((to, from, next) => {

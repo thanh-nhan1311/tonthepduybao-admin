@@ -12,6 +12,10 @@ export const useAuthStore = defineStore('authStore', {
     isAuth: false
   }),
 
+  getters: {
+    currentUser: () => {}
+  },
+
   actions: {
     checkAuth() {
       this.isAuth = !!cookie.get(COOKIE_PARAM.TOKEN)

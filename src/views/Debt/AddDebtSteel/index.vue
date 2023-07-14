@@ -1,10 +1,29 @@
 <template>
   <section class="add-debt">
-    <heading :title="MENU.ADD_DEBT_STEEL.name">
-      <p class="text-right italic mb-0 text-xl text-red-500">(*) Là các trường bắt buộc</p>
+    <heading :title="MENU.ADD_DEBT_STEEL.name" class="items-start">
+      <div class="flex items-center mb-4">
+        <a-button
+          type="default"
+          class="w-[120px] flex items-center justify-center"
+          @click="router.back()"
+        >
+          Huỷ bỏ
+        </a-button>
+
+        <a-button
+          type="primary"
+          class="w-[120px] ml-4 mr-0 flex items-center justify-center"
+          @click="submit"
+        >
+          <Iconify icon="mdi:content-save" />
+          <span class="ml-2">Tạo</span>
+        </a-button>
+      </div>
     </heading>
 
-    <div class="grid grid-cols-12 gap-x-8 mt-8">
+    <p class="text-right italic mb-0 mt-2 text-xl text-red-500">(*) Là các trường bắt buộc</p>
+
+    <div class="grid grid-cols-12 gap-x-8 mt-2">
       <div class="col-span-12 mb-6">
         <label for="name"><span class="text-red-500">*</span> Tên công nợ</label>
         <a-input
@@ -71,17 +90,18 @@
       </div>
 
       <div class="col-span-3 flex justify-end pt-[24px]">
-        <a-button type="primary" ghost class="min-w-[120px] flex items-center" @click="addDebtItem">
-          <Iconify icon="mdi:plus-circle" width="16px" />
-          <span class="ml-2">Thêm sản phẩm</span>
+        <a-button type="primary" ghost @click="initFormOptions">
+          <Iconify icon="bx:reset" width="16px" />
+          <span class="ml-2">Làm mới</span>
         </a-button>
         <a-button
           type="primary"
-          class="w-[120px] ml-4 flex items-center justify-center"
-          @click="submit"
+          ghost
+          class="min-w-[120px] flex items-center ml-4"
+          @click="addDebtItem"
         >
-          <Iconify icon="mdi:content-save" />
-          <span class="ml-2">Tạo</span>
+          <Iconify icon="mdi:plus-circle" width="16px" />
+          <span class="ml-2">Thêm sản phẩm</span>
         </a-button>
       </div>
     </div>
@@ -150,6 +170,7 @@
             :key="prop.id"
             v-model:value="formState.items[index].properties[prop.id]"
             :options="prop.items.map((item) => ({ label: item.name, value: item.id }))"
+            :allow-clear="true"
             :show-search="true"
             :placeholder="`Chọn ${prop.name}`"
             :class="['w-full', propIndex !== 0 && 'mt-2']"
@@ -200,7 +221,7 @@
 <script setup>
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { Modal } from 'ant-design-vue'
-import { createVNode, onMounted, ref } from 'vue'
+import { computed, createVNode, onBeforeMount, onMounted, ref } from 'vue'
 import { ADD_DEBT_STEEL_TABLE_COLUMNS } from '~/modules/table'
 import { useCustomerStore } from '~/stores/customer'
 import { usePropertyStore } from '~/stores/property'
@@ -209,7 +230,7 @@ import { isEmpty, cloneDeep } from 'lodash'
 import { useMessage, useMoment } from '~/composables'
 import { CUSTOMER_TYPE, DEBT_TYPE, MSG } from '~/modules/constant'
 import { formatCurrency } from '~/modules/utils'
-import { useRouter } from 'vue-router'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
 
 const router = useRouter()
@@ -246,7 +267,32 @@ const totalUnitPrice = ref(0)
 const propertyOptions = ref([])
 const customerOptions = ref([])
 
+const isFormChange = computed(() => {
+  const { name, date, customerId, propertyIds, items } = formState.value
+  return (
+    name !== '' ||
+    date !== '' ||
+    customerId !== null ||
+    propertyIds.length !== 0 ||
+    items.length !== 0
+  )
+})
+
 // Methods
+const initFormOptions = async () => {
+  await propertyStore.getAll()
+  await customerStore.getAll({ search: '', type: CUSTOMER_TYPE.SUPPLIER })
+
+  propertyOptions.value = propertyStore.allProperty.map((item) => ({
+    value: item.id,
+    label: item.name
+  }))
+  customerOptions.value = customerStore.allCustomer.map((item) => ({
+    value: item.id,
+    label: item.name
+  }))
+}
+
 const getTableRowClassName = (_record, index) => {
   return formErrors.value.items &&
     formErrors.value.items.length !== 0 &&
@@ -390,8 +436,8 @@ const submit = async () => {
 
     const items = cloneDeep(formState.value.items).map((item) => {
       return {
-        name: item.name,
-        note: item.note,
+        name: item.name.trim(),
+        note: item.note.trim(),
         properties: item.properties,
         weight: item.weight,
         quantity: item.quantity,
@@ -401,7 +447,7 @@ const submit = async () => {
 
     try {
       await debtStore.create({
-        name,
+        name: name.trim(),
         date,
         customerId,
         propertyIds,
@@ -418,18 +464,25 @@ const submit = async () => {
 
 // Hooks
 onMounted(async () => {
-  await propertyStore.getAll()
-  await customerStore.getAll({ search: '', type: CUSTOMER_TYPE.SUPPLIER })
+  await initFormOptions()
 
-  propertyOptions.value = propertyStore.allProperty.map((item) => ({
-    value: item.id,
-    label: item.name
-  }))
-  customerOptions.value = customerStore.allCustomer.map((item) => ({
-    value: item.id,
-    label: item.name
-  }))
+  window.onbeforeunload = function () {
+    return MSG.PAGE_RELOAD_CONFIRMATION
+  }
 })
+
+onBeforeMount(() => {
+  window.onbeforeunload = null
+})
+
+onBeforeRouteLeave((to, from, next) => {
+  if (isFormChange.value) {
+    if (confirm('Bạn có chắc muốn rời khỏi trang này không?')) next()
+    else next(false)
+  } else next()
+})
+
+window.be
 </script>
 
 <style lang="scss">

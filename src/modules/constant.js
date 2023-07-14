@@ -54,7 +54,9 @@ export const MSG = {
   UPLOAD_FAILED: 'Tải tệp lên thất bại!',
 
   DELETE_UPLOAD_SUCCESS: 'Xoá tệp thành công!',
-  DELETE_UPLOAD_FAILED: 'Xoá tệp thất bại!'
+  DELETE_UPLOAD_FAILED: 'Xoá tệp thất bại!',
+
+  PAGE_RELOAD_CONFIRMATION: 'Bạn có chắc muốn reload lại trang này không?'
 }
 
 export const BRANCH_STATUS = {
