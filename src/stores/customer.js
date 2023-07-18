@@ -11,18 +11,24 @@ export const useCustomerStore = defineStore('customerStore', {
   }),
 
   getters: {
-    allCustomerTableData: (state) =>
-      state.allCustomer.map((item) => {
+    customerOptions() {
+      return this.allCustomer.map((item) => ({
+        label: item.name,
+        value: item.id
+      }))
+    },
+    allCustomerTableData() {
+      return this.allCustomer.map((item) => {
         const phone =
           item.phone && item.phone.split(',').length !== 0
             ? item.phone.split(',').map((item) => item)
             : []
         return { ...item, phone }
       })
+    }
   },
 
   actions: {
-    // Function
     async getAll(payload = { search: '', type: '' }) {
       const { data } = await customerAPI.getAll(payload)
       this.allCustomer = data

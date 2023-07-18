@@ -6,11 +6,11 @@ export default () => {
   }
 
   const create = async (data) => {
-    await instance.post('/property/create', data)
+    await instance.post('/property', data)
   }
 
   const update = async (data) => {
-    await instance.post('/property/update', data)
+    await instance.put('/property', data)
   }
 
   const del = async (id) => {

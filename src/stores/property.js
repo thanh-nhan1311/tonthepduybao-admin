@@ -12,6 +12,15 @@ export const usePropertyStore = defineStore('propertyStore', {
     allProperty: []
   }),
 
+  getters: {
+    propertyOptions() {
+      return this.allProperty.map((item) => ({
+        value: item.id,
+        label: item.name
+      }))
+    }
+  },
+
   actions: {
     // Function
     async getAll(payload = { search: '' }) {

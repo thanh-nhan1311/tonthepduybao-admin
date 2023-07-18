@@ -4,16 +4,12 @@
       <div class="flex items-center">
         <a-input-search
           v-model:value="search"
-          placeholder="Tìm kiếm ..."
+          placeholder="Nhập mã công nợ để tìm kiếm ..."
           class="mr-4 w-[400px]"
           @keypress.enter="init(currentPage)"
         />
 
-        <a-button
-          type="primary"
-          class="flex items-center"
-          @click="commonStore.setShowSelectDebtTypeModal(true)"
-        >
+        <a-button type="primary" class="flex items-center" @click="router.push(MENU.ADD_DEBT.path)">
           <Iconify icon="mdi:plus-circle" width="16px" />
           <span class="ml-2">Tạo công nợ</span>
         </a-button>
@@ -42,11 +38,7 @@
             <div v-if="type && type.length !== 0" class="flex items-center">
               <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
               <span class="mr-2">Phân loại:</span>
-              <span v-if="type.includes(DEBT_TYPE.STEEL)" class="font-semibold">
-                Tôn - Sắt - Thép
-              </span>
-              <span v-if="type.length === 2">,&nbsp;</span>
-              <span v-if="type.includes(DEBT_TYPE.SCREW)" class="font-semibold">Vật liệu</span>
+              <span class="font-semibold">{{ selectedDebtType }}</span>
             </div>
           </div>
 
@@ -54,13 +46,7 @@
             <div class="flex items-center">
               <Iconify icon="mdi:account" class="mr-2" />
               <span class="mr-2">Nhà cung cấp:</span>
-              <span
-                v-for="(item, index) of selectedCustomer"
-                :key="item.id"
-                :class="['font-semibold', index !== selectedCustomer.length - 1 && 'mr-1']"
-              >
-                {{ item.name }}{{ index !== selectedCustomer.length - 1 ? ',' : '' }}
-              </span>
+              <span class="font-semibold">{{ selectedCustomer }}</span>
             </div>
           </div>
         </div>
@@ -111,9 +97,9 @@
                   />
 
                   <a-checkbox-group
-                    v-if="customerOptions.length !== 0"
+                    v-if="customerStore.customerOptions.length !== 0"
                     v-model:value="customerId"
-                    :options="customerOptions"
+                    :options="customerStore.customerOptions"
                     class="flex flex-col"
                     @change="init(currentPage)"
                   />
@@ -168,29 +154,21 @@
           </div>
         </template>
       </template>
-      <template #bodyCell="{ column, record, index }">
-        <template v-if="column.key === 'no'">{{ index + 1 }}</template>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'id'">
+          <span class="font-bold">{{ record.id }}</span>
+        </template>
         <template v-else-if="column.key === 'date'">{{ moment.dFormat(record.date) }}</template>
         <template v-if="column.key === 'customer'">
           {{ record.customer.name }}
         </template>
         <template v-if="column.key === 'totalPrice'">
-          <p class="font-medium mb-1">
-            Tổng nhập:
-            <span class="font-semibold text-red-500">
-              {{ formatCurrency(record.totalImportPrice) }}
-            </span>
-          </p>
-          <p class="font-medium mb-0">
-            Tổng xuất:
-            <span class="font-semibold text-red-500">
-              {{ formatCurrency(record.totalExportPrice) }}
-            </span>
-          </p>
+          <span class="font-semibold text-red-500">
+            {{ formatCurrency(record.totalPrice) }}
+          </span>
         </template>
         <template v-if="column.key === 'type'">
-          <span v-if="DEBT_TYPE.STEEL === record.type">Tôn - Sắt - Thép</span>
-          <span v-if="DEBT_TYPE.SCREW === record.type">Vật liệu</span>
+          <span>{{ DEBT_TYPE[record.type].name }}</span>
         </template>
         <template v-else-if="column.key === 'lastModified'">
           <div class="mb-1 flex items-center">
@@ -215,7 +193,6 @@ import { DEBT_TYPE, PAGING } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { LIST_DEBT_TABLE_COLUMNS } from '~/modules/table'
 import { formatCurrency } from '~/modules/utils'
-import { useCommonStore } from '~/stores/common'
 import { useCustomerStore } from '~/stores/customer'
 import { useDebtStore } from '~/stores/debt'
 
@@ -224,14 +201,9 @@ const router = useRouter()
 // Store
 const moment = useMoment()
 const debtStore = useDebtStore()
-const commonStore = useCommonStore()
 const customerStore = useCustomerStore()
 
 // State
-const debtTypeOptions = [
-  { label: 'Tôn - Sắt - Thép', value: DEBT_TYPE.STEEL },
-  { label: 'Vật liệu', value: DEBT_TYPE.SCREW }
-]
 const currentPage = ref(PAGING.DEFAULT_PAGE)
 const search = ref('')
 const date = ref([])
@@ -240,23 +212,31 @@ const type = ref([])
 const customerSearch = ref('')
 
 const debts = computed(() => (debtStore.allDebt ? debtStore.allDebt.data : []))
-const customerOptions = computed(() =>
-  customerStore.allCustomer.map((item) => ({
+const debtTypeOptions = computed(() =>
+  Object.values(DEBT_TYPE).map((item) => ({
     label: item.name,
     value: item.id
   }))
 )
 const selectedCustomer = computed(() =>
-  customerStore.allCustomer.filter((item) => customerId.value.includes(item.id))
+  customerStore.allCustomer
+    .filter((item) => customerId.value.includes(item.id))
+    .map((item) => item.name)
+    .join(', ')
 )
-const isFiltering = computed(() => {
-  return (
+const selectedDebtType = computed(() =>
+  Object.values(DEBT_TYPE)
+    .filter((item) => type.value.includes(item.id))
+    .map((item) => item.name)
+    .join(', ')
+)
+const isFiltering = computed(
+  () =>
     search.value ||
     (date.value && date.value.length === 2) ||
     customerId.value.length !== 0 ||
     type.value.length !== 0
-  )
-})
+)
 
 // Methods
 const init = async (page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_SIZE) => {

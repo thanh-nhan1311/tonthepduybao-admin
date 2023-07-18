@@ -19,7 +19,7 @@ router.beforeEach(async (to, from, next) => {
   if (authStore.isAuth) {
     if (to.path === LOGIN_URL) next({ path: '/' })
     else {
-      if (to.meta.roles.includes(authStore.currentUserRole.id)) next()
+      if (to.meta.permission.includes(authStore.currentUserRole.id)) next()
       else next(NOT_FOUND_PATH)
     }
   } else {

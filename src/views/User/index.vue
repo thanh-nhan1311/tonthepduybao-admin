@@ -24,7 +24,7 @@
               <template #content>
                 <a-checkbox-group
                   v-model:value="role"
-                  :options="roleOptions"
+                  :options="userStore.roleOptions"
                   class="flex flex-col"
                   @change="init"
                 />
@@ -105,7 +105,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useMessage, useMoment } from '~/composables'
 import { MSG, USER_STATUS } from '~/modules/constant'
 import { USER_TABLE_COLUMNS } from '~/modules/table'
@@ -125,13 +125,6 @@ const search = ref('')
 const status = ref([])
 const role = ref([])
 const isShowCreateUserModal = ref(false)
-
-const roleOptions = computed(() =>
-  userStore.allRole.map((item) => ({
-    label: item.name,
-    value: item.id
-  }))
-)
 
 // Methods
 const init = async () => {

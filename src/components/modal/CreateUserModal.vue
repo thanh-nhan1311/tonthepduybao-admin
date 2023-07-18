@@ -2,7 +2,7 @@
   <a-modal
     v-model:visible="visible"
     centered
-    width="50vw"
+    width="32vw"
     title="Tạo tài khoản nhân viên"
     ok-text="Tạo"
     cancel-text="Đóng"
@@ -12,44 +12,49 @@
     <a-form
       ref="formRef"
       name="custom-validation"
+      layout="vertical"
       :model="formState"
       :rules="formRules"
-      v-bind="{
-        labelCol: { span: 6 },
-        wrapperCol: { span: 18 }
-      }"
       @finish="
         emits('ok', {
-          fullName: formState.fullName,
           username: formState.username,
           password: formState.password,
-          branchId: formState.branchId
+          branchId: formState.branchId,
+          roleId: formState.roleId
         })
       "
     >
-      <a-form-item has-feedback label="Họ và tên" name="fullName">
-        <a-input v-model:value="formState.fullName" />
-      </a-form-item>
-
       <a-form-item has-feedback label="Tên đăng nhập" name="username">
         <a-input v-model:value="formState.username" />
       </a-form-item>
 
-      <a-form-item has-feedback label="Mật khẩu" name="password">
-        <a-input v-model:value="formState.password" type="password" />
-      </a-form-item>
+      <div class="grid grid-cols-2 gap-x-8 mt-4">
+        <a-form-item has-feedback label="Mật khẩu" name="password">
+          <a-input v-model:value="formState.password" type="password" />
+        </a-form-item>
 
-      <a-form-item has-feedback label="Xác nhận" name="confirmPassword">
-        <a-input v-model:value="formState.confirmPassword" type="password" />
-      </a-form-item>
+        <a-form-item has-feedback label="Xác nhận" name="confirmPassword">
+          <a-input v-model:value="formState.confirmPassword" type="password" />
+        </a-form-item>
+      </div>
 
-      <a-form-item has-feedback label="Chi nhánh" name="branchId">
-        <a-select
-          v-model:value="formState.branchId"
-          placeholder="Chọn chi nhánh"
-          :options="branchStore.branchOptions"
-        />
-      </a-form-item>
+      <div class="grid grid-cols-2 gap-x-8 mt-4">
+        <a-form-item has-feedback label="Vai trò" name="roleId">
+          <a-select
+            v-model:value="formState.roleId"
+            placeholder="Chọn vai trò"
+            :options="userStore.roleOptions"
+          />
+        </a-form-item>
+
+        <a-form-item has-feedback label="Chi nhánh" name="branchId">
+          <a-select
+            v-model:value="formState.branchId"
+            placeholder="Chọn chi nhánh"
+            :options="branchStore.branchOptions"
+          />
+        </a-form-item>
+      </div>
 
       <a-form-item :wrapper-col="{ span: 14, offset: 6 }" class="hidden">
         <a-button ref="btnSubmitRef" type="primary" html-type="submit">Lưu</a-button>
@@ -62,20 +67,21 @@
 import { onMounted, ref } from 'vue'
 import {
   defEmptyBranch,
-  defEmptyFullName,
   defEmptyPassword,
+  defEmptyRole,
   defEmptyUsername
 } from '~/modules/formRule'
 import { useBranchStore } from '~/stores/branch'
+import { useUserStore } from '~/stores/user'
 
 const emits = defineEmits(['ok', 'close'])
 
 // Store
+const userStore = useUserStore()
 const branchStore = useBranchStore()
 
 // State
 const formRules = {
-  fullName: [{ required: true, validator: defEmptyFullName, trigger: 'change' }],
   username: [
     { required: true, validator: defEmptyUsername, trigger: 'change' },
     {
@@ -96,17 +102,18 @@ const formRules = {
       trigger: 'change'
     }
   ],
-  branchId: [{ required: true, validator: defEmptyBranch, trigger: 'change' }]
+  branchId: [{ required: true, validator: defEmptyBranch, trigger: 'change' }],
+  roleId: [{ required: true, validator: defEmptyRole, trigger: 'change' }]
 }
 let btnSubmitRef = ref()
 let formRef = ref()
 const visible = ref(true)
 const formState = ref({
-  fullName: '',
   username: '',
   password: '',
   confirmPassword: '',
-  branchId: null
+  branchId: null,
+  roleId: null
 })
 
 // Methods
@@ -114,6 +121,6 @@ const submit = () => btnSubmitRef.value.$el.click()
 
 // Hooks
 onMounted(async () => {
-  await branchStore.getBranchOptions()
+  await branchStore.getAll()
 })
 </script>

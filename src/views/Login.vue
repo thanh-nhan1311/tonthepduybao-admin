@@ -31,7 +31,7 @@
             v-model:value="formState.branchId"
             placeholder="Chọn chi nhánh"
             class="w-full"
-            :options="branchStore.branchOptions"
+            :options="branchOptions"
           />
         </div>
 
@@ -44,20 +44,26 @@
 </template>
 
 <script setup>
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 import { useBranchStore } from '~/stores/branch'
+import { ALL_BRANCH_OPTION } from '~/modules/constant'
 
 // Store
-const branchStore = useBranchStore()
 const authStore = useAuthStore()
+const branchStore = useBranchStore()
 
 // State
 const formState = ref({
   username: '',
   password: '',
   branchId: -1
+})
+const branchOptions = computed(() => {
+  const options = branchStore.branchOptions
+  options.unshift(ALL_BRANCH_OPTION)
+  return options
 })
 
 // Methods
@@ -73,7 +79,7 @@ const login = async () => {
 
 // Hooks
 onMounted(async () => {
-  await branchStore.getBranchOptions(true)
+  await branchStore.getAll()
 })
 </script>
 

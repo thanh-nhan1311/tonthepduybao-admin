@@ -77,12 +77,26 @@ export const USER_STATUS = {
 
 export const USER_ROLE = {
   ADMIN: 'ADMIN',
+  MANAGER: 'MANAGER',
   STAFF: 'STAFF'
 }
 
-export const DEBT_TYPE = {
-  STEEL: 'STEEL',
+export const USER_PERMISSION = {
+  FULL_ACCESS: [USER_ROLE.ADMIN, USER_ROLE.MANAGER, USER_ROLE.STAFF].join('__'),
+  A_ACCESS: [USER_ROLE.ADMIN].join('__'),
+  AM_ACCESS: [USER_ROLE.ADMIN, USER_ROLE.MANAGER].join('__')
+}
+
+export const DEBT_TYPE_KEY = {
+  IRON_STEEL: 'IRON_STEEL',
+  CORRUGATED: 'CORRUGATED',
   SCREW: 'SCREW'
+}
+
+export const DEBT_TYPE = {
+  IRON_STEEL: { id: 'IRON_STEEL', name: 'Sắt - Thép' },
+  CORRUGATED: { id: 'CORRUGATED', name: 'Tôn' },
+  SCREW: { id: 'SCREW', name: 'Vật liệu khác' }
 }
 
 export const CUSTOMER_TYPE = {

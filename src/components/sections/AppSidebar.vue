@@ -54,10 +54,11 @@ const authStore = useAuthStore()
 const selectedKeys = ref(['1'])
 const openKeys = ref(['sub1'])
 const collapsed = ref(true)
-const menuItems = computed(() => {
-  const userRoleId = authStore.currentUser.role.id
-  return Object.values(MENU).filter((item) => !item.implicit && item.roles.includes(userRoleId))
-})
+const menuItems = computed(() =>
+  Object.values(MENU).filter(
+    (item) => !item.implicit && item.permission.includes(authStore.currentUserRole.id)
+  )
+)
 
 // Methods
 const routeTo = (path) => router.push(path)

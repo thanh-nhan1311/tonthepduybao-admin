@@ -3,9 +3,7 @@ import { defineStore } from 'pinia'
 export const useCommonStore = defineStore('commonStore', {
   state: () => ({
     breadcrumbs: [],
-
-    isLoading: false,
-    isShowSelectDebtTypeModal: false
+    isLoading: false
   }),
 
   actions: {
@@ -14,9 +12,6 @@ export const useCommonStore = defineStore('commonStore', {
     },
     setLoading(payload) {
       this.isLoading = payload
-    },
-    setShowSelectDebtTypeModal(payload) {
-      this.isShowSelectDebtTypeModal = payload
     }
   }
 })

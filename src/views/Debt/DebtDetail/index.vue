@@ -1,6 +1,6 @@
 <template>
   <section v-if="debt" class="debt-detail">
-    <heading :title="debt.name">
+    <heading :title="`Mã công nợ: [${debt.id}]`">
       <div class="flex items-center">
         <a-button
           type="primary"
@@ -15,7 +15,7 @@
         <a-button
           type="primary"
           class="flex items-center px-8 ml-4"
-          @click="router.push(MENU.EDIT_DEBT_STEEL.path + debt.id)"
+          @click="router.push(MENU.EDIT_DEBT.path + debt.id)"
         >
           <Iconify icon="mdi:pencil-box-outline" />
           <span class="ml-2">Sửa</span>
@@ -30,7 +30,7 @@
 
     <div class="grid grid-cols-12 gap-x-8 mt-8">
       <div
-        class="grid grid-cols-2 gap-8 col-span-6 border border-solid border-gray-200 rounded-md p-4"
+        class="grid grid-cols-2 gap-8 col-span-8 border border-solid border-gray-200 rounded-md p-4"
       >
         <div>
           <div class="flex items-center mb-2">
@@ -42,8 +42,7 @@
           <div class="flex items-center mb-2">
             <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
             <span class="mr-2">Phân loại:</span>
-            <span v-if="DEBT_TYPE.STEEL === debt.type" class="font-semibold">Tôn - Sắt - Thép</span>
-            <span v-if="DEBT_TYPE.SCREW === debt.type" class="font-semibold">Vật liệu</span>
+            <span class="font-semibold">{{ DEBT_TYPE[debt.type].name }}</span>
           </div>
 
           <div class="flex items-center">
@@ -67,29 +66,16 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 items-center col-span-6">
-        <table class="summary-table h-full">
+      <div class="flex justify-end col-span-4">
+        <table class="summary-table w-full h-full">
           <tbody>
             <tr>
-              <td>Tổng nhập</td>
-              <td>{{ formatCurrency(debt.totalImportPrice) }}</td>
+              <td class="font-medium">Tổng nhập</td>
+              <td>{{ formatCurrency(debt.totalPrice) }}</td>
             </tr>
             <tr>
-              <td>Tổng xuất</td>
-              <td>{{ formatCurrency(debt.totalExportPrice) }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <table class="summary-table h-full">
-          <tbody>
-            <tr>
-              <td>Tổng nhập cây/mét</td>
-              <td>{{ formatCurrency(debt.totalImportUnitPrice) }}</td>
-            </tr>
-            <tr>
-              <td>Tổng xuất cây/mét</td>
-              <td>{{ formatCurrency(debt.totalExportUnitPrice) }}</td>
+              <td class="font-medium">Tổng nhập cây/mét</td>
+              <td>{{ formatCurrency(debt.totalUnitPrice) }}</td>
             </tr>
           </tbody>
         </table>
@@ -98,24 +84,26 @@
 
     <div class="flex justify-between mt-8 mb-4">
       <div>
-        <b>Danh sách sản phẩm nhập vào:</b>
+        <b>Danh sách sản phẩm:</b>
         <span class="font-normal ml-2">{{ debtDetails.length }} sản phẩm</span>
       </div>
       <a-input-search v-model:value="search" placeholder="Tìm kiếm ..." class="mr-4 w-[400px]" />
     </div>
 
     <a-table
-      :columns="DEBT_DETAIL_STEEL_TABLE_COLUMNS"
+      :columns="columns"
       :data-source="debtDetails"
       :scroll="{ x: 'max-content' }"
       :pagination="false"
+      :class="['debt-detail__table', `debt-detail__table--${debt.type.toLowerCase()}`]"
     >
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
         <template v-else-if="column.key === 'name'">
           <span class="font-medium">{{ record.name }}</span>
         </template>
-        <template v-else-if="column.key === 'propertyDetails'">
+        <template v-else-if="column.key === 'branch'">{{ record.branch.name }}</template>
+        <template v-else-if="column.key === 'properties'">
           <div
             v-for="(propDetail, propIndex) of record.propertyDetails"
             :key="propDetail.id"
@@ -132,7 +120,7 @@
           <span class="font-medium text-red-400">{{ formatCurrency(record.totalUnitPrice) }}</span>
         </template>
         <template v-else-if="column.key === 'totalPrice'">
-          <span class="font-semibold">{{ formatCurrency(record.totalPrice) }}</span>
+          <span class="font-medium text-red-400">{{ formatCurrency(record.totalPrice) }}</span>
         </template>
       </template>
     </a-table>
@@ -170,10 +158,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
 import { NOT_FOUND_PATH, DEBT_TYPE, MSG } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
-import { DEBT_DETAIL_STEEL_TABLE_COLUMNS } from '~/modules/table'
+import { DEBT_FULL_TABLE_COLUMNS } from '~/modules/table'
 import { formatCurrency, normalize } from '~/modules/utils'
 import { useCommonStore } from '~/stores/common'
 import { useDebtStore } from '~/stores/debt'
+import { cloneDeep } from 'lodash'
 
 const route = useRoute()
 const router = useRouter()
@@ -194,6 +183,12 @@ const debtDetails = computed(() => {
   return debt.value.debtDetails.filter((item) =>
     normalize(item.name.toLowerCase()).includes(searchParam)
   )
+})
+const columns = computed(() => {
+  const cols = cloneDeep(DEBT_FULL_TABLE_COLUMNS)
+  cols.pop()
+
+  return cols
 })
 
 // Methods

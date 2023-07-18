@@ -68,7 +68,7 @@ const updateBranchStatus = async (branch) => {
 
     branch.status =
       branch.status === BRANCH_STATUS.ACTIVE ? BRANCH_STATUS.INACTIVE : BRANCH_STATUS.ACTIVE
-    await branchStore.upsertBranch(branch)
+    await branchStore.upsert(branch)
 
     mc.success(MSG.UPDATE_SUCCESS)
   } catch (error) {
@@ -77,7 +77,7 @@ const updateBranchStatus = async (branch) => {
 }
 
 // Hooks
-onMounted(() => {
-  branchStore.getAllBranch()
+onMounted(async () => {
+  await branchStore.getAll()
 })
 </script>

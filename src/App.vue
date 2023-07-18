@@ -16,8 +16,6 @@
         </a-layout>
       </a-layout>
     </a-layout>
-
-    <select-debt-type-modal />
   </main>
 
   <main v-else class="relative">

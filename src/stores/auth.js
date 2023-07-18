@@ -24,6 +24,11 @@ export const useAuthStore = defineStore('authStore', {
       return this.currentUser.role.id === USER_ROLE.ADMIN
     },
 
+    isManager() {
+      if (!this.currentUser) return false
+      return this.currentUser.role.id === USER_ROLE.MANAGER
+    },
+
     isStaff() {
       if (!this.currentUser) return false
       return this.currentUser.role.id === USER_ROLE.STAFF

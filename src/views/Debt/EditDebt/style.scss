@@ -1,4 +1,4 @@
-.debt-detail {
+.edit-debt {
   &__table {
     &--corrugated,
     &--iron_steel {
@@ -15,6 +15,14 @@
         &:nth-child(10) { width: auto; }
       }
     }
+    &--error td {
+      background: rgb(240, 187, 187) !important;
+    }
   }
 }
 
+.delete-property-confirm-modal {
+  .ant-modal-confirm-content {
+    font-size: 12px !important;
+  }
+}

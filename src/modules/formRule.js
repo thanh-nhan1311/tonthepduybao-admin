@@ -16,6 +16,8 @@ export const defEmptyBranchName = async (_rule, value, cb) =>
 
 export const defEmptyBranch = async (_rule, value, cb) => defRule(_rule, value, cb, 'Chi nhánh')
 
+export const defEmptyRole = async (_rule, value, cb) => defRule(_rule, value, cb, 'Vai trò')
+
 export const defEmptyCategoryName = async (_rule, value, cb) =>
   defRule(_rule, value, cb, 'Tên danh mục', 500)
 

@@ -1,10 +1,10 @@
 <template>
-  <section class="add-debt">
-    <heading :title="MENU.ADD_DEBT_STEEL.name" class="items-start">
+  <section v-if="debt" class="edit-debt">
+    <heading :title="`${MENU.EDIT_DEBT.name}: [${debt.id}]`">
       <div class="flex items-center mb-4">
         <a-button
           type="default"
-          class="w-[120px] flex items-center justify-center"
+          class="w-[120px] mr-0 flex items-center justify-center"
           @click="router.back()"
         >
           Huỷ bỏ
@@ -16,7 +16,7 @@
           @click="submit"
         >
           <Iconify icon="mdi:content-save" />
-          <span class="ml-2">Tạo</span>
+          <span class="ml-2">Cập nhật</span>
         </a-button>
       </div>
     </heading>
@@ -24,21 +24,37 @@
     <p class="text-right italic mb-0 mt-2 text-xl text-red-500">(*) Là các trường bắt buộc</p>
 
     <div class="grid grid-cols-12 gap-x-8 mt-2">
-      <div class="col-span-12 mb-6">
-        <label for="name"><span class="text-red-500">*</span> Tên công nợ</label>
+      <div class="col-span-9">
+        <label for="id"><span class="text-red-500">*</span> Mã công nợ</label>
         <a-input
-          id="name"
-          v-model:value="formState.name"
-          placeholder="Nhập tên công nợ"
-          :maxlength="500"
-          :show-count="true"
-          @change="clearValidate('name')"
+          id="id"
+          v-model:value="formState.id"
+          placeholder="Nhập mã công nợ"
+          @change="clearValidate('id')"
         />
-        <p v-if="formErrors.name" class="mb-0 text-red-500 mt-0.5 text-[12px]">
-          {{ formErrors.name }}
+        <p v-if="formErrors.id" class="mb-0 text-red-500 mt-0.5 text-[12px]">
+          {{ formErrors.id }}
         </p>
       </div>
 
+      <div class="col-span-3">
+        <label for="type"><span class="text-red-500">*</span> Loại sản phẩm</label>
+        <a-select
+          v-model:value="formState.type"
+          :options="debtTypeOptions"
+          :show-search="true"
+          placeholder="Chọn nhà loại sản phẩm"
+          class="w-full mt-1"
+          :disabled="formState.items.length !== 0"
+          @change="clearValidate('type')"
+        />
+        <p v-if="formErrors.type" class="mb-0 text-red-500 mt-0.5 text-[12px]">
+          {{ formErrors.type }}
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-x-8 mt-2">
       <div class="col-span-3 mb-4">
         <label for="date"><span class="text-red-500">*</span> Ngày nhập công nợ</label>
         <a-date-picker
@@ -59,7 +75,7 @@
         <label for="customerId"><span class="text-red-500">*</span> Nhà cung cấp</label>
         <a-select
           v-model:value="formState.customerId"
-          :options="customerOptions"
+          :options="customerStore.customerOptions"
           :show-search="true"
           placeholder="Chọn nhà cung cấp"
           class="w-full mt-1"
@@ -75,7 +91,7 @@
         <a-select
           id="propertyIds"
           v-model:value="formState.propertyIds"
-          :options="propertyOptions"
+          :options="propertyStore.propertyOptions"
           placeholder="Chọn thuộc tính"
           max-tag-count="responsive"
           class="w-full mt-1"
@@ -108,7 +124,7 @@
 
     <div class="flex justify-between my-8">
       <div>
-        <b>Bảng công nợ:</b>
+        <b>Danh sách sản phẩm:</b>
         <span class="font-normal ml-2">{{ formState.items.length }} sản phẩm</span>
 
         <p v-if="formErrors.tableItems" class="mb-0 text-red-500 mt-0.5 text-[12px]">
@@ -136,16 +152,19 @@
     </div>
 
     <a-table
-      :columns="ADD_DEBT_STEEL_TABLE_COLUMNS"
+      :columns="DEBT_FULL_TABLE_COLUMNS"
       :data-source="formState.items"
       :scroll="{ x: 'max-content' }"
       :pagination="false"
       :row-class-name="getTableRowClassName"
       empty-text="Dữ liệu trống"
-      class="add-debt__table"
+      :class="[
+        'edit-debt__table',
+        formState.type && `edit-debt__table--${formState.type.toLowerCase()}`
+      ]"
     >
       <template #headerCell="{ title, column }">
-        <template v-if="['name', 'weight', 'quantity', 'unitPrice'].includes(column.key)">
+        <template v-if="['name', 'branch'].includes(column.key)">
           <span class="text-red-500"> * </span>
           {{ title }}
         </template>
@@ -161,8 +180,14 @@
             />
           </div>
         </template>
-        <template v-else-if="column.key === 'note'">
-          <a-input v-model:value="formState.items[index].note" />
+        <template v-else-if="column.key === 'branch'">
+          <a-select
+            v-model:value="formState.items[index].branch"
+            :options="branchStore.branchOptions"
+            placeholder="Chọn chi nhánh"
+            class="w-full"
+            @change="clearValidate('items', index)"
+          />
         </template>
         <template v-else-if="column.key === 'properties'">
           <a-select
@@ -201,7 +226,10 @@
           />
         </template>
         <template v-else-if="column.key === 'totalUnitPrice'">
-          <span class="font-medium text-red-400">{{ formatCurrency(record.totalUnitPrice) }}</span>
+          <a-input v-model:value="formState.items[index].totalUnitPrice" type="number" :min="0" />
+        </template>
+        <template v-else-if="column.key === 'totalPrice'">
+          <a-input v-model:value="formState.items[index].totalPrice" type="number" :min="0" />
         </template>
         <template v-else-if="column.key === 'action'">
           <div class="flex items-center">
@@ -221,18 +249,21 @@
 <script setup>
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { Modal } from 'ant-design-vue'
-import { computed, createVNode, onBeforeMount, onMounted, ref } from 'vue'
-import { ADD_DEBT_STEEL_TABLE_COLUMNS } from '~/modules/table'
+import { computed, createVNode, onMounted, onUnmounted, ref } from 'vue'
+import { DEBT_FULL_TABLE_COLUMNS } from '~/modules/table'
 import { useCustomerStore } from '~/stores/customer'
 import { usePropertyStore } from '~/stores/property'
 import { useDebtStore } from '~/stores/debt'
 import { isEmpty, cloneDeep } from 'lodash'
 import { useMessage, useMoment } from '~/composables'
-import { CUSTOMER_TYPE, DEBT_TYPE, MSG } from '~/modules/constant'
+import { CUSTOMER_TYPE, DEBT_TYPE_KEY, MSG, NOT_FOUND_PATH } from '~/modules/constant'
 import { formatCurrency } from '~/modules/utils'
-import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
+import { useCommonStore } from '~/stores/common'
+import { useBranchStore } from '~/stores/branch'
 
+const route = useRoute()
 const router = useRouter()
 
 // Store
@@ -241,57 +272,46 @@ const moment = useMoment()
 const debtStore = useDebtStore()
 const propertyStore = usePropertyStore()
 const customerStore = useCustomerStore()
+const commonStore = useCommonStore()
+const branchStore = useBranchStore()
 
 // State
-const initFormState = {
-  name: '',
-  date: '',
-  customerId: null,
-  propertyIds: [],
-  items: []
-}
 const debtItem = {
+  id: null,
   name: '',
   note: '',
+  branch: null,
   quantity: 0,
   weight: 0,
   avgProportion: 0,
   unitPrice: 0,
   totalUnitPrice: 0,
-  properties: {} // dynamic property
+  totalPrice: 0,
+  properties: {} // dynamic property,
 }
-const formState = ref(cloneDeep(initFormState))
+const formState = ref({
+  id: null,
+  name: '',
+  date: '',
+  type: DEBT_TYPE_KEY.IRON_STEEL,
+  customerId: null,
+  propertyIds: [],
+  items: []
+})
 const formErrors = ref({})
+const deletedItems = ref([])
 const selectedProperties = ref([])
 const totalPrice = ref(0)
 const totalUnitPrice = ref(0)
-const propertyOptions = ref([])
-const customerOptions = ref([])
+const isSubmitted = ref(false)
 
-const isFormChange = computed(() => {
-  const { name, date, customerId, propertyIds, items } = formState.value
-  return (
-    name !== '' ||
-    date !== '' ||
-    customerId !== null ||
-    propertyIds.length !== 0 ||
-    items.length !== 0
-  )
-})
+const debt = computed(() => debtStore.debt)
 
 // Methods
 const initFormOptions = async () => {
+  await branchStore.getAll()
   await propertyStore.getAll()
   await customerStore.getAll({ search: '', type: CUSTOMER_TYPE.SUPPLIER })
-
-  propertyOptions.value = propertyStore.allProperty.map((item) => ({
-    value: item.id,
-    label: item.name
-  }))
-  customerOptions.value = customerStore.allCustomer.map((item) => ({
-    value: item.id,
-    label: item.name
-  }))
 }
 
 const getTableRowClassName = (_record, index) => {
@@ -313,7 +333,8 @@ const addDebtItem = () => {
   }
 }
 
-const deleteDebtItem = (index) => {
+const deleteDebtItem = (index, record) => {
+  if (record.id) deletedItems.value.push(record)
   formState.value.items.splice(index, 1)
 
   validateItems()
@@ -331,36 +352,44 @@ const selectProperty = (propId) => {
 }
 
 const deselectProperty = (propId) => {
-  Modal.confirm({
-    title: 'Xác nhận xoá',
-    icon: createVNode(ExclamationCircleOutlined),
-    content: `Khi xoá thuộc tính, các thuộc tính của sản phẩm cũng sẽ bị xoá theo, bạn có chắc muốn xoá không?`,
-    wrapClassName: 'delete-property-confirm-modal',
-    okText: 'Có',
-    okType: 'primary',
-    cancelText: 'Không',
-    onOk() {
-      // Delete selected property
-      selectedProperties.value = selectedProperties.value.filter((item) => item.id !== propId)
+  const isEmptyItems = formState.value.items.length === 0
+  const newSelectedProperties = selectedProperties.value.filter((item) => item.id !== propId)
 
-      // Delete selected property field in [items]
-      formState.value.items = formState.value.items.map((item) => {
-        delete item.properties[propId]
-        return item
-      })
-    },
-    onCancel() {
-      formState.value.propertyIds.push(propId)
-    }
-  })
+  if (!isEmptyItems && newSelectedProperties.length === 0) {
+    mc.error('Phải có ít nhất 1 thuộc tính cho danh sách sản phẩm.')
+    formState.value.propertyIds.push(propId)
+  } else if (!isEmptyItems) {
+    Modal.confirm({
+      title: 'Xác nhận xoá',
+      icon: createVNode(ExclamationCircleOutlined),
+      content: `Khi xoá thuộc tính, các thuộc tính của sản phẩm cũng sẽ bị xoá theo, bạn có chắc muốn xoá không?`,
+      wrapClassName: 'delete-property-confirm-modal',
+      okText: 'Có',
+      okType: 'primary',
+      cancelText: 'Không',
+      onOk() {
+        // Delete selected property
+        selectedProperties.value = selectedProperties.value.filter((item) => item.id !== propId)
+
+        // Delete selected property field in [items]
+        formState.value.items = formState.value.items.map((item) => {
+          delete item.properties[propId]
+          return item
+        })
+      },
+      onCancel() {
+        formState.value.propertyIds.push(propId)
+      }
+    })
+  } else selectedProperties.value = newSelectedProperties
 }
 
 const onChangeUnitPrice = (index) => {
-  const { avgProportion, unitPrice } = formState.value.items[index]
+  const { weight, avgProportion, unitPrice } = formState.value.items[index]
+  formState.value.items[index].totalPrice = weight * unitPrice
   formState.value.items[index].totalUnitPrice = avgProportion * unitPrice
 
   calPrice()
-  clearValidate('items', index)
 }
 
 const onChangeAvgProportion = (index) => {
@@ -372,12 +401,10 @@ const onChangeAvgProportion = (index) => {
 
 const calPrice = () => {
   totalUnitPrice.value = formState.value.items
-    .map((item) => item.avgProportion * item.unitPrice)
+    .map((item) => item.totalUnitPrice)
     .reduce((a, b) => a + b, 0)
 
-  totalPrice.value = formState.value.items
-    .map((item) => item.weight * item.unitPrice)
-    .reduce((a, b) => a + b, 0)
+  totalPrice.value = formState.value.items.map((item) => item.totalPrice).reduce((a, b) => a + b, 0)
 }
 
 const clearValidate = (errorName, index = -1) => {
@@ -399,7 +426,7 @@ const validateItems = () => {
 
     formErrors.value.items = items
       .map((item, index) => {
-        if (!item.name.trim() || !item.weight || !item.quantity || !item.unitPrice) return index
+        if (!item.name.trim() || !item.branch) return index
         return -1
       })
       .filter((itemIndex) => itemIndex !== -1)
@@ -409,10 +436,13 @@ const validateItems = () => {
 }
 
 const validate = () => {
-  const { name, date, customerId, propertyIds } = formState.value
+  const { id, date, type, customerId, propertyIds } = formState.value
 
-  if (!name.trim()) formErrors.value.name = 'Tên công nợ là trường băt buộc'
-  else clearValidate('name')
+  if (!id) formErrors.value.id = 'Mã công nợ là trường băt buộc'
+  else clearValidate('id')
+
+  if (!type) formErrors.value.type = 'Loại sản phẩm là trường băt buộc'
+  else clearValidate('type')
 
   if (!date) formErrors.value.date = 'Ngày nhập công nợ là trường băt buộc'
   else clearValidate('date')
@@ -433,32 +463,38 @@ const submit = async () => {
   const isValid = validate()
 
   if (isValid) {
-    const { name, date, customerId, propertyIds } = formState.value
+    const { id, date, type, customerId, propertyIds } = formState.value
 
     const items = cloneDeep(formState.value.items).map((item) => {
       return {
+        id: item.id,
         name: item.name.trim(),
         note: item.note.trim(),
         properties: item.properties,
-        weight: item.weight,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice
+        weight: item.weight || 0,
+        quantity: item.quantity || 0,
+        unitPrice: item.unitPrice || 0,
+        totalPrice: item.totalPrice || 0,
+        totalUnitPrice: item.totalUnitPrice || 0,
+        avgProportion: item.avgProportion || 0,
+        branch: item.branch
       }
     })
 
     try {
-      await debtStore.create({
-        name: name.trim(),
+      await debtStore.update({
+        id,
         date,
         customerId,
         propertyIds,
-        type: DEBT_TYPE.STEEL,
-        items
+        type,
+        items,
+        deletedItems: deletedItems.value.map((item) => item.id)
       })
 
-      formState.value = cloneDeep(initFormState)
+      isSubmitted.value = true
       mc.success(MSG.SAVE_SUCCESS)
-      router.push(MENU.DEBT.path)
+      router.push(MENU.DEBT_DETAIL.path + id)
     } catch (error) {
       mc.error(MSG.SAVE_FAILED)
     }
@@ -467,25 +503,76 @@ const submit = async () => {
 
 // Hooks
 onMounted(async () => {
+  const { id } = route.params
+  if (!id) router.push(NOT_FOUND_PATH)
+
   await initFormOptions()
 
-  window.onbeforeunload = function () {
-    return MSG.PAGE_RELOAD_CONFIRMATION
+  try {
+    await debtStore.get(id)
+
+    // Update breadcrumb
+    commonStore.setBreadcrumbs([
+      MENU.DEBT,
+      { name: MENU.EDIT_DEBT.name, path: MENU.EDIT_DEBT.path + debt.value.id }
+    ])
+
+    // Init form state
+    const { date, type, customer, properties, debtDetails } = debt.value
+
+    totalPrice.value = debt.value.totalPrice
+    totalUnitPrice.value = debt.value.totalUnitPrice
+    selectedProperties.value = properties
+      .map((item) => propertyStore.allProperty.find((prop) => prop.id === item.id))
+      .filter((item) => item !== undefined)
+
+    const items = debtDetails.map((item) => {
+      const itemProperties = {}
+      item.propertyDetails.forEach((propDetail) => {
+        itemProperties[propDetail.property.id] = propDetail.id
+      })
+
+      return {
+        id: item.id,
+        name: item.name.trim(),
+        note: item.note ? item.note.trim() : '',
+        branch: item.branch.id,
+        quantity: item.quantity,
+        weight: item.weight,
+        avgProportion: item.avgProportion,
+        unitPrice: item.unitPrice,
+        totalUnitPrice: item.totalUnitPrice,
+        totalPrice: item.totalPrice,
+        properties: itemProperties
+      }
+    })
+
+    formState.value = {
+      id: debt.value.id,
+      date,
+      customerId: customer.id,
+      propertyIds: properties.map((item) => item.id),
+      type,
+      items
+    }
+  } catch (error) {
+    console.log(error)
+    // router.push(MENU.DEBT.path)
   }
 })
 
-onBeforeMount(() => {
-  window.onbeforeunload = null
+onUnmounted(() => {
+  commonStore.setBreadcrumbs([])
 })
 
 onBeforeRouteLeave((to, from, next) => {
-  if (isFormChange.value) {
-    if (confirm('Bạn có chắc muốn rời khỏi trang này không?')) next()
-    else next(false)
-  } else next()
-})
+  // if (isSubmitted.value) {
+  //   if (confirm('Bạn có chắc muốn rời khỏi trang này không?')) next()
+  //   else next(false)
+  // } else
 
-window.be
+  next()
+})
 </script>
 
 <style lang="scss">

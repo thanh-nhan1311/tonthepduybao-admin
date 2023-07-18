@@ -11,6 +11,15 @@ export const useUserStore = defineStore('userStore', {
     allRole: []
   }),
 
+  getters: {
+    roleOptions() {
+      return this.allRole.map((role) => ({
+        label: role.name,
+        value: role.id
+      }))
+    }
+  },
+
   actions: {
     async getMe() {
       const { data } = await userAPI.getMe()

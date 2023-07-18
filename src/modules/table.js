@@ -227,86 +227,21 @@ export const PROPERTY_TABLE_COLUMNS = [
   }
 ]
 
-export const ADD_DEBT_STEEL_TABLE_COLUMNS = [
+export const DEBT_FULL_TABLE_COLUMNS = [
   {
     title: 'Tên',
     dataIndex: 'name',
-    key: 'name',
-    width: 200
+    key: 'name'
   },
   {
-    title: 'Ghi chú',
-    dataIndex: 'note',
-    key: 'note',
-    width: 120
+    title: 'Chi nhánh',
+    dataIndex: 'branch',
+    key: 'branch'
   },
   {
     title: 'Thuộc tính',
     dataIndex: 'properties',
-    key: 'properties',
-    width: 100
-  },
-  {
-    title: 'Số KG',
-    dataIndex: 'weight',
-    key: 'weight',
-    width: 100
-  },
-  {
-    title: 'Số lượng',
-    dataIndex: 'quantity',
-    key: 'quantity',
-    width: 100
-  },
-  {
-    title: 'TT TB',
-    dataIndex: 'avgProportion',
-    key: 'avgProportion',
-    width: 70
-  },
-  {
-    title: 'Đơn giá',
-    dataIndex: 'unitPrice',
-    key: 'unitPrice',
-    width: 120
-  },
-  {
-    title: 'Đơn giá cây/mét',
-    dataIndex: 'totalUnitPrice',
-    key: 'totalUnitPrice',
-    width: 140
-  },
-  {
-    title: 'Thao tác',
-    key: 'action',
-    width: 100
-  }
-]
-
-export const DEBT_DETAIL_STEEL_TABLE_COLUMNS = [
-  {
-    title: 'No',
-    dataIndex: 'no',
-    key: 'no',
-    width: 70
-  },
-  {
-    title: 'Tên',
-    dataIndex: 'name',
-    key: 'name',
-    width: 240
-  },
-  {
-    title: 'Ghi chú',
-    dataIndex: 'note',
-    key: 'note',
-    width: 160
-  },
-  {
-    title: 'Thuộc tính',
-    dataIndex: 'propertyDetails',
-    key: 'propertyDetails',
-    width: 200
+    key: 'properties'
   },
   {
     title: 'Số KG',
@@ -321,8 +256,7 @@ export const DEBT_DETAIL_STEEL_TABLE_COLUMNS = [
   {
     title: 'TT TB',
     dataIndex: 'avgProportion',
-    key: 'avgProportion',
-    width: 70
+    key: 'avgProportion'
   },
   {
     title: 'Đơn giá',
@@ -335,30 +269,27 @@ export const DEBT_DETAIL_STEEL_TABLE_COLUMNS = [
     key: 'totalUnitPrice'
   },
   {
-    title: 'Tổng nhập',
+    title: 'Thành tiền',
     dataIndex: 'totalPrice',
     key: 'totalPrice'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
   }
 ]
 
 export const LIST_DEBT_TABLE_COLUMNS = [
   {
-    title: 'Mã ',
+    title: 'Mã công nợ',
     dataIndex: 'id',
     key: 'id',
-    width: 75
-  },
-  {
-    title: 'Tên',
-    dataIndex: 'name',
-    key: 'name',
-    width: 240
+    width: 200
   },
   {
     title: 'Ngày tạo',
     dataIndex: 'date',
-    key: 'date',
-    width: 120
+    key: 'date'
   },
   {
     title: 'Nhà cung cấp',
@@ -371,7 +302,7 @@ export const LIST_DEBT_TABLE_COLUMNS = [
     key: 'type'
   },
   {
-    title: 'Tổng nhập/xuất',
+    title: 'Tổng nhập',
     dataIndex: 'totalPrice',
     key: 'totalPrice'
   },
