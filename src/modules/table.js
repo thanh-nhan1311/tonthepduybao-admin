@@ -68,6 +68,44 @@ export const CUSTOMER_TABLE_COLUMNS = [
   }
 ]
 
+export const USER_TABLE_COLUMNS = [
+  {
+    title: 'No',
+    dataIndex: 'no',
+    key: 'no'
+  },
+  {
+    title: 'Họ và tên',
+    dataIndex: 'fullName',
+    key: 'fullName'
+  },
+  {
+    title: 'Chi nhánh',
+    dataIndex: 'branch',
+    key: 'branch'
+  },
+  {
+    title: 'Vai trò',
+    dataIndex: 'role',
+    key: 'role'
+  },
+  {
+    title: 'Trạng thái',
+    dataIndex: 'status',
+    key: 'status'
+  },
+  {
+    title: 'Được tạo lúc',
+    dataIndex: 'createdBy',
+    key: 'createdBy'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action',
+    width: 200
+  }
+]
+
 export const SITE_CONTACT_TABLE_COLUMNS = [
   {
     title: 'No.',
@@ -206,7 +244,7 @@ export const ADD_DEBT_STEEL_TABLE_COLUMNS = [
     title: 'Thuộc tính',
     dataIndex: 'properties',
     key: 'properties',
-    width: 200
+    width: 100
   },
   {
     title: 'Số KG',

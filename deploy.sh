@@ -24,7 +24,7 @@ git pull
 echo "\n-- Installing..."
 rm -rf node_modules
 yarn install
-# cp env.properties .env
+cp env.properties .env
 
 echo "\n-- Building at [${env}] environment..."
 NODE_ENV=$env yarn build

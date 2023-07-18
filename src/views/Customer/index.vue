@@ -3,7 +3,6 @@
     <heading :title="pageTitle">
       <div class="flex items-center">
         <a-input-search
-          ref="refUsername"
           v-model:value="search"
           placeholder="Tìm kiếm ..."
           class="mr-4 w-[400px]"
@@ -71,6 +70,7 @@
           <div>
             <a-button type="link" @click="openModal(record)"> Sửa </a-button>
             <a-popconfirm
+              v-if="authStore.isAdmin"
               title="Bạn có chắc muốn xoá khách hàng này không?"
               ok-text="Có"
               cancel-text="Không"
@@ -91,9 +91,11 @@
 import { computed, onMounted, ref, toRef } from 'vue'
 import { CUSTOMER_TYPE } from '~/modules/constant'
 import { CUSTOMER_TABLE_COLUMNS } from '~/modules/table'
+import { useAuthStore } from '~/stores/auth'
 import { useCustomerStore } from '~/stores/customer'
 
 // Store
+const authStore = useAuthStore()
 const customerStore = useCustomerStore()
 
 // State
@@ -129,6 +131,7 @@ const closeModal = () => {
   selectedCustomer.value = null
   isShowModal.value = false
 }
+// TODO: delete customer
 const deleteCustomer = () => {}
 
 // Hooks

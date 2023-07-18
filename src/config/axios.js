@@ -59,7 +59,7 @@ instance.interceptors.response.use(
     commonStore.setLoading(false)
 
     if (error && error.response) {
-      const { _401, _403, _404, _500 } = HTTP_STATUS
+      const { _400, _401, _403, _404, _500 } = HTTP_STATUS
       const { UNAUTHORIZED, SYSTEM_ERROR } = MSG
       const { data, status } = error.response
 
@@ -70,6 +70,7 @@ instance.interceptors.response.use(
           cookie.remove(COOKIE_PARAM.TOKEN)
           if (window.location.pathname !== LOGIN_URL) window.location.reload()
           break
+        case _400:
         case _404:
           mc.error(data.message)
           break

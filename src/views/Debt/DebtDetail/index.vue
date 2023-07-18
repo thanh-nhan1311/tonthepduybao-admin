@@ -98,8 +98,8 @@
 
     <div class="flex justify-between mt-8 mb-4">
       <div>
-        <b>Bảng công nợ:</b>
-        <span class="font-normal ml-2">{{ 0 }} sản phẩm</span>
+        <b>Danh sách sản phẩm nhập vào:</b>
+        <span class="font-normal ml-2">{{ debtDetails.length }} sản phẩm</span>
       </div>
       <a-input-search v-model:value="search" placeholder="Tìm kiếm ..." class="mr-4 w-[400px]" />
     </div>

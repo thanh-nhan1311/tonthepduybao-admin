@@ -1,16 +1,20 @@
 import { isNil, isEmpty, isNumber } from 'lodash'
 
-export const defRule = async (_rule, value, cb, label = '', length = null) => {
+export const defRule = async (_rule, value, cb, label = '', max = null, min = null) => {
   if (isNil(value) || isEmpty(value.toString().trim()))
     return Promise.reject(`${label} là trường bắt buộc`)
-  else if (!isNil(length) && isNumber(length) && value.trim().length > length)
-    return Promise.reject(`${label} là trường bắt buộc và không được vượt quá ${length} kí tự`)
+  else if (!isNil(max) && isNumber(max) && value.trim().length > max)
+    return Promise.reject(`${label} là trường bắt buộc và không được vượt quá ${max} kí tự`)
+  else if (!isNil(min) && isNumber(min) && value.trim().length < min)
+    return Promise.reject(`${label} là trường bắt buộc và có ít nhất ${min} kí tự`)
 
   return Promise.resolve()
 }
 
 export const defEmptyBranchName = async (_rule, value, cb) =>
-  defRule(_rule, value, cb, 'Tên chi nhánh')
+  defRule(_rule, value, cb, 'Tên chi nhánh', 255)
+
+export const defEmptyBranch = async (_rule, value, cb) => defRule(_rule, value, cb, 'Chi nhánh')
 
 export const defEmptyCategoryName = async (_rule, value, cb) =>
   defRule(_rule, value, cb, 'Tên danh mục', 500)
@@ -47,3 +51,13 @@ export const defEmptyCustomerName = async (_rule, value, cb) =>
 
 export const defEmptyCustomerType = async (_rule, value, cb) =>
   defRule(_rule, value, cb, 'Phân loại khách hàng')
+
+export const defEmptyFullName = async (_rule, value, cb) => defRule(_rule, value, cb, 'Họ và tên')
+
+export const defEmptyUsername = async (_rule, value, cb) =>
+  defRule(_rule, value, cb, 'Tên đăng nhập', 50, 6)
+
+export const defEmptyPassword = async (_rule, value, cb) =>
+  defRule(_rule, value, cb, 'Mật khẩu', 100, 8)
+
+export const defEmptyEmail = async (_rule, value, cb) => defRule(_rule, value, cb, 'Email')

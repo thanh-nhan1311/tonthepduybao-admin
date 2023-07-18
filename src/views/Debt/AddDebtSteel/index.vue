@@ -90,7 +90,7 @@
       </div>
 
       <div class="col-span-3 flex justify-end pt-[24px]">
-        <a-button type="primary" ghost @click="initFormOptions">
+        <a-button type="primary" ghost class="flex items-center" @click="initFormOptions">
           <Iconify icon="bx:reset" width="16px" />
           <span class="ml-2">Làm mới</span>
         </a-button>
@@ -173,7 +173,7 @@
             :allow-clear="true"
             :show-search="true"
             :placeholder="`Chọn ${prop.name}`"
-            :class="['w-full', propIndex !== 0 && 'mt-2']"
+            :class="['w-full min-w-[120px]', propIndex !== 0 && 'mt-2']"
           />
         </template>
         <template v-else-if="column.key === 'weight'">
@@ -243,6 +243,13 @@ const propertyStore = usePropertyStore()
 const customerStore = useCustomerStore()
 
 // State
+const initFormState = {
+  name: '',
+  date: '',
+  customerId: null,
+  propertyIds: [],
+  items: []
+}
 const debtItem = {
   name: '',
   note: '',
@@ -253,13 +260,7 @@ const debtItem = {
   totalUnitPrice: 0,
   properties: {} // dynamic property
 }
-const formState = ref({
-  name: '',
-  date: '',
-  customerId: null,
-  propertyIds: [],
-  items: []
-})
+const formState = ref(cloneDeep(initFormState))
 const formErrors = ref({})
 const selectedProperties = ref([])
 const totalPrice = ref(0)
@@ -454,6 +455,8 @@ const submit = async () => {
         type: DEBT_TYPE.STEEL,
         items
       })
+
+      formState.value = cloneDeep(initFormState)
       mc.success(MSG.SAVE_SUCCESS)
       router.push(MENU.DEBT.path)
     } catch (error) {

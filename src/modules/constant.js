@@ -42,13 +42,13 @@ export const MSG = {
   UNAUTHORIZED: 'Bạn không có quyền truy cập vào hệ thống, xin hãy đăng nhập!',
 
   SAVE_SUCCESS: 'Lưu dữ liệu thành công!',
+  SAVE_FAILED: 'Lưu dữ liệu không thành công!',
 
   UPDATE_SUCCESS: 'Cập nhật thành công!',
-  DELETE_SUCCESS: 'Dữ liệu đã được xoá thành công!',
-
   UPDATE_FAILED: 'Cập nhật không thành công!',
+
+  DELETE_SUCCESS: 'Dữ liệu đã được xoá thành công!',
   DELETE_FAILED: 'Xoá không thành công!',
-  SAVE_FAILED: 'Lưu dữ liệu không thành công!',
 
   UPLOAD_SUCCESS: 'Tải tệp lên thành công!',
   UPLOAD_FAILED: 'Tải tệp lên thất bại!',
@@ -56,12 +56,28 @@ export const MSG = {
   DELETE_UPLOAD_SUCCESS: 'Xoá tệp thành công!',
   DELETE_UPLOAD_FAILED: 'Xoá tệp thất bại!',
 
-  PAGE_RELOAD_CONFIRMATION: 'Bạn có chắc muốn reload lại trang này không?'
+  PAGE_RELOAD_CONFIRMATION: 'Bạn có chắc muốn reload lại trang này không?',
+
+  UPDATE_AVATAR_SUCCESS: 'Cập nhật avatar thành công.',
+  UPDATE_AVATAR_FAILED: 'Cập nhật avatar thất bại.',
+
+  DOWNLOAD_SUCCESS: 'Tải xuống thành công.',
+  DOWNLOAD_FAILED: 'Tải xuống thất bại.'
 }
 
 export const BRANCH_STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE'
+}
+
+export const USER_STATUS = {
+  ACTIVE: 'ACTIVE',
+  BLOCKED: 'BLOCKED'
+}
+
+export const USER_ROLE = {
+  ADMIN: 'ADMIN',
+  STAFF: 'STAFF'
 }
 
 export const DEBT_TYPE = {
@@ -72,6 +88,12 @@ export const DEBT_TYPE = {
 export const CUSTOMER_TYPE = {
   CUSTOMER: 'CUSTOMER',
   SUPPLIER: 'SUPPLIER'
+}
+
+export const SYSTEM_LOG_TYPE = {
+  LOG: 'LOG',
+  TXT: 'TXT',
+  CSV: 'CSV'
 }
 
 export const SITE_SETTING = {

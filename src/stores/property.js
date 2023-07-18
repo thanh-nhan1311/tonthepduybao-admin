@@ -15,8 +15,8 @@ export const usePropertyStore = defineStore('propertyStore', {
   actions: {
     // Function
     async getAll(payload = { search: '' }) {
-      const res = await propertyAPI.getAll(payload)
-      this.allProperty = res.data
+      const { data } = await propertyAPI.getAll(payload)
+      this.allProperty = data
     },
 
     async delete(payload) {

@@ -74,7 +74,6 @@ const productCategories = computed(() => {
 
 // Methods
 const openModal = (productCategory) => {
-  console.log(productCategory)
   selectProductCategory.value = productCategory
   isShowModal.value = true
 }

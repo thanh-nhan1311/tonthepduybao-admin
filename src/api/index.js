@@ -5,6 +5,8 @@ import useUploadAPI from './uploadApi'
 import useCustomerAPI from './customerApi'
 import usePropertyAPI from './propertyApi'
 import useDebtAPI from './debtApi'
+import useUserAPI from './userApi'
+import useSystemLogAPI from './systemLogApi'
 
 export {
   useAuthAPI,
@@ -13,5 +15,7 @@ export {
   useUploadAPI,
   useCustomerAPI,
   usePropertyAPI,
-  useDebtAPI
+  useDebtAPI,
+  useUserAPI,
+  useSystemLogAPI
 }

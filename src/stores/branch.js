@@ -13,17 +13,18 @@ export const useBranchStore = defineStore('branchStore', {
   actions: {
     // Function
     async getAllBranch() {
-      const res = await branchAPI.getAll()
-      this.allBranch = res.data
+      const { data } = await branchAPI.getAll()
+      this.allBranch = data
     },
 
-    async getBranchOptions() {
-      const res = await branchAPI.getAll()
-      this.branchOptions = res.data.map((item) => ({
+    async getBranchOptions(hasAllOption = false) {
+      const { data } = await branchAPI.getAll()
+      this.branchOptions = data.map((item) => ({
         value: item.id,
         label: item.name
       }))
-      this.branchOptions.unshift(ALL_BRANCH_OPTION)
+
+      if (hasAllOption) this.branchOptions.unshift(ALL_BRANCH_OPTION)
     },
 
     async upsertBranch(payload) {

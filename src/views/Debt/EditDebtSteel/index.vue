@@ -90,7 +90,7 @@
       </div>
 
       <div class="col-span-3 flex justify-end pt-[24px]">
-        <a-button type="primary" ghost @click="initFormOptions">
+        <a-button type="primary" ghost class="flex items-center" @click="initFormOptions">
           <Iconify icon="bx:reset" width="16px" />
           <span class="ml-2">Làm mới</span>
         </a-button>
@@ -323,8 +323,6 @@ const deleteDebtItem = (index, record) => {
     })
     .filter((item) => !!item)
 
-  console.log(index, record.id, formState.value.items)
-
   validateItems()
   calPrice()
 }
@@ -472,9 +470,8 @@ const submit = async () => {
 
       isSubmitted.value = true
       mc.success(MSG.SAVE_SUCCESS)
-      router.push(MENU.DEBT.path)
+      router.push(MENU.DEBT_DETAIL.path + id)
     } catch (error) {
-      console.log(error)
       mc.error(MSG.SAVE_FAILED)
     }
   }

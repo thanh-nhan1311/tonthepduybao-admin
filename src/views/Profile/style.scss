@@ -1,0 +1,28 @@
+.profile-page {
+  &__form {
+    &.editing {
+      .ant-form-item {
+        .ant-form-item-label .ant-form-item-required::before {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  .ant-form-item {
+
+    &:last-child,
+    &:last-child .ant-form-item-control-input-content {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .ant-form-item-label {
+      text-align: left;
+
+      .ant-form-item-required::before {
+        display: none;
+      }
+    }
+  }
+}

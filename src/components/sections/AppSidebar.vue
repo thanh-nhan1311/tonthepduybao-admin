@@ -6,7 +6,7 @@
       mode="inline"
       :style="{ height: '100%', borderRight: 0 }"
     >
-      <template v-for="item in Object.values(MENU).filter((item) => !item.implicit)">
+      <template v-for="item in menuItems">
         <a-menu-item
           v-if="!hasSubMenu(item.subMenu)"
           :key="item.id"
@@ -40,16 +40,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
+import { useAuthStore } from '~/stores/auth'
 
 const router = useRouter()
+
+// Store
+const authStore = useAuthStore()
 
 // State
 const selectedKeys = ref(['1'])
 const openKeys = ref(['sub1'])
 const collapsed = ref(true)
+const menuItems = computed(() => {
+  const userRoleId = authStore.currentUser.role.id
+  return Object.values(MENU).filter((item) => !item.implicit && item.roles.includes(userRoleId))
+})
 
 // Methods
 const routeTo = (path) => router.push(path)

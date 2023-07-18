@@ -1,4 +1,4 @@
-import { DEBT_TYPE } from './constant'
+import { DEBT_TYPE, USER_ROLE } from './constant'
 
 export const MENU = {
   HOME: {
@@ -7,6 +7,7 @@ export const MENU = {
     name: 'Trang chủ',
     icon: 'ant-design:home-outlined',
     subMenu: null,
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: false
   },
 
@@ -15,6 +16,7 @@ export const MENU = {
     path: null,
     name: 'Quản lý trang',
     icon: 'ant-design:global-outlined',
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: false,
     subMenu: {
       SM_PRODUCT: {
@@ -56,30 +58,35 @@ export const MENU = {
     name: 'Công nợ',
     icon: 'mdi:file-document-multiple',
     subMenu: null,
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: false
   },
   DEBT_DETAIL: {
     id: 'DebtDetail',
     path: '/debt/detail/',
     name: 'Thông tin công nợ',
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: true
   },
   ADD_DEBT_STEEL: {
     id: 'AddDebtSteel',
     path: `/debt/add/${DEBT_TYPE.STEEL.toLowerCase()}`,
     name: 'Tạo công nợ: Tôn - Sắt - Thép',
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: true
   },
   EDIT_DEBT_STEEL: {
     id: 'EditDebtSteel',
     path: `/debt/edit/${DEBT_TYPE.STEEL.toLowerCase()}/`,
     name: 'Chỉnh sửa công nợ',
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: true
   },
   ADD_DEBT_SCREW: {
     id: 'AddDebtScrew',
     path: `/debt/add/${DEBT_TYPE.SCREW.toLowerCase()}`,
     name: 'Tạo công nợ: Vật liệu',
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: true
   },
 
@@ -89,6 +96,7 @@ export const MENU = {
     name: 'Khách hàng',
     icon: 'heroicons:user-group-solid',
     subMenu: null,
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: false
   },
   PROPERTY: {
@@ -97,6 +105,7 @@ export const MENU = {
     name: 'Thiết lập thuộc tính',
     icon: 'ic:baseline-settings',
     subMenu: null,
+    roles: [USER_ROLE.ADMIN],
     implicit: false
   },
   BRANCH: {
@@ -105,6 +114,16 @@ export const MENU = {
     name: 'Chi nhánh',
     icon: 'mdi:store-marker-outline',
     subMenu: null,
+    roles: [USER_ROLE.ADMIN],
+    implicit: false
+  },
+  USER: {
+    id: 'User',
+    path: '/users',
+    name: 'Nhân viên',
+    icon: 'fluent-mdl2:recruitment-management',
+    subMenu: null,
+    roles: [USER_ROLE.ADMIN],
     implicit: false
   },
   PROFILE: {
@@ -113,6 +132,7 @@ export const MENU = {
     name: 'Tài khoản',
     icon: 'ant-design:user',
     subMenu: null,
+    roles: [USER_ROLE.ADMIN, USER_ROLE.STAFF],
     implicit: false
   }
 }
