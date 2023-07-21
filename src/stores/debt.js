@@ -31,12 +31,24 @@ export const useDebtStore = defineStore('debtStore', {
       await debtAPI.create(payload)
     },
 
+    async createFromFile(payload) {
+      return await debtAPI.createFromFile(payload)
+    },
+
     async update(payload) {
       await debtAPI.update(payload)
     },
 
     async delete(payload) {
       await debtAPI.del(payload)
+    },
+
+    async download(payload) {
+      return await debtAPI.download(payload)
+    },
+
+    async downloadTemplate(payload) {
+      return await debtAPI.downloadTemplate(payload)
     }
   }
 })

@@ -249,7 +249,7 @@ export const DEBT_FULL_TABLE_COLUMNS = [
     key: 'weight'
   },
   {
-    title: 'Số lượng',
+    title: 'Số lượng/mét',
     dataIndex: 'quantity',
     key: 'quantity'
   },
@@ -267,6 +267,43 @@ export const DEBT_FULL_TABLE_COLUMNS = [
     title: 'Đơn giá cây/mét',
     dataIndex: 'totalUnitPrice',
     key: 'totalUnitPrice'
+  },
+  {
+    title: 'Thành tiền',
+    dataIndex: 'totalPrice',
+    key: 'totalPrice'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]
+
+export const DEBT_SCREW_TABLE_COLUMNS = [
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
+    title: 'Chi nhánh',
+    dataIndex: 'branch',
+    key: 'branch'
+  },
+  {
+    title: 'Thuộc tính',
+    dataIndex: 'properties',
+    key: 'properties'
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: 'Đơn giá',
+    dataIndex: 'unitPrice',
+    key: 'unitPrice'
   },
   {
     title: 'Thành tiền',
@@ -310,5 +347,11 @@ export const LIST_DEBT_TABLE_COLUMNS = [
     title: 'Chỉnh sửa gần đây',
     dataIndex: 'lastModified',
     key: 'lastModified'
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'action',
+    key: 'action',
+    width: 100
   }
 ]

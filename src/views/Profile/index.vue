@@ -155,6 +155,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useMessage } from '~/composables'
 import { MSG } from '~/modules/constant'
 import { defEmptyAddress, defEmptyEmail, defEmptyFullName, defEmptyPhone } from '~/modules/formRule'
+import { downloadFromResponse } from '~/modules/utils'
 import { useAuthStore } from '~/stores/auth'
 import { useSystemLogStore } from '~/stores/systemLog'
 import { useUserStore } from '~/stores/user'
@@ -227,23 +228,11 @@ const formSubmit = async () => {
 const downloadSystemLog = async (payload) => {
   try {
     const { headers, data } = await systemLogStore.download(payload)
-    const fileName = headers['content-disposition'].replace('attachment;filename=', '')
-
-    const href = URL.createObjectURL(data)
-    const link = document.createElement('a')
-    link.href = href
-    link.setAttribute('download', fileName)
-    document.body.appendChild(link)
-    link.click()
-
-    // clean up "a" element & remove ObjectURL
-    document.body.removeChild(link)
-    URL.revokeObjectURL(href)
+    downloadFromResponse(headers, data)
 
     mc.success(MSG.DOWNLOAD_SUCCESS)
     isShowSystemLogModal.value = false
   } catch (error) {
-    console.log(error)
     mc.error(MSG.DOWNLOAD_FAILED)
     isShowSystemLogModal.value = false
   }

@@ -142,7 +142,6 @@ const createUser = async (payload) => {
     isShowCreateUserModal.value = false
     mc.success(MSG.SAVE_SUCCESS)
   } catch (error) {
-    console.log(error)
     mc.error(MSG.SAVE_FAILED)
   }
 }

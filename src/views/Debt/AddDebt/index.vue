@@ -30,6 +30,7 @@
           id="id"
           v-model:value="formState.id"
           placeholder="Nhập mã công nợ"
+          @keyup="changeID"
           @change="clearValidate('id')"
         />
         <p v-if="formErrors.id" class="mb-0 text-red-500 mt-0.5 text-[12px]">
@@ -42,8 +43,7 @@
         <a-select
           v-model:value="formState.type"
           :options="debtTypeOptions"
-          :show-search="true"
-          placeholder="Chọn nhà loại sản phẩm"
+          placeholder="Chọn loại sản phẩm"
           class="w-full mt-1"
           :disabled="formState.items.length !== 0"
           @change="clearValidate('type')"
@@ -152,7 +152,7 @@
     </div>
 
     <a-table
-      :columns="DEBT_FULL_TABLE_COLUMNS"
+      :columns="tableColumns"
       :data-source="formState.items"
       :scroll="{ x: 'max-content' }"
       :pagination="false"
@@ -250,7 +250,7 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { Modal } from 'ant-design-vue'
 import { computed, createVNode, onMounted, ref } from 'vue'
-import { DEBT_FULL_TABLE_COLUMNS } from '~/modules/table'
+import { DEBT_FULL_TABLE_COLUMNS, DEBT_SCREW_TABLE_COLUMNS } from '~/modules/table'
 import { useCustomerStore } from '~/stores/customer'
 import { usePropertyStore } from '~/stores/property'
 import { useDebtStore } from '~/stores/debt'
@@ -299,6 +299,9 @@ const selectedProperties = ref([])
 const totalPrice = ref(0)
 const totalUnitPrice = ref(0)
 
+const tableColumns = computed(() =>
+  formState.value.type === DEBT_TYPE_KEY.SCREW ? DEBT_SCREW_TABLE_COLUMNS : DEBT_FULL_TABLE_COLUMNS
+)
 const isFormChange = computed(() => {
   const { id, date, customerId, propertyIds, items } = formState.value
   return (
@@ -322,6 +325,8 @@ const initFormOptions = async () => {
   await propertyStore.getAll()
   await customerStore.getAll({ search: '', type: CUSTOMER_TYPE.SUPPLIER })
 }
+
+const changeID = (event) => (formState.value.id = event.target.value.trim().toUpperCase())
 
 const getTableRowClassName = (_record, index) => {
   return formErrors.value.items &&
@@ -393,8 +398,9 @@ const deselectProperty = (propId) => {
 }
 
 const onChangeUnitPrice = (index) => {
-  const { weight, avgProportion, unitPrice } = formState.value.items[index]
-  formState.value.items[index].totalPrice = weight * unitPrice
+  const { quantity, weight, avgProportion, unitPrice } = formState.value.items[index]
+  formState.value.items[index].totalPrice =
+    formState.value.type === DEBT_TYPE_KEY.SCREW ? quantity * unitPrice : weight * unitPrice
   formState.value.items[index].totalUnitPrice = avgProportion * unitPrice
 
   calPrice()

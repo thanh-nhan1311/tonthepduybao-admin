@@ -30,6 +30,7 @@
           id="id"
           v-model:value="formState.id"
           placeholder="Nhập mã công nợ"
+          :disabled="true"
           @change="clearValidate('id')"
         />
         <p v-if="formErrors.id" class="mb-0 text-red-500 mt-0.5 text-[12px]">
@@ -42,8 +43,7 @@
         <a-select
           v-model:value="formState.type"
           :options="debtTypeOptions"
-          :show-search="true"
-          placeholder="Chọn nhà loại sản phẩm"
+          placeholder="Chọn loại sản phẩm"
           class="w-full mt-1"
           :disabled="formState.items.length !== 0"
           @change="clearValidate('type')"
@@ -152,7 +152,7 @@
     </div>
 
     <a-table
-      :columns="DEBT_FULL_TABLE_COLUMNS"
+      :columns="tableColumns"
       :data-source="formState.items"
       :scroll="{ x: 'max-content' }"
       :pagination="false"
@@ -250,13 +250,13 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { Modal } from 'ant-design-vue'
 import { computed, createVNode, onMounted, onUnmounted, ref } from 'vue'
-import { DEBT_FULL_TABLE_COLUMNS } from '~/modules/table'
+import { DEBT_FULL_TABLE_COLUMNS, DEBT_SCREW_TABLE_COLUMNS } from '~/modules/table'
 import { useCustomerStore } from '~/stores/customer'
 import { usePropertyStore } from '~/stores/property'
 import { useDebtStore } from '~/stores/debt'
 import { isEmpty, cloneDeep } from 'lodash'
 import { useMessage, useMoment } from '~/composables'
-import { CUSTOMER_TYPE, DEBT_TYPE_KEY, MSG, NOT_FOUND_PATH } from '~/modules/constant'
+import { CUSTOMER_TYPE, DEBT_TYPE, DEBT_TYPE_KEY, MSG, NOT_FOUND_PATH } from '~/modules/constant'
 import { formatCurrency } from '~/modules/utils'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
@@ -306,6 +306,15 @@ const totalUnitPrice = ref(0)
 const isSubmitted = ref(false)
 
 const debt = computed(() => debtStore.debt)
+const tableColumns = computed(() =>
+  formState.value.type === DEBT_TYPE_KEY.SCREW ? DEBT_SCREW_TABLE_COLUMNS : DEBT_FULL_TABLE_COLUMNS
+)
+const debtTypeOptions = computed(() =>
+  Object.values(DEBT_TYPE).map((item) => ({
+    label: item.name,
+    value: item.id
+  }))
+)
 
 // Methods
 const initFormOptions = async () => {
@@ -342,7 +351,8 @@ const deleteDebtItem = (index, record) => {
 }
 
 const duplicateDebtItem = (index) => {
-  formState.value.items.push(cloneDeep(formState.value.items[index]))
+  const duplicateDebt = cloneDeep(formState.value.items[index])
+  formState.value.items.push({ ...duplicateDebt, id: null })
   calPrice()
 }
 
@@ -385,8 +395,9 @@ const deselectProperty = (propId) => {
 }
 
 const onChangeUnitPrice = (index) => {
-  const { weight, avgProportion, unitPrice } = formState.value.items[index]
-  formState.value.items[index].totalPrice = weight * unitPrice
+  const { quantity, weight, avgProportion, unitPrice } = formState.value.items[index]
+  formState.value.items[index].totalPrice =
+    formState.value.type === DEBT_TYPE_KEY.SCREW ? quantity * unitPrice : weight * unitPrice
   formState.value.items[index].totalUnitPrice = avgProportion * unitPrice
 
   calPrice()
@@ -556,8 +567,7 @@ onMounted(async () => {
       items
     }
   } catch (error) {
-    console.log(error)
-    // router.push(MENU.DEBT.path)
+    router.push(MENU.DEBT.path)
   }
 })
 

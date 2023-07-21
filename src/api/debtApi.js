@@ -13,6 +13,12 @@ export default () => {
     await instance.post('/debt', data)
   }
 
+  const createFromFile = async (payload) => {
+    return await instance.post('/debt/file', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  }
+
   const update = async (data) => {
     await instance.put('/debt', data)
   }
@@ -21,11 +27,28 @@ export default () => {
     await instance.delete(`/debt/${id}`)
   }
 
+  const download = async (params) => {
+    return await instance.get('/debt/download', {
+      params,
+      responseType: 'blob'
+    })
+  }
+
+  const downloadTemplate = async (params) => {
+    return await instance.get('/debt/download/template', {
+      params,
+      responseType: 'blob'
+    })
+  }
+
   return {
     get,
     getAll,
     create,
+    createFromFile,
     update,
-    del
+    del,
+    download,
+    downloadTemplate
   }
 }

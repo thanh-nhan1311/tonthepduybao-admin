@@ -21,7 +21,7 @@
           <span class="ml-2">Sửa</span>
         </a-button>
 
-        <a-button type="primary" class="flex items-center ml-4">
+        <a-button type="primary" class="flex items-center ml-4" @click="downloadDebt">
           <Iconify icon="mdi:file-excel" />
           <span class="ml-2">Tải xuống</span>
         </a-button>
@@ -73,7 +73,7 @@
               <td class="font-medium">Tổng nhập</td>
               <td>{{ formatCurrency(debt.totalPrice) }}</td>
             </tr>
-            <tr>
+            <tr v-if="debt.type !== DEBT_TYPE_KEY.SCREW">
               <td class="font-medium">Tổng nhập cây/mét</td>
               <td>{{ formatCurrency(debt.totalUnitPrice) }}</td>
             </tr>
@@ -156,10 +156,10 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
-import { NOT_FOUND_PATH, DEBT_TYPE, MSG } from '~/modules/constant'
+import { NOT_FOUND_PATH, DEBT_TYPE, MSG, DEBT_TYPE_KEY } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
-import { DEBT_FULL_TABLE_COLUMNS } from '~/modules/table'
-import { formatCurrency, normalize } from '~/modules/utils'
+import { DEBT_FULL_TABLE_COLUMNS, DEBT_SCREW_TABLE_COLUMNS } from '~/modules/table'
+import { downloadFromResponse, formatCurrency, normalize } from '~/modules/utils'
 import { useCommonStore } from '~/stores/common'
 import { useDebtStore } from '~/stores/debt'
 import { cloneDeep } from 'lodash'
@@ -185,13 +185,26 @@ const debtDetails = computed(() => {
   )
 })
 const columns = computed(() => {
-  const cols = cloneDeep(DEBT_FULL_TABLE_COLUMNS)
+  const cols =
+    debt.value.type === DEBT_TYPE_KEY.SCREW
+      ? cloneDeep(DEBT_SCREW_TABLE_COLUMNS)
+      : cloneDeep(DEBT_FULL_TABLE_COLUMNS)
   cols.pop()
 
   return cols
 })
 
 // Methods
+const downloadDebt = async () => {
+  try {
+    const { headers, data } = await debtStore.download({ ids: debt.value.id })
+    downloadFromResponse(headers, data)
+
+    mc.success(MSG.DOWNLOAD_SUCCESS)
+  } catch (error) {
+    mc.error(MSG.DOWNLOAD_FAILED)
+  }
+}
 const deleteDebt = async () => {
   try {
     await debtStore.delete(debt.value.id)
@@ -214,7 +227,7 @@ onMounted(async () => {
 
     commonStore.setBreadcrumbs([
       MENU.DEBT,
-      { name: debt.value.name, path: MENU.DEBT_DETAIL.path + debt.value.id }
+      { name: debt.value.id, path: MENU.DEBT_DETAIL.path + debt.value.id }
     ])
   } catch (error) {
     router.push(MENU.DEBT.path)

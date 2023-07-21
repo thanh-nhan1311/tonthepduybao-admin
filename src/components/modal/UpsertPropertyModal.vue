@@ -97,7 +97,6 @@ const formState = ref(cloneDeep(initialFormState))
 // Methods
 const formSubmit = async () => {
   const { id, name, properties } = formState.value
-  console.log(formState.value)
   if (isEdit.value) {
     await propertyStore.update({
       id,

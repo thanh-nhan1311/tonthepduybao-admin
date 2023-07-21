@@ -8,3 +8,18 @@ export const normalize = (str) => {
     .replace(/[\u0300-\u036F]/g, '')
     .replaceAll('đ', '')
 }
+
+export const downloadFromResponse = (headers, data) => {
+  const fileName = headers['content-disposition'].replace('attachment;filename=', '')
+
+  const href = URL.createObjectURL(data)
+  const link = document.createElement('a')
+  link.href = href
+  link.setAttribute('download', fileName)
+  document.body.appendChild(link)
+  link.click()
+
+  // clean up "a" element & remove ObjectURL
+  document.body.removeChild(link)
+  URL.revokeObjectURL(href)
+}
