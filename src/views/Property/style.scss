@@ -1,0 +1,11 @@
+.property-page {
+  .ant-table {
+    td {
+      &:nth-child(1) { width: 75px; }
+      &:nth-child(2) { width: 260px; }
+      &:nth-child(3) { width: auto; }
+      &:nth-child(4) { width: 240px; }
+      &:nth-child(5) { width: 160px; }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="property-page">
     <heading title="Danh sách thuộc tính" :tooltip="true" class="mb-8">
       <template #tooltip>
         <div class="pt-2 pl-2">
@@ -41,7 +41,7 @@
           </div>
         </template>
         <template v-else-if="column.key === 'properties'">
-          <a-tag v-for="item in record.items" :key="item.id" color="blue">
+          <a-tag v-for="item in record.items" :key="item.id" color="blue" class="mb-2">
             {{ item.name }}
           </a-tag>
         </template>
@@ -101,3 +101,7 @@ onMounted(() => {
   propertyStore.getAll({ search: search.value })
 })
 </script>
+
+<style lang="scss">
+@import './style.scss';
+</style>

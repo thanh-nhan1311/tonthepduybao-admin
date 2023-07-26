@@ -15,6 +15,17 @@
         &:nth-child(10) { width: auto; }
       }
     }
+    &--screw {
+      td {
+        &:nth-child(1) { width: auto; }
+        &:nth-child(2) { width: 260px; }
+        &:nth-child(3) { width: 240px; }
+        &:nth-child(7) { width: 160px; }
+        &:nth-child(8) { width: 160px; }
+        &:nth-child(9) { width: 160px; }
+        &:nth-child(7) { width: 160px; }
+      }
+    }
     &--error td {
       background: rgb(240, 187, 187) !important;
     }

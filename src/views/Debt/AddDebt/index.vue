@@ -96,6 +96,7 @@
           max-tag-count="responsive"
           class="w-full mt-1"
           mode="multiple"
+          :filter-option="customFilter"
           @select="selectProperty"
           @deselect="deselectProperty"
           @change="clearValidate('propertyIds')"
@@ -256,8 +257,8 @@ import { usePropertyStore } from '~/stores/property'
 import { useDebtStore } from '~/stores/debt'
 import { isEmpty, cloneDeep } from 'lodash'
 import { useMessage, useMoment } from '~/composables'
-import { CUSTOMER_TYPE, DEBT_TYPE, DEBT_TYPE_KEY, MSG } from '~/modules/constant'
-import { formatCurrency } from '~/modules/utils'
+import { CUSTOMER_TYPE_KEY, DEBT_TYPE, DEBT_TYPE_KEY, MSG } from '~/modules/constant'
+import { customFilter, formatCurrency } from '~/modules/utils'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
 import { useBranchStore } from '~/stores/branch'
@@ -323,7 +324,7 @@ const debtTypeOptions = computed(() =>
 const initFormOptions = async () => {
   await branchStore.getAll()
   await propertyStore.getAll()
-  await customerStore.getAll({ search: '', type: CUSTOMER_TYPE.SUPPLIER })
+  await customerStore.getAll({ search: '', type: CUSTOMER_TYPE_KEY.SUPPLIER })
 }
 
 const changeID = (event) => (formState.value.id = event.target.value.trim().toUpperCase())

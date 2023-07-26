@@ -52,6 +52,25 @@ export const MENU = {
     }
   },
 
+  PRODUCT: {
+    id: 'Product',
+    path: '/product/list',
+    name: 'Sản phẩm',
+    icon: 'fluent-mdl2:product-variant',
+    subMenu: null,
+    permission: USER_PERMISSION.FULL_ACCESS,
+    implicit: false
+  },
+  CREATE_PRODUCT: {
+    id: 'CreateProduct',
+    name: 'Thêm sản phẩm',
+    path: '/product/create',
+    icon: null,
+    subMenu: null,
+    permission: USER_PERMISSION.FULL_ACCESS,
+    implicit: true
+  },
+
   DEBT: {
     id: 'DebtList',
     path: '/debt/list',

@@ -6,7 +6,7 @@
           v-model:value="search"
           placeholder="Tìm kiếm ..."
           class="mr-4 w-[400px]"
-          @keypress.enter="init"
+          @keypress.enter="init(1)"
         />
 
         <a-button type="primary" class="flex items-center" @click="isShowModal = true">
@@ -18,6 +18,12 @@
 
     <a-table
       :columns="CUSTOMER_TABLE_COLUMNS"
+      :pagination="{
+        current: currentPage,
+        total: customerStore.allCustomer.totalItems,
+        pageSize: customerStore.allCustomer.pageSize,
+        onChange: init
+      }"
       :data-source="customerStore.allCustomerTableData"
       class="mt-8"
     >
@@ -30,7 +36,7 @@
                   v-model:value="type"
                   :options="customerTypeOptions"
                   class="flex flex-col"
-                  @change="init"
+                  @change="init(currentPage)"
                 />
               </template>
               <Iconify icon="mdi:filter" class="cursor-pointer outline-none" width="14px" />
@@ -42,7 +48,7 @@
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
         <template v-else-if="column.key === 'contact'">
-          <div class="flex items-center mb-2">
+          <div v-if="record.email" class="flex items-center mb-2">
             <Iconify icon="mdi:email" width="16px" />
             <a :href="`mailto:${record.email}`" target="_blank" class="ml-2">{{ record.email }}</a>
           </div>
@@ -62,10 +68,7 @@
             </div>
           </div>
         </template>
-        <template v-if="column.key === 'type'">
-          <span v-if="record.type === CUSTOMER_TYPE.CUSTOMER">Khách hàng</span>
-          <span v-if="record.type === CUSTOMER_TYPE.SUPPLIER">Nhà cung cấp</span>
-        </template>
+        <template v-if="column.key === 'type'">{{ CUSTOMER_TYPE[record.type].name }}</template>
         <template v-else-if="column.key === 'action'">
           <div>
             <a-button type="link" @click="openModal(record)"> Sửa </a-button>
@@ -83,44 +86,60 @@
       </template>
     </a-table>
 
-    <upsert-customer-modal v-if="isShowModal" :customer="selectedCustomer" @close="closeModal" />
+    <upsert-customer-modal
+      v-if="isShowModal"
+      :customer="selectedCustomer"
+      @submit="upsertCustomer"
+      @close="closeModal"
+    />
   </section>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, toRef } from 'vue'
-import { CUSTOMER_TYPE } from '~/modules/constant'
+import { computed, onMounted, ref } from 'vue'
+import { useMessage } from '~/composables'
+import { CUSTOMER_TYPE, CUSTOMER_TYPE_KEY, MSG, PAGING } from '~/modules/constant'
 import { CUSTOMER_TABLE_COLUMNS } from '~/modules/table'
 import { useAuthStore } from '~/stores/auth'
 import { useCustomerStore } from '~/stores/customer'
 
 // Store
+const mc = useMessage()
 const authStore = useAuthStore()
 const customerStore = useCustomerStore()
 
 // State
-const customerTypeOptions = [
-  { label: 'Khách hàng', value: CUSTOMER_TYPE.CUSTOMER },
-  { label: 'Nhà cung cấp', value: CUSTOMER_TYPE.SUPPLIER }
-]
-const search = toRef(customerStore, 'search')
-const type = toRef(customerStore, 'type')
+const search = ref('')
+const type = ref([])
 const selectedCustomer = ref(null)
 const isShowModal = ref(false)
+const currentPage = ref(PAGING.DEFAULT_PAGE)
 const pageTitle = computed(() => {
   if (type.value.length === 1) {
-    if (type.value.includes(CUSTOMER_TYPE.CUSTOMER)) return 'Danh sách khách hàng'
-    else if (type.value.includes(CUSTOMER_TYPE.SUPPLIER)) return 'Danh sách nhà cung cấp'
+    if (type.value.includes(CUSTOMER_TYPE_KEY.CUSTOMER)) return 'Danh sách khách hàng'
+    else if (type.value.includes(CUSTOMER_TYPE_KEY.SUPPLIER)) return 'Danh sách nhà cung cấp'
   }
 
   return 'Danh sách khách hàng/nhà cung cấp'
 })
+const customerTypeOptions = computed(() =>
+  Object.values(CUSTOMER_TYPE).map((item) => ({
+    label: item.name,
+    value: item.id
+  }))
+)
 
 // Methods
-const init = async () => {
+const init = async (page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_SIZE) => {
+  currentPage.value = page
+
+  console.log(page)
+
   await customerStore.getAll({
     search: search.value,
-    type: type.value.join(',')
+    type: type.value.join(','),
+    page,
+    pageSize
   })
 }
 const openModal = (customer) => {
@@ -131,11 +150,23 @@ const closeModal = () => {
   selectedCustomer.value = null
   isShowModal.value = false
 }
+const upsertCustomer = async (payload) => {
+  try {
+    await customerStore.upsert(payload)
+    await init(currentPage.value)
+
+    closeModal()
+    mc.success(MSG.UPDATE_SUCCESS)
+  } catch (error) {
+    mc.error(MSG.UPDATE_FAILED)
+  }
+}
+
 // TODO: delete customer
 const deleteCustomer = () => {}
 
 // Hooks
 onMounted(async () => {
-  await init()
+  await init(currentPage.value)
 })
 </script>

@@ -1,0 +1,10 @@
+.product-category-page {
+  .ant-table {
+    td {
+      &:nth-child(1) { width: 75px; }
+      &:nth-child(2) { width: auto; }
+      &:nth-child(3) { width: 240px; }
+      &:nth-child(4) { width: 160px; }
+    }
+  }
+}

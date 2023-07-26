@@ -35,6 +35,7 @@
               max-tag-count="responsive"
               class="col-span-5"
               mode="multiple"
+              :filter-option="customFilter"
               @change="validateDownloadTemplate"
             />
             <a-button
@@ -84,7 +85,7 @@ import { useRouter } from 'vue-router'
 import { useMessage } from '~/composables'
 import { MSG } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
-import { downloadFromResponse } from '~/modules/utils'
+import { customFilter, downloadFromResponse } from '~/modules/utils'
 import { useDebtStore } from '~/stores/debt'
 import { usePropertyStore } from '~/stores/property'
 

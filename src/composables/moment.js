@@ -21,6 +21,7 @@ export default () => {
   }
 
   return {
+    moment,
     MOMENT_FORMAT,
     dFormat,
     mFormat,

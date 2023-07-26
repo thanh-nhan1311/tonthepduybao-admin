@@ -6,7 +6,7 @@ export const normalize = (str) => {
   return str
     .normalize('NFD')
     .replace(/[\u0300-\u036F]/g, '')
-    .replaceAll('đ', '')
+    .replaceAll('đ', 'd')
 }
 
 export const downloadFromResponse = (headers, data) => {
@@ -23,3 +23,6 @@ export const downloadFromResponse = (headers, data) => {
   document.body.removeChild(link)
   URL.revokeObjectURL(href)
 }
+
+export const customFilter = (value, option) =>
+  normalize(option.label.toLowerCase()).includes(normalize(value.trim().toLowerCase()))

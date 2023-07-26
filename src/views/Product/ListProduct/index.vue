@@ -1,17 +1,21 @@
 <template>
   <section class="list-debt">
-    <heading :title="MENU.DEBT.name">
+    <heading :title="MENU.PRODUCT.name">
       <div class="flex items-center">
         <a-input-search
           v-model:value="filter.search"
-          placeholder="Nhập mã công nợ để tìm kiếm ..."
+          placeholder="Tìm kiếm sản phẩm ..."
           class="mr-4 w-[400px]"
           @keypress.enter="init(currentPage)"
         />
 
-        <a-button type="primary" class="flex items-center" @click="isShowModal = true">
+        <a-button
+          type="primary"
+          class="flex items-center"
+          @click="router.push(MENU.CREATE_PRODUCT.path)"
+        >
           <Iconify icon="mdi:plus-circle" width="16px" />
-          <span class="ml-2">Tạo công nợ</span>
+          <span class="ml-2">Thêm sản phẩm</span>
         </a-button>
 
         <a-button
@@ -37,26 +41,17 @@
             Nội dung: <span class="font-semibold">{{ filter.search }}</span>
           </p>
 
-          <div class="mb-1">
-            <div v-if="filter.date && filter.date.length === 2" class="flex items-center mb-1">
-              <Iconify icon="mdi:calendar" class="mr-2" />
-              <span>Ngày tạo từ </span>
-              <span class="font-semibold mx-2">{{ moment.dFormat(filter.date[0]) }}</span>
-              <span>đến</span>
-              <span class="font-semibold ml-2">{{ moment.dFormat(filter.date[1]) }}</span>
-            </div>
-            <div v-if="filter.type && filter.type.length !== 0" class="flex items-center">
-              <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
-              <span class="mr-2">Phân loại:</span>
-              <span class="font-semibold">{{ selectedDebtType }}</span>
-            </div>
+          <div v-if="filter.type && filter.type.length !== 0" class="flex items-center">
+            <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
+            <span class="mr-2">Phân loại:</span>
+            <span class="font-semibold">{{ selectedDebtType }}</span>
           </div>
 
-          <div v-if="filter.customerId && filter.customerId.length !== 0" class="flex items-center">
+          <div v-if="filter.branchId && filter.branchId.length !== 0" class="flex items-center">
             <div class="flex items-center">
               <Iconify icon="mdi:account" class="mr-2" />
               <span class="mr-2">Nhà cung cấp:</span>
-              <span class="font-semibold">{{ selectedCustomer }}</span>
+              <span class="font-semibold">{{ selectedBranch }}</span>
             </div>
           </div>
         </div>
@@ -69,25 +64,25 @@
     </div>
 
     <p class="text-red-500 font-semibold mb-2 mt-4">
-      Tổng số: {{ debtStore.allDebt.totalItems }} công nợ
+      Tổng số: {{ productStore.allProduct.totalItems }} sản phẩm
     </p>
 
     <a-table
       :row-key="(record) => record.id"
-      :columns="LIST_DEBT_TABLE_COLUMNS"
+      :columns="LIST_PRODUCT_TABLE_COLUMNS"
       :scroll="{ x: 'max-content' }"
       :row-selection="rowSelection"
       :pagination="{
         current: currentPage,
-        total: debtStore.allDebt.totalItems,
-        pageSize: debtStore.allDebt.pageSize,
+        total: productStore.allProduct.totalItems,
+        pageSize: productStore.allProduct.pageSize,
         onChange: init
       }"
-      :data-source="debts"
+      :data-source="products"
       row-class-name="cursor-pointer"
     >
       <template #headerCell="{ title, column }">
-        <template v-if="column.key === 'customer'">
+        <template v-if="column.key === 'branch'">
           <div class="flex items-center">
             <a-popover
               trigger="click"
@@ -95,23 +90,13 @@
               overlay-class-name="list-debt-customer-popover"
             >
               <template #content>
-                <div class="max-h-[320px] overflow-y-auto custom-scroll p-4">
-                  <a-input
-                    v-model:value="filter.customerSearch"
-                    placeholder="Tìm kiếm nhà cung cấp ..."
-                    class="w-full mb-4"
-                    @keypress.enter="customerStore.getAll({ search: filter.customerSearch })"
-                  />
-
-                  <a-checkbox-group
-                    v-if="customerStore.customerOptions.length !== 0"
-                    v-model:value="filter.customerId"
-                    :options="customerStore.customerOptions"
-                    class="flex flex-col"
-                    @change="init(currentPage)"
-                  />
-                  <p class="text-center my-4">Không có dữ liệu</p>
-                </div>
+                <a-checkbox-group
+                  v-if="branchStore.branchOptions.length !== 0"
+                  v-model:value="filter.branchId"
+                  :options="branchStore.branchOptions"
+                  class="flex flex-col"
+                  @change="init(currentPage)"
+                />
               </template>
               <Iconify icon="mdi:filter" class="cursor-pointer outline-none" width="14px" />
             </a-popover>
@@ -141,41 +126,18 @@
             <span class="ml-4">{{ title }}</span>
           </div>
         </template>
-
-        <template v-else-if="column.key === 'date'">
-          <div class="flex items-center">
-            <a-popover trigger="click" placement="bottom">
-              <template #content>
-                <a-range-picker
-                  v-model:value="filter.date"
-                  :format="moment.MOMENT_FORMAT.YYYY_MM_DD"
-                  :value-format="moment.MOMENT_FORMAT.YYYYMMDD"
-                  :input-read-only="true"
-                  :placeholder="['Từ ngày', 'đến ngày']"
-                  @change="init(currentPage)"
-                />
-              </template>
-              <Iconify icon="mdi:filter" class="cursor-pointer outline-none" width="14px" />
-            </a-popover>
-            <span class="ml-4">{{ title }}</span>
-          </div>
-        </template>
       </template>
 
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'id'">
           <span class="font-bold">{{ record.id }}</span>
         </template>
-        <template v-else-if="column.key === 'date'">{{ moment.dFormat(record.date) }}</template>
-        <template v-if="column.key === 'customer'">
-          {{ record.customer.name }}
+        <template v-else-if="column.key === 'branch'">
+          <ul v-if="record.branches && record.branches.length !== 0" class="list-none p-0 m-0">
+            <li v-for="(item, index) of record.branches" :key="index">{{ item }}</li>
+          </ul>
         </template>
-        <template v-if="column.key === 'totalPrice'">
-          <span class="font-semibold text-red-500">
-            {{ formatCurrency(record.totalPrice) }}
-          </span>
-        </template>
-        <template v-if="column.key === 'type'">
+        <template v-else-if="column.key === 'type'">
           <span>{{ DEBT_TYPE[record.type].name }}</span>
         </template>
         <template v-else-if="column.key === 'lastModified'">
@@ -200,8 +162,6 @@
         </template>
       </template>
     </a-table>
-
-    <select-way-to-add-debt v-if="isShowModal" @callback="init" @close="isShowModal = false" />
   </section>
 </template>
 
@@ -211,32 +171,29 @@ import { useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
 import { DEBT_TYPE, MSG, PAGING } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
-import { LIST_DEBT_TABLE_COLUMNS } from '~/modules/table'
-import { downloadFromResponse, formatCurrency } from '~/modules/utils'
-import { useCustomerStore } from '~/stores/customer'
-import { useDebtStore } from '~/stores/debt'
+import { LIST_PRODUCT_TABLE_COLUMNS } from '~/modules/table'
+import { downloadFromResponse } from '~/modules/utils'
 import { cloneDeep } from 'lodash'
+import { useBranchStore } from '~/stores/branch'
+import { useProductStore } from '~/stores/product'
 
 const router = useRouter()
 
 // Store
 const mc = useMessage()
 const moment = useMoment()
-const debtStore = useDebtStore()
-const customerStore = useCustomerStore()
+const productStore = useProductStore()
+const branchStore = useBranchStore()
 
 // State
 const initialFilter = {
   search: '',
-  date: [],
-  customerId: [],
   type: [],
-  customerSearch: ''
+  branchId: []
 }
 const filter = ref(cloneDeep(initialFilter))
 const currentPage = ref(PAGING.DEFAULT_PAGE)
 const selectedDebt = ref([])
-const isShowModal = ref(false)
 
 const rowSelection = ref({
   key: 'id',
@@ -245,16 +202,16 @@ const rowSelection = ref({
   }
 })
 
-const debts = computed(() => (debtStore.allDebt ? debtStore.allDebt.data : []))
+const products = computed(() => (productStore.allProduct ? productStore.allProduct.data : []))
 const debtTypeOptions = computed(() =>
   Object.values(DEBT_TYPE).map((item) => ({
     label: item.name,
     value: item.id
   }))
 )
-const selectedCustomer = computed(() =>
-  customerStore.allCustomer
-    .filter((item) => filter.value.customerId.includes(item.id))
+const selectedBranch = computed(() =>
+  branchStore.allBranch
+    .filter((item) => filter.value.branchId.includes(item.id))
     .map((item) => item.name)
     .join(', ')
 )
@@ -265,21 +222,19 @@ const selectedDebtType = computed(() =>
     .join(', ')
 )
 const isFiltering = computed(() => {
-  const { search, date, customerId, type } = filter.value
+  const { search, branchId, type } = filter.value
 
-  return search || (date && date.length === 2) || customerId.length !== 0 || type.length !== 0
+  return search || branchId.length !== 0 || type.length !== 0
 })
 
 // Methods
 const init = async (page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_SIZE) => {
   currentPage.value = page
 
-  const { search, date, customerId, type } = filter.value
-  await debtStore.getAll({
+  const { search, branchId, type } = filter.value
+  await productStore.getAll({
     search,
-    fromDate: date && date.length === 2 ? date[0] : '',
-    toDate: date && date.length === 2 ? date[1] : '',
-    customerId: customerId.join(','),
+    branchId: branchId.join(','),
     type: type.join(','),
     page,
     pageSize
@@ -287,7 +242,7 @@ const init = async (page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_S
 }
 const downloadDebt = async (ids) => {
   try {
-    const { headers, data } = await debtStore.download({ ids: ids.join(',') })
+    const { headers, data } = await productStore.download({ ids: ids.join(',') })
     downloadFromResponse(headers, data)
 
     mc.success(MSG.DOWNLOAD_SUCCESS)
@@ -304,7 +259,7 @@ const reset = () => {
 
 onMounted(async () => {
   await init(currentPage.value)
-  await customerStore.getAll({ search: filter.value.customerSearch })
+  await branchStore.getAll()
 })
 </script>
 

@@ -1,10 +1,14 @@
-import Home from '~/views/Home.vue'
+import Home from '~/views/Home/index.vue'
 import Branch from '~/views/Branch/index.vue'
 import User from '~/views/User/index.vue'
 import Customer from '~/views/Customer/index.vue'
 import Profile from '~/views/Profile/index.vue'
 import Login from '~/views/Login.vue'
 import NotFound from '~/views/NotFound.vue'
+
+import ProductCategory from '~/views/Product/ProductCategory/index.vue'
+import ListProduct from '~/views/Product/ListProduct/index.vue'
+import CreateProduct from '~/views/Product/CreateProduct/index.vue'
 
 import SiteContact from '~/views/SiteManagement/SiteContact/index.vue'
 import SiteProductCategory from '~/views/SiteManagement/SiteProductCategory/index.vue'
@@ -22,7 +26,7 @@ import { MENU } from '~/modules/menu'
 
 export default [
   {
-    path: '/',
+    path: '',
     name: 'Home',
     component: Home,
     meta: { permission: USER_PERMISSION.FULL_ACCESS }
@@ -56,6 +60,31 @@ export default [
       }
     ]
   },
+
+  {
+    name: 'Product',
+    children: [
+      {
+        path: '/product/list',
+        name: 'ListProduct',
+        component: ListProduct,
+        meta: {
+          breadcrumbs: [MENU.PRODUCT],
+          permission: USER_PERMISSION.FULL_ACCESS
+        }
+      },
+      {
+        path: '/product/create',
+        name: 'CreateProduct',
+        component: CreateProduct,
+        meta: {
+          breadcrumbs: [MENU.PRODUCT, MENU.CREATE_PRODUCT],
+          permission: USER_PERMISSION.FULL_ACCESS
+        }
+      }
+    ]
+  },
+
   {
     name: 'Debt',
     children: [

@@ -201,10 +201,9 @@ export const SITE_PARTNER_TABLE_COLUMNS = [
 
 export const PROPERTY_TABLE_COLUMNS = [
   {
-    title: 'No.',
-    dataIndex: 'no',
-    key: 'no',
-    width: 100
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id'
   },
   {
     title: 'Tên',
@@ -354,4 +353,120 @@ export const LIST_DEBT_TABLE_COLUMNS = [
     key: 'action',
     width: 100
   }
+]
+
+export const PRODUCT_CATEGORY_TABLE_COLUMNS = [
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id'
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
+    title: 'Chỉnh sửa gần đây',
+    dataIndex: 'lastModified',
+    key: 'lastModified'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]
+
+export const PRODUCT_FULL_TABLE_COLUMNS = [
+  {
+    title: 'Ngày nhập',
+    dataIndex: 'date',
+    key: 'date'
+  },
+  {
+    title: 'Chi nhánh',
+    dataIndex: 'branch',
+    key: 'branch'
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: 'Khổ/quy cách (mm)',
+    dataIndex: 'size',
+    key: 'size'
+  },
+  {
+    title: 'Diện tích (m2)',
+    dataIndex: 'sizeCalculator',
+    key: 'sizeCalculator'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]
+
+export const PRODUCT_CORRUGATED_TABLE_COLUMNS = [
+  {
+    title: 'Ngày nhập',
+    dataIndex: 'date',
+    key: 'date'
+  },
+  {
+    title: 'Chi nhánh',
+    dataIndex: 'branch',
+    key: 'branch'
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: 'Thao tác',
+    key: 'action'
+  }
+]
+
+export const LIST_PRODUCT_TABLE_COLUMNS = [
+  {
+    title: 'Mã',
+    dataIndex: 'id',
+    key: 'id',
+    width: 100
+  },
+  {
+    title: 'Tên',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
+    title: 'Chi nhánh',
+    dataIndex: 'branch',
+    key: 'branch'
+  },
+  {
+    title: 'Phân loại',
+    dataIndex: 'type',
+    key: 'type'
+  },
+  {
+    title: 'Tồn kho',
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity'
+  },
+  {
+    title: 'Chỉnh sửa gần đây',
+    dataIndex: 'lastModified',
+    key: 'lastModified'
+  }
+  // {
+  //   title: 'Thao tác',
+  //   dataIndex: 'action',
+  //   key: 'action',
+  //   width: 100
+  // }
 ]

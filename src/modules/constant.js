@@ -100,6 +100,11 @@ export const DEBT_TYPE = {
 }
 
 export const CUSTOMER_TYPE = {
+  CUSTOMER: { id: 'CUSTOMER', name: 'Khách hàng' },
+  SUPPLIER: { id: 'SUPPLIER', name: 'Nhà cung cấp' }
+}
+
+export const CUSTOMER_TYPE_KEY = {
   CUSTOMER: 'CUSTOMER',
   SUPPLIER: 'SUPPLIER'
 }

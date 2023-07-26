@@ -74,14 +74,12 @@
 </template>
 
 <script setup>
-import { ref, toRef, onMounted } from 'vue'
+import { ref, toRef, onMounted, computed } from 'vue'
 import { defEmptyCustomerName, defEmptyCustomerType } from '~/modules/formRule'
 import { isNil, cloneDeep } from 'lodash'
-import { useCustomerStore } from '~/stores/customer'
-import { CUSTOMER_TYPE, MSG } from '~/modules/constant'
-import { useMessage } from '~/composables'
+import { CUSTOMER_TYPE, CUSTOMER_TYPE_KEY } from '~/modules/constant'
 
-const emits = defineEmits(['close'])
+const emits = defineEmits(['submit', 'close'])
 const props = defineProps({
   customer: {
     type: Object,
@@ -90,20 +88,18 @@ const props = defineProps({
 })
 const customerProp = toRef(props, 'customer')
 
-// Store
-const mc = useMessage()
-const customerStore = useCustomerStore()
-
 // State
-const customerTypeOptions = [
-  { label: 'Khách hàng', value: CUSTOMER_TYPE.CUSTOMER },
-  { label: 'Nhà cung cấp', value: CUSTOMER_TYPE.SUPPLIER }
-]
+const customerTypeOptions = computed(() =>
+  Object.values(CUSTOMER_TYPE).map((item) => ({
+    label: item.name,
+    value: item.id
+  }))
+)
 const visible = ref(true)
 const initialFormState = {
   id: null,
   name: '',
-  type: CUSTOMER_TYPE.CUSTOMER,
+  type: CUSTOMER_TYPE_KEY.CUSTOMER,
   phone: [],
   email: '',
   address: '',
@@ -120,22 +116,15 @@ const formState = ref(initialFormState)
 
 // Methods
 const formSubmit = async () => {
-  try {
-    const phone =
-      formState.value.phone && formState.value.phone.length !== 0
-        ? formState.value.phone.join(',')
-        : ''
-    const payload = {
-      ...formState.value,
-      phone
-    }
-    await customerStore.upsert(payload)
-    reset()
-    emits('close')
-    mc.success(MSG.UPDATE_SUCCESS)
-  } catch (error) {
-    mc.error(MSG.UPDATE_FAILED)
+  const phone =
+    formState.value.phone && formState.value.phone.length !== 0
+      ? formState.value.phone.join(',')
+      : ''
+  const payload = {
+    ...formState.value,
+    phone
   }
+  emits('submit', payload)
 }
 const submit = () => btnSubmitRef.value.$el.click()
 const reset = () => {
