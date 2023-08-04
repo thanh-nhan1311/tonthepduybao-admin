@@ -47,7 +47,7 @@
           placeholder="Chọn loại sản phẩm"
           class="w-full"
           :disabled="formState.productQuantities.length !== 0"
-          @change="clearValidate('type')"
+          @change="changeType"
         />
         <p v-if="formErrors.type" class="mb-0 text-red-500 mt-0.5 text-[12px]">
           {{ formErrors.type }}
@@ -72,25 +72,13 @@
       <span class="text-red-500">*</span><span class="ml-2 text-xl font-medium">Thuộc tính</span>
     </a-divider>
     <div>
-      <a-select
-        v-model:value="selectedPropertyIds"
-        :options="propertyStore.propertyOptions"
-        placeholder="Chọn thuộc tính"
-        max-tag-count="responsive"
-        class="w-full"
-        mode="multiple"
-        :filter-option="customFilter"
-        @select="selectProperty"
-        @deselect="deselectProperty"
-      />
-
-      <div v-if="selectedProperties.length !== 0" class="grid grid-cols-12 gap-x-8 mt-4">
+      <div class="grid grid-cols-12 gap-x-20 mt-4">
         <div
           v-for="prop of selectedProperties"
           :key="prop.id"
-          class="col-span-4 flex items-center mt-2"
+          class="col-span-3 flex items-center mt-2"
         >
-          <span class="mr-4 w-[120px] font-semibold">{{ prop.name }}:</span>
+          <span class="mr-4 w-[160px] font-semibold">{{ prop.name }}:</span>
           <a-select
             v-model:value="formState.properties[prop.id]"
             :options="prop.items.map((item) => ({ label: item.name, value: item.id }))"
@@ -98,12 +86,9 @@
             :show-search="true"
             :filter-option="customFilter"
             max-tag-count="responsive"
-            class="w-[240px]"
+            class="w-full"
             @change="clearValidate('properties')"
           />
-          <a-button type="text" danger class="ml-4" @click="deselectProperty(prop.id)">
-            <Iconify icon="mdi:trash-can" width="20px" />
-          </a-button>
         </div>
       </div>
 
@@ -231,7 +216,7 @@ const propertyStore = usePropertyStore()
 // State
 const initFormState = {
   name: '',
-  type: TYPE_KEY.IRON_STEEL,
+  type: TYPE_KEY.IRON,
   parent: null,
   properties: {},
   productQuantities: []
@@ -245,7 +230,6 @@ const productQuantityItem = {
 }
 const formState = ref(cloneDeep(initFormState))
 const formErrors = ref({})
-const selectedPropertyIds = ref([])
 const selectedProperties = ref([])
 
 const tableColumns = computed(() =>
@@ -267,7 +251,19 @@ const isFormChange = computed(() => {
 // Methods
 const initFormOptions = async () => {
   await branchStore.getAll()
-  await propertyStore.getAll()
+  await changeType()
+}
+
+const changeType = async () => {
+  await propertyStore.getAll({ type: formState.value.type })
+
+  const sortedProperties = propertyStore.allProperty.sort((a, b) => a.orderBy - b.orderBy)
+  selectedProperties.value = sortedProperties
+
+  formState.value.properties = {}
+  sortedProperties.forEach((item) => (formState.value.properties[item.id] = null))
+
+  clearValidate('type')
 }
 
 const getTableRowClassName = (_record, index) => {
@@ -286,20 +282,6 @@ const addProductQuantity = () => {
 const deleteProductQuantity = (index) => {
   formState.value.productQuantities.splice(index, 1)
   validateItems()
-}
-
-const selectProperty = (propId) => {
-  const property = propertyStore.allProperty.find((item) => item.id === propId)
-  selectedProperties.value.push(property)
-
-  formState.value.properties[propId] = null
-  clearValidate('properties')
-}
-
-const deselectProperty = (propId) => {
-  selectedProperties.value = selectedProperties.value.filter((item) => item.id !== propId)
-  selectedPropertyIds.value = selectedPropertyIds.value.filter((item) => item !== propId)
-  delete formState.value.properties[propId]
 }
 
 const calSizeCalculator = (index) => {
@@ -401,11 +383,10 @@ onMounted(async () => {
 })
 
 onBeforeRouteLeave((to, from, next) => {
-  // if (isFormChange.value) {
-  //   if (confirm('Bạn có chắc muốn rời khỏi trang này không?')) next()
-  //   else next(false)
-  // } else
-  next()
+  if (isFormChange.value) {
+    if (confirm('Bạn có chắc muốn rời khỏi trang này không?')) next()
+    else next(false)
+  } else next()
 })
 </script>
 

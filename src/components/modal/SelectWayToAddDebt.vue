@@ -27,13 +27,22 @@
           <span class="text-xl font-medium">Tạo file mẫu</span>
         </a-divider>
         <div>
-          <div class="grid grid-cols-7 gap-x-8">
+          <div class="grid grid-cols-8 gap-x-8">
+            <a-select
+              v-model:value="type"
+              :options="Object.values(TYPE)"
+              placeholder="Chọn danh mục"
+              max-tag-count="responsive"
+              class="col-span-2"
+              :filter-option="customFilter"
+              @change="changeType()"
+            />
             <a-select
               v-model:value="propertyIds"
               :options="propertyStore.propertyOptions"
               placeholder="Chọn thuộc tính"
               max-tag-count="responsive"
-              class="col-span-5"
+              class="col-span-4"
               mode="multiple"
               :filter-option="customFilter"
               @change="validateDownloadTemplate"
@@ -70,9 +79,7 @@
         </div>
 
         <div class="w-full flex justify-center mt-8">
-          <a-button type="default" size="medium" class="px-16" @click="isCreateFromFile = false">
-            Huỷ bỏ
-          </a-button>
+          <a-button type="default" size="medium" class="px-16" @click="cancel"> Huỷ bỏ </a-button>
         </div>
       </div>
     </div>
@@ -83,7 +90,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage } from '~/composables'
-import { MSG } from '~/modules/constant'
+import { MSG, TYPE, TYPE_KEY } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { customFilter, downloadFromResponse } from '~/modules/utils'
 import { useDebtStore } from '~/stores/debt'
@@ -102,6 +109,7 @@ const fileRef = ref()
 const visible = ref(true)
 const isCreateFromFile = ref(false)
 const templateError = ref('')
+const type = ref(TYPE_KEY.IRON)
 const propertyIds = ref([])
 const errors = ref([])
 
@@ -115,11 +123,15 @@ const validateDownloadTemplate = () => {
   templateError.value = ''
   return true
 }
+const changeType = async () => {
+  await propertyStore.getAll({ type: type.value })
+}
 const downloadTemplateDebt = async () => {
   const isValidate = validateDownloadTemplate()
   if (isValidate) {
     try {
       const { headers, data } = await debtStore.downloadTemplate({
+        type: type.value,
         propertyIds: propertyIds.value.join(',')
       })
       downloadFromResponse(headers, data)
@@ -147,16 +159,21 @@ const uploadDebt = async (event) => {
         emits('close')
       }
     } catch (error) {
-      console.log(error)
       mc.error(MSG.SAVE_FAILED)
     }
   }
 
   if (fileRef.value) fileRef.value.value = ''
 }
+const cancel = () => {
+  type.value = TYPE_KEY.IRON
+  propertyIds.value = []
+  isCreateFromFile.value = false
+  if (fileRef.value) fileRef.value.value = ''
+}
 
 // Hooks
 onMounted(async () => {
-  await propertyStore.getAll()
+  await changeType()
 })
 </script>

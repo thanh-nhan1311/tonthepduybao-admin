@@ -63,8 +63,6 @@ const currentPage = ref(PAGING.DEFAULT_PAGE)
 const init = async (page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_SIZE) => {
   currentPage.value = page
 
-  console.log(page)
-
   await customerStore.getAll({
     search: search.value,
     type: type.value,

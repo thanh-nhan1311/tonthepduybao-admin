@@ -100,7 +100,13 @@
                     v-model:value="filter.customerSearch"
                     placeholder="Tìm kiếm nhà cung cấp ..."
                     class="w-full mb-4"
-                    @keypress.enter="customerStore.getAll({ search: filter.customerSearch })"
+                    @keypress.enter="
+                      customerStore.getAll({
+                        page: 1,
+                        pageSize: 1000,
+                        search: filter.customerSearch
+                      })
+                    "
                   />
 
                   <a-checkbox-group
@@ -110,7 +116,7 @@
                     class="flex flex-col"
                     @change="init(currentPage)"
                   />
-                  <p class="text-center my-4">Không có dữ liệu</p>
+                  <p v-else class="text-center my-4">Không có dữ liệu</p>
                 </div>
               </template>
               <Iconify icon="mdi:filter" class="cursor-pointer outline-none" width="14px" />
@@ -247,7 +253,7 @@ const rowSelection = ref({
 
 const debts = computed(() => (debtStore.allDebt ? debtStore.allDebt.data : []))
 const selectedCustomer = computed(() =>
-  customerStore.allCustomer
+  customerStore.allCustomer.data
     .filter((item) => filter.value.customerId.includes(item.id))
     .map((item) => item.name)
     .join(', ')
@@ -260,7 +266,6 @@ const selectedType = computed(() =>
 )
 const isFiltering = computed(() => {
   const { search, date, customerId, type } = filter.value
-
   return search || (date && date.length === 2) || customerId.length !== 0 || type.length !== 0
 })
 
@@ -298,7 +303,7 @@ const reset = () => {
 
 onMounted(async () => {
   await init(currentPage.value)
-  await customerStore.getAll({ search: filter.value.customerSearch })
+  await customerStore.getAll({ page: 1, pageSize: 1000, search: filter.value.customerSearch })
 })
 </script>
 

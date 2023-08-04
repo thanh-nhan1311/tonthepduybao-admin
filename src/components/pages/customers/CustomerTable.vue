@@ -2,6 +2,7 @@
   <a-table
     :columns="CUSTOMER_TABLE_COLUMNS"
     :pagination="{
+      currentPage: 1,
       showSizeChanger: false,
       total: customerStore.allCustomer.totalItems,
       pageSize: customerStore.allCustomer.pageSize,

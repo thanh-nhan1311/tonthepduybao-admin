@@ -39,14 +39,14 @@
       </div>
 
       <div class="col-span-3">
-        <label for="type"><span class="text-red-500">*</span> Loại sản phẩm</label>
+        <label for="type"><span class="text-red-500">*</span> Danh mục</label>
         <a-select
           v-model:value="formState.type"
           :options="Object.values(TYPE)"
           placeholder="Chọn loại sản phẩm"
           class="w-full mt-1"
           :disabled="formState.items.length !== 0"
-          @change="clearValidate('type')"
+          @change="changeType"
         />
         <p v-if="formErrors.type" class="mb-0 text-red-500 mt-0.5 text-[12px]">
           {{ formErrors.type }}
@@ -207,7 +207,7 @@
             v-model:value="formState.items[index].weight"
             type="number"
             :min="0"
-            @change="onChangeAvgProportion(index)"
+            @change="changeAvgProportion(index)"
           />
         </template>
         <template v-else-if="column.key === 'quantity'">
@@ -215,7 +215,7 @@
             v-model:value="formState.items[index].quantity"
             type="number"
             :min="0"
-            @change="onChangeAvgProportion(index)"
+            @change="changeAvgProportion(index)"
           />
         </template>
         <template v-else-if="column.key === 'unitPrice'">
@@ -223,7 +223,7 @@
             v-model:value="formState.items[index].unitPrice"
             type="number"
             :min="0"
-            @change="onChangeUnitPrice(index)"
+            @change="changeUnitPrice(index)"
           />
         </template>
         <template v-else-if="column.key === 'totalUnitPrice'">
@@ -294,7 +294,7 @@ const formState = ref({
   id: null,
   name: '',
   date: '',
-  type: TYPE_KEY.IRON_STEEL,
+  type: TYPE_KEY.IRON,
   customerId: null,
   propertyIds: [],
   items: []
@@ -314,8 +314,9 @@ const tableColumns = computed(() =>
 // Methods
 const initFormOptions = async () => {
   await branchStore.getAll()
-  await propertyStore.getAll()
   await customerStore.getAll({ search: '', type: CUSTOMER_TYPE_KEY.SUPPLIER })
+
+  await changeType()
 }
 
 const getTableRowClassName = (_record, index) => {
@@ -389,7 +390,12 @@ const deselectProperty = (propId) => {
   } else selectedProperties.value = newSelectedProperties
 }
 
-const onChangeUnitPrice = (index) => {
+const changeType = async () => {
+  await propertyStore.getAll({ type: formState.value.type })
+  clearValidate('type')
+}
+
+const changeUnitPrice = (index) => {
   const { quantity, weight, avgProportion, unitPrice } = formState.value.items[index]
   formState.value.items[index].totalPrice =
     formState.value.type === TYPE_KEY.SCREW ? quantity * unitPrice : weight * unitPrice
@@ -398,11 +404,11 @@ const onChangeUnitPrice = (index) => {
   calPrice()
 }
 
-const onChangeAvgProportion = (index) => {
+const changeAvgProportion = (index) => {
   const { weight, quantity } = formState.value.items[index]
   formState.value.items[index].avgProportion = quantity > 0 ? (weight / quantity).toFixed(2) : 0
 
-  onChangeUnitPrice(index)
+  changeUnitPrice(index)
 }
 
 const calPrice = () => {
