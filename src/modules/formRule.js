@@ -37,7 +37,7 @@ export const defEmptyPartnerLogo = async (_rule, value, cb) =>
   defRule(_rule, value, cb, 'Logo đối tác chưa được chọn')
 
 export const defEmptyCategory = async (_rule, value, cb) =>
-  defRule(_rule, value, cb, 'Tên danh mục chưa được chọn')
+  defRule(_rule, value, cb, 'Danh mục chưa được chọn')
 
 export const defEmptyCategoryImage = async (_rule, value, cb) =>
   defRule(_rule, value, cb, 'Hình ảnh cho danh mục sản phẩm chưa được chọn')

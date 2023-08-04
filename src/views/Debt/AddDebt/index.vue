@@ -42,7 +42,7 @@
         <label for="type"><span class="text-red-500">*</span> Loại sản phẩm</label>
         <a-select
           v-model:value="formState.type"
-          :options="debtTypeOptions"
+          :options="Object.values(TYPE)"
           placeholder="Chọn loại sản phẩm"
           class="w-full mt-1"
           :disabled="formState.items.length !== 0"
@@ -257,7 +257,7 @@ import { usePropertyStore } from '~/stores/property'
 import { useDebtStore } from '~/stores/debt'
 import { isEmpty, cloneDeep } from 'lodash'
 import { useMessage, useMoment } from '~/composables'
-import { CUSTOMER_TYPE_KEY, DEBT_TYPE, DEBT_TYPE_KEY, MSG } from '~/modules/constant'
+import { CUSTOMER_TYPE_KEY, TYPE, TYPE_KEY, MSG } from '~/modules/constant'
 import { customFilter, formatCurrency } from '~/modules/utils'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
@@ -277,7 +277,7 @@ const customerStore = useCustomerStore()
 const initFormState = {
   id: '',
   date: '',
-  type: DEBT_TYPE_KEY.IRON_STEEL,
+  type: TYPE_KEY.IRON_STEEL,
   customerId: null,
   propertyIds: [],
   items: []
@@ -301,7 +301,7 @@ const totalPrice = ref(0)
 const totalUnitPrice = ref(0)
 
 const tableColumns = computed(() =>
-  formState.value.type === DEBT_TYPE_KEY.SCREW ? DEBT_SCREW_TABLE_COLUMNS : DEBT_FULL_TABLE_COLUMNS
+  formState.value.type === TYPE_KEY.SCREW ? DEBT_SCREW_TABLE_COLUMNS : DEBT_FULL_TABLE_COLUMNS
 )
 const isFormChange = computed(() => {
   const { id, date, customerId, propertyIds, items } = formState.value
@@ -313,12 +313,6 @@ const isFormChange = computed(() => {
     items.length !== 0
   )
 })
-const debtTypeOptions = computed(() =>
-  Object.values(DEBT_TYPE).map((item) => ({
-    label: item.name,
-    value: item.id
-  }))
-)
 
 // Methods
 const initFormOptions = async () => {
@@ -401,7 +395,7 @@ const deselectProperty = (propId) => {
 const onChangeUnitPrice = (index) => {
   const { quantity, weight, avgProportion, unitPrice } = formState.value.items[index]
   formState.value.items[index].totalPrice =
-    formState.value.type === DEBT_TYPE_KEY.SCREW ? quantity * unitPrice : weight * unitPrice
+    formState.value.type === TYPE_KEY.SCREW ? quantity * unitPrice : weight * unitPrice
   formState.value.items[index].totalUnitPrice = avgProportion * unitPrice
 
   calPrice()

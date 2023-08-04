@@ -37,9 +37,9 @@ export const BRANCH_TABLE_COLUMNS = [
 
 export const CUSTOMER_TABLE_COLUMNS = [
   {
-    title: 'No',
-    dataIndex: 'no',
-    key: 'no'
+    title: 'Mã',
+    dataIndex: 'id',
+    key: 'id'
   },
   {
     title: 'Tên',
@@ -214,6 +214,16 @@ export const PROPERTY_TABLE_COLUMNS = [
     title: 'Thuộc tính',
     dataIndex: 'properties',
     key: 'properties'
+  },
+  {
+    title: 'Danh mục',
+    dataIndex: 'type',
+    key: 'type'
+  },
+  {
+    title: 'TT ưu tiên',
+    dataIndex: 'orderBy',
+    key: 'orderBy'
   },
   {
     title: 'Chỉnh sửa gần đây',

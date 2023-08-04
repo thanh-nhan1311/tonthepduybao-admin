@@ -25,7 +25,7 @@
       </a-form-item>
 
       <a-form-item has-feedback label="Phân loại" name="type">
-        <a-radio-group v-model:value="formState.type" :options="customerTypeOptions" />
+        <a-radio-group v-model:value="formState.type" :options="Object.values(CUSTOMER_TYPE)" />
       </a-form-item>
 
       <div v-for="(item, index) in formState.phone" :key="index" class="flex mb-2">
@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, toRef, onMounted, computed } from 'vue'
+import { ref, toRef, onMounted } from 'vue'
 import { defEmptyCustomerName, defEmptyCustomerType } from '~/modules/formRule'
 import { isNil, cloneDeep } from 'lodash'
 import { CUSTOMER_TYPE, CUSTOMER_TYPE_KEY } from '~/modules/constant'
@@ -89,12 +89,6 @@ const props = defineProps({
 const customerProp = toRef(props, 'customer')
 
 // State
-const customerTypeOptions = computed(() =>
-  Object.values(CUSTOMER_TYPE).map((item) => ({
-    label: item.name,
-    value: item.id
-  }))
-)
 const visible = ref(true)
 const initialFormState = {
   id: null,

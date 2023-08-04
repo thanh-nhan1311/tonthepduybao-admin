@@ -48,7 +48,7 @@
             <div v-if="filter.type && filter.type.length !== 0" class="flex items-center">
               <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
               <span class="mr-2">Phân loại:</span>
-              <span class="font-semibold">{{ selectedDebtType }}</span>
+              <span class="font-semibold">{{ selectedType }}</span>
             </div>
           </div>
 
@@ -130,7 +130,7 @@
                 <div class="px-4 py-2">
                   <a-checkbox-group
                     v-model:value="filter.type"
-                    :options="debtTypeOptions"
+                    :options="Object.values(TYPE)"
                     class="flex flex-col"
                     @change="init(currentPage)"
                   />
@@ -176,7 +176,7 @@
           </span>
         </template>
         <template v-if="column.key === 'type'">
-          <span>{{ DEBT_TYPE[record.type].name }}</span>
+          <span>{{ TYPE[record.type].name }}</span>
         </template>
         <template v-else-if="column.key === 'lastModified'">
           <div class="mb-1 flex items-center">
@@ -209,7 +209,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
-import { DEBT_TYPE, MSG, PAGING } from '~/modules/constant'
+import { TYPE, MSG, PAGING } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { LIST_DEBT_TABLE_COLUMNS } from '~/modules/table'
 import { downloadFromResponse, formatCurrency } from '~/modules/utils'
@@ -246,22 +246,16 @@ const rowSelection = ref({
 })
 
 const debts = computed(() => (debtStore.allDebt ? debtStore.allDebt.data : []))
-const debtTypeOptions = computed(() =>
-  Object.values(DEBT_TYPE).map((item) => ({
-    label: item.name,
-    value: item.id
-  }))
-)
 const selectedCustomer = computed(() =>
   customerStore.allCustomer
     .filter((item) => filter.value.customerId.includes(item.id))
     .map((item) => item.name)
     .join(', ')
 )
-const selectedDebtType = computed(() =>
-  Object.values(DEBT_TYPE)
-    .filter((item) => filter.value.type.includes(item.id))
-    .map((item) => item.name)
+const selectedType = computed(() =>
+  Object.values(TYPE)
+    .filter((item) => filter.value.type.includes(item.value))
+    .map((item) => item.label)
     .join(', ')
 )
 const isFiltering = computed(() => {

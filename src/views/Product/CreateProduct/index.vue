@@ -43,7 +43,7 @@
         <label for="type"><span class="text-red-500">*</span> Danh mục</label>
         <a-select
           v-model:value="formState.type"
-          :options="debtTypeOptions"
+          :options="Object.values(TYPE)"
           placeholder="Chọn loại sản phẩm"
           class="w-full"
           :disabled="formState.productQuantities.length !== 0"
@@ -212,7 +212,7 @@ import { usePropertyStore } from '~/stores/property'
 import { useProductStore } from '~/stores/product'
 import { isEmpty, cloneDeep } from 'lodash'
 import { useMessage, useMoment } from '~/composables'
-import { DEBT_TYPE, DEBT_TYPE_KEY, MSG } from '~/modules/constant'
+import { TYPE, TYPE_KEY, MSG } from '~/modules/constant'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { MENU } from '~/modules/menu'
 import { useBranchStore } from '~/stores/branch'
@@ -231,7 +231,7 @@ const propertyStore = usePropertyStore()
 // State
 const initFormState = {
   name: '',
-  type: DEBT_TYPE_KEY.IRON_STEEL,
+  type: TYPE_KEY.IRON_STEEL,
   parent: null,
   properties: {},
   productQuantities: []
@@ -249,7 +249,7 @@ const selectedPropertyIds = ref([])
 const selectedProperties = ref([])
 
 const tableColumns = computed(() =>
-  formState.value.type === DEBT_TYPE_KEY.CORRUGATED
+  formState.value.type === TYPE_KEY.CORRUGATED
     ? PRODUCT_FULL_TABLE_COLUMNS
     : PRODUCT_CORRUGATED_TABLE_COLUMNS
 )
@@ -263,12 +263,6 @@ const isFormChange = computed(() => {
     productQuantities.length !== 0
   )
 })
-const debtTypeOptions = computed(() =>
-  Object.values(DEBT_TYPE).map((item) => ({
-    label: item.name,
-    value: item.id
-  }))
-)
 
 // Methods
 const initFormOptions = async () => {
@@ -311,7 +305,7 @@ const deselectProperty = (propId) => {
 const calSizeCalculator = (index) => {
   const { type, productQuantities } = formState.value
 
-  if (DEBT_TYPE_KEY.CORRUGATED === type) {
+  if (TYPE_KEY.CORRUGATED === type) {
     const size = productQuantities[index].size || 0
     const quantity = productQuantities[index].quantity || 0
 

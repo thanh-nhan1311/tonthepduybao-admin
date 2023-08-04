@@ -42,7 +42,7 @@
           <div class="flex items-center mb-2">
             <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
             <span class="mr-2">Phân loại:</span>
-            <span class="font-semibold">{{ DEBT_TYPE[debt.type].name }}</span>
+            <span class="font-semibold">{{ TYPE[debt.type].name }}</span>
           </div>
 
           <div class="flex items-center">
@@ -73,7 +73,7 @@
               <td class="font-medium">Tổng nhập</td>
               <td>{{ formatCurrency(debt.totalPrice) }}</td>
             </tr>
-            <tr v-if="debt.type !== DEBT_TYPE_KEY.SCREW">
+            <tr v-if="debt.type !== TYPE_KEY.SCREW">
               <td class="font-medium">Tổng nhập cây/mét</td>
               <td>{{ formatCurrency(debt.totalUnitPrice) }}</td>
             </tr>
@@ -156,7 +156,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
-import { NOT_FOUND_PATH, DEBT_TYPE, MSG, DEBT_TYPE_KEY } from '~/modules/constant'
+import { NOT_FOUND_PATH, TYPE, MSG, TYPE_KEY } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { DEBT_FULL_TABLE_COLUMNS, DEBT_SCREW_TABLE_COLUMNS } from '~/modules/table'
 import { downloadFromResponse, formatCurrency, normalize } from '~/modules/utils'
@@ -186,7 +186,7 @@ const debtDetails = computed(() => {
 })
 const columns = computed(() => {
   const cols =
-    debt.value.type === DEBT_TYPE_KEY.SCREW
+    debt.value.type === TYPE_KEY.SCREW
       ? cloneDeep(DEBT_SCREW_TABLE_COLUMNS)
       : cloneDeep(DEBT_FULL_TABLE_COLUMNS)
   cols.pop()

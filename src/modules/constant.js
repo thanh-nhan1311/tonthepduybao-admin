@@ -87,21 +87,23 @@ export const USER_PERMISSION = {
   AM_ACCESS: [USER_ROLE.ADMIN, USER_ROLE.MANAGER].join('__')
 }
 
-export const DEBT_TYPE_KEY = {
-  IRON_STEEL: 'IRON_STEEL',
+export const TYPE_KEY = {
+  IRON: 'IRON',
+  STEEL: 'STEEL',
   CORRUGATED: 'CORRUGATED',
   SCREW: 'SCREW'
 }
 
-export const DEBT_TYPE = {
-  IRON_STEEL: { id: 'IRON_STEEL', name: 'Sắt - Thép' },
-  CORRUGATED: { id: 'CORRUGATED', name: 'Tôn' },
-  SCREW: { id: 'SCREW', name: 'Vật liệu khác' }
+export const TYPE = {
+  IRON: { value: 'IRON', label: 'Sắt' },
+  STEEL: { value: 'STEEL', label: 'Thép' },
+  CORRUGATED: { value: 'CORRUGATED', label: 'Tôn' },
+  SCREW: { value: 'SCREW', label: 'Vật liệu khác' }
 }
 
 export const CUSTOMER_TYPE = {
-  CUSTOMER: { id: 'CUSTOMER', name: 'Khách hàng' },
-  SUPPLIER: { id: 'SUPPLIER', name: 'Nhà cung cấp' }
+  CUSTOMER: { value: 'CUSTOMER', label: 'Khách hàng' },
+  SUPPLIER: { value: 'SUPPLIER', label: 'Nhà cung cấp' }
 }
 
 export const CUSTOMER_TYPE_KEY = {

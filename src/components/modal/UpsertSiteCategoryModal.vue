@@ -80,8 +80,8 @@ const isEdit = ref(false)
 const formState = ref(initialFormState)
 
 // Methods
-const formSubmit = () => {
-  siteCategoryStore.upsertCategory(formState.value)
+const formSubmit = async () => {
+  await siteCategoryStore.upsertCategory(formState.value)
   reset()
   emits('close')
 }
