@@ -5,7 +5,7 @@
         <a-input-search
           v-model:value="filter.search"
           placeholder="Nhập mã công nợ để tìm kiếm ..."
-          class="mr-4 w-[400px]"
+          class="mr-4 w-[480px]"
           @keypress.enter="init(currentPage)"
         />
 
@@ -26,51 +26,69 @@
       </div>
     </heading>
 
-    <div
-      v-if="isFiltering"
-      class="mt-8 mb-4 flex border border-solid border-neutral-200 rounded-md justify-between p-4"
-    >
-      <div>
-        <p class="mb-1">Tiêu chí tìm kiếm:</p>
-        <div class="mb-0 pl-8">
-          <p v-if="filter.search" class="mb-1">
-            Nội dung: <span class="font-semibold">{{ filter.search }}</span>
-          </p>
+    <div class="grid grid-cols-12 gap-x-8 my-8">
+      <div
+        :class="[
+          'flex justify-between col-span-8 rounded-md p-4',
+          isFiltering && 'border border-solid border-gray-200'
+        ]"
+      >
+        <div v-if="isFiltering">
+          <p class="mb-1">Tiêu chí tìm kiếm:</p>
+          <div class="mb-0 pl-8">
+            <p v-if="filter.search" class="mb-1">
+              Nội dung: <span class="font-semibold">{{ filter.search }}</span>
+            </p>
 
-          <div class="mb-1">
-            <div v-if="filter.date && filter.date.length === 2" class="flex items-center mb-1">
-              <Iconify icon="mdi:calendar" class="mr-2" />
-              <span>Ngày tạo từ </span>
-              <span class="font-semibold mx-2">{{ moment.dFormat(filter.date[0]) }}</span>
-              <span>đến</span>
-              <span class="font-semibold ml-2">{{ moment.dFormat(filter.date[1]) }}</span>
+            <div class="mb-1">
+              <div v-if="filter.date && filter.date.length === 2" class="flex items-center mb-1">
+                <Iconify icon="mdi:calendar" class="mr-2" />
+                <span>Ngày tạo từ </span>
+                <span class="font-semibold mx-2">{{ moment.dFormat(filter.date[0]) }}</span>
+                <span>đến</span>
+                <span class="font-semibold ml-2">{{ moment.dFormat(filter.date[1]) }}</span>
+              </div>
+              <div v-if="filter.type && filter.type.length !== 0" class="flex items-center">
+                <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
+                <span class="mr-2">Phân loại:</span>
+                <span class="font-semibold">{{ selectedType }}</span>
+              </div>
             </div>
-            <div v-if="filter.type && filter.type.length !== 0" class="flex items-center">
-              <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
-              <span class="mr-2">Phân loại:</span>
-              <span class="font-semibold">{{ selectedType }}</span>
-            </div>
-          </div>
 
-          <div v-if="filter.customerId && filter.customerId.length !== 0" class="flex items-center">
-            <div class="flex items-center">
-              <Iconify icon="mdi:account" class="mr-2" />
-              <span class="mr-2">Nhà cung cấp:</span>
-              <span class="font-semibold">{{ selectedCustomer }}</span>
+            <div
+              v-if="filter.customerId && filter.customerId.length !== 0"
+              class="flex items-center"
+            >
+              <div class="flex items-center">
+                <Iconify icon="mdi:account" class="mr-2" />
+                <span class="mr-2">Nhà cung cấp:</span>
+                <span class="font-semibold">{{ selectedCustomer }}</span>
+              </div>
             </div>
           </div>
         </div>
+
+        <a-button v-if="isFiltering" type="primary" class="w-fit flex items-center" @click="reset">
+          <Iconify icon="tabler:zoom-reset" width="16px" />
+          <span class="ml-2">Làm mới</span>
+        </a-button>
       </div>
 
-      <a-button v-if="isFiltering" type="primary" class="flex items-center" @click="reset">
-        <Iconify icon="tabler:zoom-reset" width="16px" />
-        <span class="ml-2">Làm mới</span>
-      </a-button>
+      <div class="flex items-end justify-end col-span-4">
+        <table class="summary-table w-full h-fit">
+          <tbody>
+            <tr>
+              <td class="font-medium">Tổng số</td>
+              <td>{{ debtStore.allDebt.totalItems }} công nợ</td>
+            </tr>
+            <tr>
+              <td class="font-medium">Tổng giá trị</td>
+              <td>{{ formatCurrency(debtStore.allDebtTotalPrice) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <p class="text-red-500 font-semibold mb-2 mt-4">
-      Tổng số: {{ debtStore.allDebt.totalItems }} công nợ
-    </p>
 
     <a-table
       :row-key="(record) => record.id"
@@ -182,7 +200,7 @@
           </span>
         </template>
         <template v-if="column.key === 'type'">
-          <span>{{ TYPE[record.type].name }}</span>
+          <span>{{ TYPE[record.type].label }}</span>
         </template>
         <template v-else-if="column.key === 'lastModified'">
           <div class="mb-1 flex items-center">
@@ -215,7 +233,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
-import { TYPE, MSG, PAGING } from '~/modules/constant'
+import { TYPE, MSG, PAGING, CUSTOMER_TYPE_KEY } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { LIST_DEBT_TABLE_COLUMNS } from '~/modules/table'
 import { downloadFromResponse, formatCurrency } from '~/modules/utils'
@@ -303,7 +321,12 @@ const reset = () => {
 
 onMounted(async () => {
   await init(currentPage.value)
-  await customerStore.getAll({ page: 1, pageSize: 1000, search: filter.value.customerSearch })
+  await customerStore.getAll({
+    page: 1,
+    pageSize: 1000,
+    type: CUSTOMER_TYPE_KEY.SUPPLIER,
+    search: filter.value.customerSearch
+  })
 })
 </script>
 

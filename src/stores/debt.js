@@ -13,18 +13,21 @@ export const useDebtStore = defineStore('debtStore', {
       pageSize: PAGING.DEFAULT_PAGE_SIZE,
       totalPages: 0,
       totalItems: 0
-    }
+    },
+    allDebtTotalPrice: 0
   }),
 
   actions: {
     async get(payload) {
       const { data } = await debtAPI.get(payload)
       this.debt = data
+      this.allDebtTotalPrice = data.totalPrice
     },
 
     async getAll(payload) {
       const { data } = await debtAPI.getAll(payload)
-      this.allDebt = data
+      this.allDebt = data.allDebt
+      this.allDebtTotalPrice = data.totalPrice
     },
 
     async create(payload) {

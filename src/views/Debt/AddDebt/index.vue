@@ -76,6 +76,7 @@
         <a-select
           v-model:value="formState.customerId"
           :options="customerStore.customerOptions"
+          :filter-option="customFilter"
           :show-search="true"
           placeholder="Chọn nhà cung cấp"
           class="w-full mt-1"

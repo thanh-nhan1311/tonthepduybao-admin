@@ -42,7 +42,7 @@
           <div class="flex items-center mb-2">
             <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
             <span class="mr-2">Phân loại:</span>
-            <span class="font-semibold">{{ TYPE[debt.type].name }}</span>
+            <span class="font-semibold">{{ TYPE[debt.type].label }}</span>
           </div>
 
           <div class="flex items-center">
@@ -100,19 +100,11 @@
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'no'">{{ index + 1 }}</template>
         <template v-else-if="column.key === 'name'">
-          <span class="font-medium">{{ record.name }}</span>
+          <span class="font-medium">
+            {{ record.name + ' ' + record.propertyDetails.map((item) => item.name).join(' ') }}
+          </span>
         </template>
         <template v-else-if="column.key === 'branch'">{{ record.branch.name }}</template>
-        <template v-else-if="column.key === 'properties'">
-          <div
-            v-for="(propDetail, propIndex) of record.propertyDetails"
-            :key="propDetail.id"
-            :class="['flex items-center', propIndex !== 0 && 'mt-2']"
-          >
-            <span class="mr-2">{{ propDetail.property.name }}:</span>
-            <a-tag class="font-semibold" color="blue">{{ propDetail.name }}</a-tag>
-          </div>
-        </template>
         <template v-else-if="column.key === 'unitPrice'">
           {{ formatCurrency(record.unitPrice) }}
         </template>

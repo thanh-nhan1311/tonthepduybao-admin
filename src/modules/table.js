@@ -248,11 +248,6 @@ export const DEBT_FULL_TABLE_COLUMNS = [
     key: 'branch'
   },
   {
-    title: 'Thuộc tính',
-    dataIndex: 'properties',
-    key: 'properties'
-  },
-  {
     title: 'Số KG',
     dataIndex: 'weight',
     key: 'weight'
@@ -298,11 +293,6 @@ export const DEBT_SCREW_TABLE_COLUMNS = [
     title: 'Chi nhánh',
     dataIndex: 'branch',
     key: 'branch'
-  },
-  {
-    title: 'Thuộc tính',
-    dataIndex: 'properties',
-    key: 'properties'
   },
   {
     title: 'Số lượng',
