@@ -3,7 +3,7 @@ export const NOT_FOUND_PATH = '/404'
 
 export const PAGING = {
   DEFAULT_PAGE: 1,
-  DEFAULT_PAGE_SIZE: 25
+  DEFAULT_PAGE_SIZE: 15
 }
 
 export const PROP_DEF = {
@@ -29,6 +29,15 @@ export const PROP_DEF = {
     type: Boolean,
     required: false,
     default: false
+  },
+  NUMBER: {
+    type: Number,
+    required: false,
+    default: 0
+  },
+  NUMBER_REQUIRED: {
+    type: Number,
+    required: true
   }
 }
 

@@ -4,11 +4,11 @@
     :pagination="{
       currentPage: 1,
       showSizeChanger: false,
-      total: customerStore.allCustomer.totalItems,
-      pageSize: customerStore.allCustomer.pageSize,
+      total: total,
+      pageSize: pageSize,
       onChange: (page) => emits('init', page)
     }"
-    :data-source="customerStore.allCustomerTableData"
+    :data-source="data"
   >
     <template #bodyCell="{ column, record, index }">
       <template v-if="column.key === 'no'">{{ index + 1 }}</template>
@@ -38,7 +38,7 @@
         <div>
           <a-button type="link" @click="emits('edit', record)"> Sửa </a-button>
           <a-popconfirm
-            v-if="authStore.isAdmin"
+            v-if="isDelete"
             title="Bạn có chắc muốn xoá khách hàng này không?"
             ok-text="Có"
             cancel-text="Không"
@@ -53,14 +53,14 @@
 </template>
 
 <script setup>
-import { CUSTOMER_TYPE } from '~/modules/constant'
+import { CUSTOMER_TYPE, PROP_DEF } from '~/modules/constant'
 import { CUSTOMER_TABLE_COLUMNS } from '~/modules/table'
-import { useAuthStore } from '~/stores/auth'
-import { useCustomerStore } from '~/stores/customer'
 
+defineProps({
+  data: PROP_DEF.OBJECT_REQUIRED,
+  total: PROP_DEF.NUMBER,
+  pageSize: PROP_DEF.NUMBER,
+  isDelete: PROP_DEF.BOOLEAN
+})
 const emits = defineEmits(['init', 'delete', 'edit'])
-
-// Store
-const authStore = useAuthStore()
-const customerStore = useCustomerStore()
 </script>

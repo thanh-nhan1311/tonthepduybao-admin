@@ -231,6 +231,7 @@ const productQuantityItem = {
 const formState = ref(cloneDeep(initFormState))
 const formErrors = ref({})
 const selectedProperties = ref([])
+const isSummitting = ref(false)
 
 const tableColumns = computed(() =>
   formState.value.type === TYPE_KEY.CORRUGATED
@@ -344,6 +345,7 @@ const validate = () => {
 }
 
 const submit = async () => {
+  isSummitting.value = true
   const isValid = validate()
 
   if (isValid) {
@@ -373,6 +375,7 @@ const submit = async () => {
       router.push(MENU.PRODUCT.path)
     } catch (error) {
       mc.error(MSG.SAVE_FAILED)
+      isSummitting.value = false
     }
   }
 }
@@ -383,7 +386,7 @@ onMounted(async () => {
 })
 
 onBeforeRouteLeave((to, from, next) => {
-  if (isFormChange.value) {
+  if (!isSummitting.value && isFormChange.value) {
     if (confirm('Bạn có chắc muốn rời khỏi trang này không?')) next()
     else next(false)
   } else next()

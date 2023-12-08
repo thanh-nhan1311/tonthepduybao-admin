@@ -152,12 +152,12 @@
         </template>
         <template v-else-if="column.key === 'action'">
           <div class="flex items-center">
-            <a-button type="link" @click="router.push(MENU.DEBT_DETAIL.path + record.id)">
+            <a-button type="link" @click="router.push(MENU.PRODUCT_DETAIL.path + record.id)">
               <Iconify icon="mdi:eye" width="24px" />
             </a-button>
-            <a-button type="link" @click="downloadDebt([record.id])">
+            <!-- <a-button type="link" @click="downloadDebt([record.id])">
               <Iconify icon="material-symbols:download" width="24px" />
-            </a-button>
+            </a-button> -->
           </div>
         </template>
       </template>

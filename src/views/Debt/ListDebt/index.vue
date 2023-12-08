@@ -217,6 +217,9 @@
             <a-button type="link" @click="router.push(MENU.DEBT_DETAIL.path + record.id)">
               <Iconify icon="mdi:eye" width="24px" />
             </a-button>
+            <a-button type="link" @click="router.push(MENU.EDIT_DEBT.path + record.id)">
+              <Iconify icon="mdi:file-document-edit" width="24px" />
+            </a-button>
             <a-button type="link" @click="downloadDebt([record.id])">
               <Iconify icon="material-symbols:download" width="24px" />
             </a-button>

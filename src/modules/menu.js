@@ -61,6 +61,15 @@ export const MENU = {
     permission: USER_PERMISSION.FULL_ACCESS,
     implicit: false
   },
+  PRODUCT_DETAIL: {
+    id: 'Product',
+    path: '/product/list/detail',
+    name: 'Thông tin sản phẩm',
+    icon: 'fluent-mdl2:product-variant',
+    subMenu: null,
+    permission: USER_PERMISSION.FULL_ACCESS,
+    implicit: true
+  },
   CREATE_PRODUCT: {
     id: 'CreateProduct',
     name: 'Thêm sản phẩm',

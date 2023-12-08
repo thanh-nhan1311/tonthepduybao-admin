@@ -26,6 +26,10 @@
       </a-tab-pane>
       <a-tab-pane :key="CUSTOMER_TYPE_KEY.SUPPLIER" :tab="CUSTOMER_TYPE.SUPPLIER.label">
         <customer-table
+          :data="customerStore.allCustomerTableData"
+          :total="customerStore.allCustomer.totalElements"
+          :page-size="customerStore.customerStore.pageSize"
+          :is-delete="authStore.isAdmin"
           @init="(page) => init(page)"
           @edit="(customer) => openModal(customer)"
           @delete="(id) => deleteCustomer(id)"
@@ -46,10 +50,12 @@
 import { onMounted, ref } from 'vue'
 import { useMessage } from '~/composables'
 import { CUSTOMER_TYPE, CUSTOMER_TYPE_KEY, MSG, PAGING } from '~/modules/constant'
+import { useAuthStore } from '~/stores/auth'
 import { useCustomerStore } from '~/stores/customer'
 
 // Store
 const mc = useMessage()
+const authStore = useAuthStore()
 const customerStore = useCustomerStore()
 
 // State

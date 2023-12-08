@@ -1,8 +1,20 @@
 <template>
-  <a-table :columns="PROPERTY_TABLE_COLUMNS" :data-source="propertyStore.allProperty">
+  <a-table :columns="PROPERTY_TABLE_COLUMNS" :data-source="data">
+    <template #headerCell="{ title, column }">
+      <template v-if="['orderBy', 'updatedAt'].includes(column.key)">
+        <div class="flex items-center">
+          <Iconify
+            icon="fa6-solid:sort"
+            class="mr-4 cursor-pointer"
+            @click="emits('sort', column.key)"
+          />
+          {{ title }}
+        </div>
+      </template>
+    </template>
     <template #bodyCell="{ column, record, index }">
       <template v-if="column.key === 'no'">{{ index + 1 }}</template>
-      <template v-else-if="column.key === 'lastModified'">
+      <template v-else-if="column.key === 'updatedAt'">
         <div class="mb-1 flex items-center">
           <Iconify icon="mdi:account" />
           <span class="ml-2">{{ record.updatedBy }}</span>
@@ -36,13 +48,14 @@
 
 <script setup>
 import { useMoment } from '~/composables'
-import { TYPE } from '~/modules/constant'
+import { PROP_DEF, TYPE } from '~/modules/constant'
 import { PROPERTY_TABLE_COLUMNS } from '~/modules/table'
-import { usePropertyStore } from '~/stores/property'
 
-const emits = defineEmits(['delete', 'edit'])
+defineProps({
+  data: PROP_DEF.OBJECT_REQUIRED
+})
+const emits = defineEmits(['sort', 'delete', 'edit'])
 
 // Store
 const moment = useMoment()
-const propertyStore = usePropertyStore()
 </script>

@@ -455,6 +455,8 @@ const validate = () => {
   const { id, date, type, customerId, propertyIds } = formState.value
 
   if (!id) formErrors.value.id = 'Mã công nợ là trường băt buộc'
+  else if (!/^[A-Z0-9-_]+$/.test(id))
+    formErrors.value.id = 'Mã công nợ là chỉ được có kí tự A-Z, 0-9, -, _'
   else clearValidate('id')
 
   if (!type) formErrors.value.type = 'Loại sản phẩm là trường băt buộc'

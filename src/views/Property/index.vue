@@ -18,7 +18,7 @@
           v-model:value="search"
           placeholder="Tìm kiếm thuộc tính..."
           class="w-[320px]"
-          @keypress.enter="propertyStore.getAll({ search })"
+          @keypress.enter="init(sort)"
         />
         <a-button type="primary" class="flex items-center ml-4" @click="openModal">
           <Iconify icon="mdi:plus-circle" class="mr-1" />
@@ -27,12 +27,19 @@
       </div>
     </heading>
 
+    <!-- Property tabs -->
     <a-tabs v-model:activeKey="type" @change="init()">
       <a-tab-pane v-for="item of Object.values(TYPE)" :key="item.value" :tab="item.label">
-        <property-table @edit="(id) => openModal(id)" @delete="(id) => deleteProperty(id)" />
+        <property-table
+          :data="propertyStore.allProperty"
+          @sort="(sortField) => init(sortField)"
+          @edit="(id) => openModal(id)"
+          @delete="(id) => deleteProperty(id)"
+        />
       </a-tab-pane>
     </a-tabs>
 
+    <!-- Create/update property modal -->
     <upsert-property-modal
       v-if="isShowModal"
       :property="selectedProperty"
@@ -56,11 +63,13 @@ const propertyStore = usePropertyStore()
 const isShowModal = ref(false)
 const selectedProperty = ref(null)
 const search = ref('')
+const sort = ref('')
 const type = ref(TYPE_KEY.IRON)
 
 // Methods
-const init = async () => {
-  await propertyStore.getAll({ search: search.value, type: type.value })
+const init = async (sortField = '') => {
+  sort.value = sortField
+  await propertyStore.getAll({ search: search.value, sort: sortField, type: type.value })
 }
 const openModal = (id = null) => {
   if (id) {
@@ -74,7 +83,7 @@ const closeModal = () => {
 const deleteProperty = async (id) => {
   try {
     await propertyStore.delete(id)
-    await init()
+    await init(sort.value)
 
     mc.success(MSG.DELETE_SUCCESS)
   } catch (error) {

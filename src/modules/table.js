@@ -227,8 +227,8 @@ export const PROPERTY_TABLE_COLUMNS = [
   },
   {
     title: 'Chỉnh sửa gần đây',
-    dataIndex: 'lastModified',
-    key: 'lastModified'
+    dataIndex: 'updatedAt',
+    key: 'updatedAt'
   },
   {
     title: 'Thao tác',
@@ -246,6 +246,11 @@ export const DEBT_FULL_TABLE_COLUMNS = [
     title: 'Chi nhánh',
     dataIndex: 'branch',
     key: 'branch'
+  },
+  {
+    title: 'Thuộc tính',
+    dataIndex: 'properties',
+    key: 'properties'
   },
   {
     title: 'Số KG',
@@ -293,6 +298,11 @@ export const DEBT_SCREW_TABLE_COLUMNS = [
     title: 'Chi nhánh',
     dataIndex: 'branch',
     key: 'branch'
+  },
+  {
+    title: 'Thuộc tính',
+    dataIndex: 'properties',
+    key: 'properties'
   },
   {
     title: 'Số lượng',
@@ -462,11 +472,11 @@ export const LIST_PRODUCT_TABLE_COLUMNS = [
     title: 'Chỉnh sửa gần đây',
     dataIndex: 'lastModified',
     key: 'lastModified'
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'action',
+    key: 'action',
+    width: 100
   }
-  // {
-  //   title: 'Thao tác',
-  //   dataIndex: 'action',
-  //   key: 'action',
-  //   width: 100
-  // }
 ]

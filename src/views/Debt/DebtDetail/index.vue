@@ -177,11 +177,13 @@ const debtDetails = computed(() => {
   )
 })
 const columns = computed(() => {
-  const cols =
+  let cols =
     debt.value.type === TYPE_KEY.SCREW
       ? cloneDeep(DEBT_SCREW_TABLE_COLUMNS)
       : cloneDeep(DEBT_FULL_TABLE_COLUMNS)
-  cols.pop()
+
+  // remove properties and action column
+  cols = cols.filter((item) => item.key !== 'properties' && item.key !== 'action')
 
   return cols
 })
