@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { useProductAPI } from '../api'
 import { PAGING } from '~/modules/constant'
+import { useProductAPI } from '../api'
 
 const productAPI = useProductAPI()
 
@@ -18,6 +18,14 @@ export const useProductStore = defineStore('productStore', {
   actions: {
     async create(payload) {
       await productAPI.create(payload)
+    },
+
+    async delete(payload) {
+      await productAPI.delete(payload)
+    },
+    
+    async deleteAll() {
+      await productAPI.deleteAll()
     },
 
     async getAll(payload) {

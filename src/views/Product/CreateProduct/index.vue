@@ -46,7 +46,6 @@
           :options="Object.values(TYPE)"
           placeholder="Chọn loại sản phẩm"
           class="w-full"
-          :disabled="formState.productQuantities.length !== 0"
           @change="changeType"
         />
         <p v-if="formErrors.type" class="mb-0 text-red-500 mt-0.5 text-[12px]">
@@ -68,15 +67,76 @@
       </div>
     </div>
 
+    <div class="grid grid-cols-12 gap-x-8 mt-8">
+      <div class="col-span-3">
+        <label for="date"><span class="text-red-500">*</span> Ngày nhập</label>
+        <a-date-picker
+          v-model:value="formState.date"
+          placeholder="Chọn ngày"
+          :format="moment.MOMENT_FORMAT.YYYY_MM_DD"
+          :value-format="moment.MOMENT_FORMAT.YYYYMMDD"
+          class="w-full"
+          @change="clearValidate('productQuantities')"
+        />
+        <p v-if="formErrors.date" class="mb-0 text-red-500 mt-0.5 text-[12px]">
+          {{ formErrors.date }}
+        </p>
+      </div>
+      <div class="col-span-3">
+        <label for="branch"><span class="text-red-500">*</span> Chi nhánh</label>
+        <a-select
+          v-model:value="formState.branch"
+          :options="branchStore.branchOptions"
+          placeholder="Chọn chi nhánh"
+          class="w-full"
+          @change="clearValidate('productQuantities')"
+        />
+        <p v-if="formErrors.branch" class="mb-0 text-red-500 mt-0.5 text-[12px]">
+          {{ formErrors.branch }}
+        </p>
+      </div>
+      <div class="col-span-3">
+        <label for="quantity"><span class="text-red-500">*</span> Số lượng</label>
+        <a-input
+          v-model:value="formState.quantity"
+          type="number"
+          :min="0"
+          @change="calSizeCalculator()"
+        />
+        <p v-if="formErrors.quantity" class="mb-0 text-red-500 mt-0.5 text-[12px]">
+          {{ formErrors.quantity }}
+        </p>
+      </div>
+    </div>
+
+    <div v-if="type === 'CORRUGATED'" class="grid grid-cols-12 gap-x-8 mt-8">
+      <div class="col-span-3">
+        <label for="name">Khổ/quy cách (mm)</label>
+        <a-input
+          v-model:value="formState.size"
+          type="number"
+          :min="0"
+          @change="calSizeCalculator(index)"
+        />
+      </div>
+      <div class="col-span-3">
+        <label for="name">Diện tích (m2)</label>
+        <a-input
+          v-model:value="formState.sizeCalculator"
+          :disabled="true"
+        />
+      </div>
+    </div>
+
     <a-divider orientation="left" class="mt-8 mb-4" orientation-margin="0">
       <span class="text-red-500">*</span><span class="ml-2 text-xl font-medium">Thuộc tính</span>
     </a-divider>
     <div>
-      <div class="grid grid-cols-12 gap-x-20 mt-4">
+      <div class="grid grid-cols-12 gap-x-20 gap-y-8 mt-4">
         <div
           v-for="prop of selectedProperties"
           :key="prop.id"
-          class="col-span-3 flex items-center mt-2"
+          class="col-span-3 flex items-center"
         >
           <span class="mr-4 w-[160px] font-semibold">{{ prop.name }}:</span>
           <a-select
@@ -96,113 +156,20 @@
         {{ formErrors.properties }}
       </p>
     </div>
-
-    <div class="flex mb-8">
-      <div class="w-11/12">
-        <a-divider orientation="left" class="mt-8 mb-4" orientation-margin="0">
-          <span class="text-red-500">*</span>
-          <span class="ml-2 text-xl font-medium">Tồn kho</span>
-        </a-divider>
-        <p v-if="formErrors.tableItems" class="mb-0 text-red-500 mt-2 text-[12px]">
-          {{ formErrors.tableItems }}
-        </p>
-        <p
-          v-if="formErrors.productQuantities && formErrors.productQuantities.length !== 0"
-          class="mb-0 text-red-500 mt-0.5 text-[12px]"
-        >
-          Một trong số các trường bắt buộc của sản phẩm chưa được nhập
-        </p>
-      </div>
-
-      <a-button
-        type="primary"
-        ghost
-        class="min-w-[120px] flex items-center mt-7 ml-4"
-        @click="addProductQuantity"
-      >
-        <Iconify icon="mdi:plus-circle" width="16px" />
-        <span class="ml-2">Thêm sản phẩm</span>
-      </a-button>
-    </div>
-
-    <a-table
-      :columns="tableColumns"
-      :data-source="formState.productQuantities"
-      :scroll="{ x: 'max-content' }"
-      :pagination="false"
-      :row-class-name="getTableRowClassName"
-      empty-text="Dữ liệu trống"
-      :class="[
-        'create-product-page__table',
-        formState.type && `create-product-page__table--${formState.type.toLowerCase()}`
-      ]"
-    >
-      <template #headerCell="{ title, column }">
-        <template v-if="['branch', 'date'].includes(column.key)">
-          <span class="text-red-500"> * </span>
-          {{ title }}
-        </template>
-      </template>
-
-      <template #bodyCell="{ column, index }">
-        <template v-if="column.key === 'branch'">
-          <a-select
-            v-model:value="formState.productQuantities[index].branch"
-            :options="branchStore.branchOptions"
-            placeholder="Chọn chi nhánh"
-            class="w-full"
-            @change="clearValidate('productQuantities', index)"
-          />
-        </template>
-        <template v-else-if="column.key === 'date'">
-          <a-date-picker
-            v-model:value="formState.productQuantities[index].date"
-            placeholder="Chọn ngày"
-            :format="moment.MOMENT_FORMAT.YYYY_MM_DD"
-            :value-format="moment.MOMENT_FORMAT.YYYYMMDD"
-            class="w-full"
-            @change="clearValidate('productQuantities')"
-          />
-        </template>
-        <template v-else-if="column.key === 'quantity'">
-          <a-input
-            v-model:value="formState.productQuantities[index].quantity"
-            type="number"
-            :min="0"
-            @change="calSizeCalculator(index)"
-          />
-        </template>
-        <template v-else-if="column.key === 'size'">
-          <a-input
-            v-model:value="formState.productQuantities[index].size"
-            type="number"
-            :min="0"
-            @change="calSizeCalculator(index)"
-          />
-        </template>
-
-        <template v-else-if="column.key === 'action'">
-          <a-button type="link" danger @click="deleteProductQuantity(index)">
-            <Iconify icon="mdi:trash-can" width="20px" />
-          </a-button>
-        </template>
-      </template>
-    </a-table>
   </section>
 </template>
 
 <script setup>
+import { cloneDeep, isEmpty } from 'lodash'
 import { computed, onMounted, ref } from 'vue'
-import { usePropertyStore } from '~/stores/property'
-import { useProductStore } from '~/stores/product'
-import { isEmpty, cloneDeep } from 'lodash'
-import { useMessage, useMoment } from '~/composables'
-import { TYPE, TYPE_KEY, MSG } from '~/modules/constant'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { useMessage, useMoment } from '~/composables'
+import { MSG, TYPE, TYPE_KEY } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
-import { useBranchStore } from '~/stores/branch'
-import { PRODUCT_CORRUGATED_TABLE_COLUMNS, PRODUCT_FULL_TABLE_COLUMNS } from '~/modules/table'
 import { customFilter } from '~/modules/utils'
+import { useBranchStore } from '~/stores/branch'
+import { useProductStore } from '~/stores/product'
+import { usePropertyStore } from '~/stores/property'
 
 const router = useRouter()
 
@@ -219,9 +186,6 @@ const initFormState = {
   type: TYPE_KEY.IRON,
   parent: null,
   properties: {},
-  productQuantities: []
-}
-const productQuantityItem = {
   date: '',
   branch: null,
   quantity: 0,
@@ -233,19 +197,16 @@ const formErrors = ref({})
 const selectedProperties = ref([])
 const isSummitting = ref(false)
 
-const tableColumns = computed(() =>
-  formState.value.type === TYPE_KEY.CORRUGATED
-    ? PRODUCT_FULL_TABLE_COLUMNS
-    : PRODUCT_CORRUGATED_TABLE_COLUMNS
-)
 const isFormChange = computed(() => {
-  const { name, type, parent, properties, productQuantities } = formState.value
+  const { name, type, parent, properties, date, branch, quantity } = formState.value
   return (
-    name !== '' ||
-    type !== null ||
-    parent !== null ||
+    !name ||
+    !type ||
+    !parent ||
     Object.values(properties).length !== 0 ||
-    productQuantities.length !== 0
+    !date ||
+    !branch ||
+    !quantity
   )
 })
 
@@ -267,67 +228,21 @@ const changeType = async () => {
   clearValidate('type')
 }
 
-const getTableRowClassName = (_record, index) => {
-  return formErrors.value.productQuantities &&
-    formErrors.value.productQuantities.length !== 0 &&
-    formErrors.value.productQuantities.includes(index)
-    ? 'create-product-page__table--error'
-    : ''
-}
 
-const addProductQuantity = () => {
-  formState.value.productQuantities.push(cloneDeep(productQuantityItem))
-  clearValidate('tableItems')
-}
+const calSizeCalculator = () => {
+  const { type, size, quantity } = formState.value
 
-const deleteProductQuantity = (index) => {
-  formState.value.productQuantities.splice(index, 1)
-  validateItems()
-}
-
-const calSizeCalculator = (index) => {
-  const { type, productQuantities } = formState.value
-
-  if (TYPE_KEY.CORRUGATED === type) {
-    const size = productQuantities[index].size || 0
-    const quantity = productQuantities[index].quantity || 0
-
-    formState.value.productQuantities[index].sizeCalculator = (size / 1000) * quantity
+  if (TYPE_KEY.CORRUGATED === type && size && quantity) {
+    formState.value.sizeCalculator = (size / 1000) * quantity
   }
 }
 
-const clearValidate = (errorName, index = -1) => {
-  if (index === -1) delete formErrors.value[errorName]
-  else if (formErrors.value.productQuantities && formErrors.value.productQuantities.length !== 0) {
-    formErrors.value.productQuantities = formErrors.value.productQuantities.filter(
-      (itemIndex) => itemIndex !== index
-    )
-    if (formErrors.value.productQuantities.length === 0) delete formErrors.value.productQuantities
-  }
-}
-
-const validateItems = () => {
-  const { productQuantities } = formState.value
-
-  if (!productQuantities || productQuantities.length === 0) {
-    formErrors.value.tableItems = 'Bạn chưa thêm thông tin chi tiết cho sản phẩm'
-    delete formErrors.value.productQuantities
-  } else {
-    delete formErrors.value.tableItems
-
-    formErrors.value.productQuantities = productQuantities
-      .map((item, index) => {
-        if (!item.date || !item.branch) return index
-        return -1
-      })
-      .filter((itemIndex) => itemIndex !== -1)
-
-    if (formErrors.value.productQuantities.length === 0) clearValidate('productQuantities')
-  }
+const clearValidate = (errorName) => {
+  delete formErrors.value[errorName]
 }
 
 const validate = () => {
-  const { name, type, properties } = formState.value
+  const { name, type, properties, date, branch, quantity } = formState.value
 
   if (!name) formErrors.value.name = 'Tên sản phẩm là trường băt buộc'
   else clearValidate('name')
@@ -335,11 +250,18 @@ const validate = () => {
   if (!type) formErrors.value.type = 'Loại sản phẩm là trường băt buộc'
   else clearValidate('type')
 
+  if (!date) formErrors.value.date = 'Ngày nhập là trường băt buộc'
+  else clearValidate('date')
+
+  if (!branch) formErrors.value.branch = 'Chi nhánh là trường băt buộc'
+  else clearValidate('branch')
+
+  if (!quantity) formErrors.value.quantity = 'Số lượng là trường băt buộc'
+  else clearValidate('quantity')
+
   if (!properties || Object.values(properties).length === 0)
     formErrors.value.properties = 'Thuộc tính là trường băt buộc'
   else clearValidate('properties')
-
-  validateItems()
 
   return isEmpty(formErrors.value)
 }
@@ -349,17 +271,7 @@ const submit = async () => {
   const isValid = validate()
 
   if (isValid) {
-    const { name, type, parent, properties } = formState.value
-
-    const productQuantities = cloneDeep(formState.value.productQuantities).map((item) => {
-      return {
-        date: item.date,
-        branch: item.branch,
-        quantity: item.quantity,
-        size: item.size,
-        sizeCalculator: item.sizeCalculator
-      }
-    })
+    const { name, type, parent, properties, date, branch, quantity, size, sizeCalculator } = formState.value
 
     try {
       await productStore.create({
@@ -367,7 +279,11 @@ const submit = async () => {
         type,
         properties,
         parent,
-        productQuantities
+        date,
+        branch,
+        quantity,
+        size,
+        sizeCalculator
       })
 
       formState.value = cloneDeep(initFormState)

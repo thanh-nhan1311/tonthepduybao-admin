@@ -133,12 +133,10 @@
           <span class="font-bold">{{ record.id }}</span>
         </template>
         <template v-else-if="column.key === 'branch'">
-          <ul v-if="record.branches && record.branches.length !== 0" class="list-none p-0 m-0">
-            <li v-for="(item, index) of record.branches" :key="index">{{ item }}</li>
-          </ul>
+          <span>{{ record.branch.name }}</span>
         </template>
         <template v-else-if="column.key === 'type'">
-          <span>{{ TYPE[record.type].name }}</span>
+          <span>{{ TYPE[record.type].label }}</span>
         </template>
         <template v-else-if="column.key === 'lastModified'">
           <div class="mb-1 flex items-center">
@@ -155,9 +153,6 @@
             <a-button type="link" @click="router.push(MENU.PRODUCT_DETAIL.path + record.id)">
               <Iconify icon="mdi:eye" width="24px" />
             </a-button>
-            <!-- <a-button type="link" @click="downloadDebt([record.id])">
-              <Iconify icon="material-symbols:download" width="24px" />
-            </a-button> -->
           </div>
         </template>
       </template>
@@ -166,14 +161,14 @@
 </template>
 
 <script setup>
+import { cloneDeep } from 'lodash'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
-import { TYPE, MSG, PAGING } from '~/modules/constant'
+import { MSG, PAGING, TYPE } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { LIST_PRODUCT_TABLE_COLUMNS } from '~/modules/table'
 import { downloadFromResponse } from '~/modules/utils'
-import { cloneDeep } from 'lodash'
 import { useBranchStore } from '~/stores/branch'
 import { useProductStore } from '~/stores/product'
 

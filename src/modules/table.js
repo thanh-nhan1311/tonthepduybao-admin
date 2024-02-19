@@ -387,60 +387,6 @@ export const PRODUCT_CATEGORY_TABLE_COLUMNS = [
   }
 ]
 
-export const PRODUCT_FULL_TABLE_COLUMNS = [
-  {
-    title: 'Ngày nhập',
-    dataIndex: 'date',
-    key: 'date'
-  },
-  {
-    title: 'Chi nhánh',
-    dataIndex: 'branch',
-    key: 'branch'
-  },
-  {
-    title: 'Số lượng',
-    dataIndex: 'quantity',
-    key: 'quantity'
-  },
-  {
-    title: 'Khổ/quy cách (mm)',
-    dataIndex: 'size',
-    key: 'size'
-  },
-  {
-    title: 'Diện tích (m2)',
-    dataIndex: 'sizeCalculator',
-    key: 'sizeCalculator'
-  },
-  {
-    title: 'Thao tác',
-    key: 'action'
-  }
-]
-
-export const PRODUCT_CORRUGATED_TABLE_COLUMNS = [
-  {
-    title: 'Ngày nhập',
-    dataIndex: 'date',
-    key: 'date'
-  },
-  {
-    title: 'Chi nhánh',
-    dataIndex: 'branch',
-    key: 'branch'
-  },
-  {
-    title: 'Số lượng',
-    dataIndex: 'quantity',
-    key: 'quantity'
-  },
-  {
-    title: 'Thao tác',
-    key: 'action'
-  }
-]
-
 export const LIST_PRODUCT_TABLE_COLUMNS = [
   {
     title: 'Mã',
@@ -465,8 +411,8 @@ export const LIST_PRODUCT_TABLE_COLUMNS = [
   },
   {
     title: 'Tồn kho',
-    dataIndex: 'totalQuantity',
-    key: 'totalQuantity'
+    dataIndex: 'quantity',
+    key: 'quantity'
   },
   {
     title: 'Chỉnh sửa gần đây',
