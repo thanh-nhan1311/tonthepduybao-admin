@@ -5,6 +5,14 @@ export default () => {
     await instance.post('/product/create', payload)
   }
 
+  const createAll = async (payload) => {
+    await instance.post('/product/create-all', payload)
+  }
+
+  const get = async (id) => {
+    return await instance.get(`/product/${id}`)
+  }
+
   const del = async (id) => {
     await instance.delete(`/product/${id}`)
   }
@@ -19,6 +27,8 @@ export default () => {
 
   return {
     create,
+    createAll,
+    get,
     del,
     deleteAll,
     getAll

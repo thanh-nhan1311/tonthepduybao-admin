@@ -1,28 +1,29 @@
-import Home from '~/views/Home/index.vue'
 import Branch from '~/views/Branch/index.vue'
-import User from '~/views/User/index.vue'
 import Customer from '~/views/Customer/index.vue'
-import Profile from '~/views/Profile/index.vue'
+import Home from '~/views/Home/index.vue'
 import Login from '~/views/Login.vue'
 import NotFound from '~/views/NotFound.vue'
+import Profile from '~/views/Profile/index.vue'
+import User from '~/views/User/index.vue'
 
-import ProductCategory from '~/views/Product/ProductCategory/index.vue'
-import ListProduct from '~/views/Product/ListProduct/index.vue'
 import CreateProduct from '~/views/Product/CreateProduct/index.vue'
+import EditProduct from '~/views/Product/EditProduct/index.vue'
+import ListProduct from '~/views/Product/ListProduct/index.vue'
+import ProductDetail from '~/views/Product/ProductDetail/index.vue'
 
 import SiteContact from '~/views/SiteManagement/SiteContact/index.vue'
-import SiteProductCategory from '~/views/SiteManagement/SiteProductCategory/index.vue'
 import SitePartner from '~/views/SiteManagement/SitePartner/index.vue'
+import SiteProductCategory from '~/views/SiteManagement/SiteProductCategory/index.vue'
 import SiteSetting from '~/views/SiteManagement/SiteSetting/index.vue'
 
 import Property from '~/views/Property/index.vue'
 
-import AddDebt from '~/views/Debt/AddDebt/index.vue'
-import EditDebt from '~/views/Debt/EditDebt/index.vue'
-import DebtDetail from '~/views/Debt/DebtDetail/index.vue'
-import ListDebt from '~/views/Debt/ListDebt/index.vue'
 import { USER_PERMISSION } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
+import AddDebt from '~/views/Debt/AddDebt/index.vue'
+import DebtDetail from '~/views/Debt/DebtDetail/index.vue'
+import EditDebt from '~/views/Debt/EditDebt/index.vue'
+import ListDebt from '~/views/Debt/ListDebt/index.vue'
 
 export default [
   {
@@ -74,6 +75,12 @@ export default [
         }
       },
       {
+        path: '/product/detail/:id',
+        name: 'ProductDetail',
+        component: ProductDetail,
+        meta: { permission: USER_PERMISSION.FULL_ACCESS }
+      },
+      {
         path: '/product/create',
         name: 'CreateProduct',
         component: CreateProduct,
@@ -81,6 +88,12 @@ export default [
           breadcrumbs: [MENU.PRODUCT, MENU.CREATE_PRODUCT],
           permission: USER_PERMISSION.FULL_ACCESS
         }
+      },
+      {
+        path: '/product/edit/:id',
+        name: 'EditProduct',
+        component: EditProduct,
+        meta: { permission: USER_PERMISSION.FULL_ACCESS }
       }
     ]
   },

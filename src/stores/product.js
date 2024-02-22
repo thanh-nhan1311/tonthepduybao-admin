@@ -6,6 +6,7 @@ const productAPI = useProductAPI()
 
 export const useProductStore = defineStore('productStore', {
   state: () => ({
+    product: null,
     allProduct: {
       data: [],
       page: PAGING.DEFAULT_PAGE,
@@ -18,6 +19,17 @@ export const useProductStore = defineStore('productStore', {
   actions: {
     async create(payload) {
       await productAPI.create(payload)
+    },
+
+    async createAll(payload) {
+      await productAPI.createAll(payload)
+    },
+
+    async get(payload) {
+      const { data } = await productAPI.get(payload)
+      this.product = data
+
+      return data
     },
 
     async delete(payload) {

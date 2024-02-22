@@ -2,7 +2,7 @@
   <section>
     <analysis />
 
-    <!-- <div class="flex items-center space-x-8 mt-10">
+    <div class="flex items-center space-x-8 mt-10">
       <a-button type="primary" @click="saveDebt()">Save Debt</a-button>
       <a-button type="primary" danger @click="saveDebt(true)">Delete & Save Debt</a-button>
     </div>
@@ -10,14 +10,17 @@
     <div class="flex items-center space-x-8 mt-10">
       <a-button type="primary" @click="saveProduct()">Save Product</a-button>
       <a-button type="primary" danger @click="saveProduct(true)">Delete & Save Product</a-button>
-    </div> -->
+    </div>
   </section>
 </template>
 
 <script setup>
-import { CHIEU_DAI, DO_DAY, SUPPLIER } from './database';
-import debtData from './debt.json';
-import productData from './product.json';
+import { useDebtStore } from '~/stores/debt';
+import { useProductStore } from '~/stores/product';
+import { CHIEU_DAI, DO_DAY, SUPPLIER } from './data/database';
+import debtData from './data/debt.json';
+import { getScrewProducts } from './data/productScrew';
+import { getSteelProducts } from './data/productSteel';
 
 
 const debtStore = useDebtStore()
@@ -61,8 +64,6 @@ const saveDebt = async (isDelete = false) => {
   const debtObj = {}
   uniqueDates.forEach(uDate => {
     const debtValue = convertData.filter(item => item.date === uDate)
-
-
 
     const debtDetailItems = debtValue.map(item => {
       const properties = {}
@@ -126,49 +127,19 @@ const saveProduct = async (isDelete = false) => {
     }
   }
 
-  const products = Object.values(productData)
-
-  for (let i = 0; i < products.length; i++) {
-    const product = products[i]
-
-    for (let pi = 0; pi < product.items.length; pi++) {
-      const piItem = product.items[pi]
-
-      const arr = []
-      if (piItem[129]) arr.push({ pId: 129, pQuantity: piItem[129] })
-      if (piItem[130]) arr.push({ pId: 130, pQuantity: piItem[130] })
-      if (piItem[133]) arr.push({ pId: 133, pQuantity: piItem[133] })
-      if (piItem[134]) arr.push({ pId: 134, pQuantity: piItem[134] })
-
-      for (let ai = 0; ai < arr.length; ai++) {
-        const arrItem = arr[ai]
-        try {
-          await productStore.create({
-            name: piItem.name.trim(),
-            type: 'STEEL',
-            properties: {
-              12: 107,
-              16: arrItem.pId
-            },
-            date: '20240219',
-            branch: product.branchId,
-            quantity: arrItem.pQuantity,
-          })
-
-          console.log(`Save OK ==> ${piItem.name.trim()}`);
-        } catch (error) {
-          console.log(`Save FAILED ==> ${piItem.name.trim()}`);
-        }
-      }
-    }
+  const steelProducts = getSteelProducts()
+  const screwProducts = getScrewProducts()
+  try {
+    await productStore.createAll({ data: [...steelProducts, ...screwProducts] })
+    console.log('Save OK')
+  } catch (error) {
+    console.log('Save FAILED')
   }
 }
 </script>
 
 <script>
 import { defineComponent } from 'vue';
-import { useDebtStore } from '~/stores/debt';
-import { useProductStore } from '~/stores/product';
 import Analysis from './Analysis/index.vue';
 
 export default defineComponent({

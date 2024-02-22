@@ -5,6 +5,10 @@ export default () => {
     return await instance.get('/property/all', { params })
   }
 
+  const getAllByType = async (params) => {
+    return await instance.get('/property/all-by-type', { params })
+  }
+
   const create = async (data) => {
     await instance.post('/property', data)
   }
@@ -19,6 +23,7 @@ export default () => {
 
   return {
     getAll,
+    getAllByType,
     create,
     update,
     del

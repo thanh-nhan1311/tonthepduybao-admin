@@ -1,0 +1,25 @@
+.edit-product-page {
+  &__table {
+    &--screw,
+    &--iron_steel {
+      td:not(:last-child) {
+        width: 30%;
+      }
+      td:last-child {
+        width: 10%;
+      }
+    }
+    &--corrugated {
+      td:last-child { width: 120px; }
+    }
+    &--error td {
+      background: rgb(240, 187, 187) !important;
+    }
+  }
+}
+
+.delete-property-confirm-modal {
+  .ant-modal-confirm-content {
+    font-size: 12px !important;
+  }
+}
