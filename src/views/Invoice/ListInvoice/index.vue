@@ -1,33 +1,24 @@
 <template>
-  <section class="list-debt">
-    <heading :title="MENU.DEBT.name">
+  <section class="list-invoice">
+    <heading :title="MENU.INVOICE.name">
       <div class="flex items-center">
         <a-input-search
           v-model:value="filter.search"
-          placeholder="Nhập mã công nợ để tìm kiếm ..."
+          placeholder="Nhập ID hoá đơn để tìm kiếm ..."
           class="mr-4 w-[480px]"
           @keypress.enter="init(currentPage)"
         />
 
-        <a-button type="primary" class="flex items-center" @click="isShowModal = true">
+        <a-button type="primary" class="flex items-center" @click="router.push(MENU.ADD_INVOICE.path)">
           <Iconify icon="mdi:plus-circle" width="16px" />
-          <span class="ml-2">Tạo công nợ</span>
-        </a-button>
-
-        <a-button
-          v-if="selectedDebt.length !== 0"
-          type="primary"
-          class="flex items-center ml-4"
-          @click="downloadDebt(selectedDebt)"
-        >
-          <Iconify icon="mdi:file-excel" />
-          <span class="ml-2">Tải xuống</span>
+          <span class="ml-2">Tạo hoá đơn</span>
         </a-button>
       </div>
     </heading>
 
     <div class="grid grid-cols-12 gap-x-8 my-8">
-      <div
+      <div class="col-span-8"></div>
+      <!-- <div
         :class="[
           'flex justify-between col-span-8 rounded-md p-4',
           isFiltering && 'border border-solid border-gray-200'
@@ -48,10 +39,10 @@
                 <span>đến</span>
                 <span class="font-semibold ml-2">{{ moment.dFormat(filter.date[1]) }}</span>
               </div>
-              <div v-if="filter.type && filter.type.length !== 0" class="flex items-center">
+              <div v-if="filter.branchId && filter.branchId.length !== 0" class="flex items-center">
                 <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
-                <span class="mr-2">Phân loại:</span>
-                <span class="font-semibold">{{ selectedType }}</span>
+                <span class="mr-2">Chi nhánh:</span>
+                <span class="font-semibold">{{ selectedBranch }}</span>
               </div>
             </div>
 
@@ -72,18 +63,18 @@
           <Iconify icon="tabler:zoom-reset" width="16px" />
           <span class="ml-2">Làm mới</span>
         </a-button>
-      </div>
+      </div> -->
 
       <div class="flex items-end justify-end col-span-4">
         <table class="summary-table w-full h-fit">
           <tbody>
             <tr>
               <td class="font-medium">Tổng số</td>
-              <td>{{ debtStore.allDebt.totalItems }} công nợ</td>
+              <td>{{ invoiceStore.allInvoice.totalItems }} hoá đơn</td>
             </tr>
             <tr>
               <td class="font-medium">Tổng giá trị</td>
-              <td>{{ formatCurrency(debtStore.allDebtTotalPrice) }}</td>
+              <td>{{ formatCurrency(invoiceStore.allInvoiceTotalPrice) }}</td>
             </tr>
           </tbody>
         </table>
@@ -92,20 +83,20 @@
 
     <a-table
       :row-key="(record) => record.id"
-      :columns="LIST_DEBT_TABLE_COLUMNS"
+      :columns="LIST_INVOICE_TABLE_COLUMNS"
       :scroll="{ x: 'max-content' }"
       :row-selection="rowSelection"
       :pagination="{
         current: currentPage,
-        total: debtStore.allDebt.totalItems,
-        pageSize: debtStore.allDebt.pageSize,
+        total: invoiceStore.allInvoice.totalItems,
+        pageSize: invoiceStore.allInvoice.pageSize,
         onChange: init
       }"
-      :data-source="debts"
+      :data-source="invoices"
       row-class-name="cursor-pointer"
     >
       <template #headerCell="{ title, column }">
-        <template v-if="column.key === 'customer'">
+        <!-- <template v-if="column.key === 'customer'">
           <div class="flex items-center">
             <a-popover
               trigger="click"
@@ -141,9 +132,9 @@
             </a-popover>
             <span class="ml-4">{{ title }}</span>
           </div>
-        </template>
+        </template> -->
 
-        <template v-if="column.key === 'type'">
+        <!-- <template v-if="column.key === 'branch'">
           <div class="flex items-center">
             <a-popover
               trigger="click"
@@ -153,7 +144,7 @@
               <template #content>
                 <div class="px-4 py-2">
                   <a-checkbox-group
-                    v-model:value="filter.type"
+                    v-model:value="filter.branchId"
                     :options="Object.values(TYPE)"
                     class="flex flex-col"
                     @change="init(currentPage)"
@@ -164,9 +155,9 @@
             </a-popover>
             <span class="ml-4">{{ title }}</span>
           </div>
-        </template>
+        </template> -->
 
-        <template v-else-if="column.key === 'date'">
+        <template v-if="column.key === 'date'">
           <div class="flex items-center">
             <a-popover trigger="click" placement="bottom">
               <template #content>
@@ -194,13 +185,13 @@
         <template v-if="column.key === 'customer'">
           {{ record.customer.name }}
         </template>
+        <template v-if="column.key === 'branch'">
+          {{ record.branch.name }}
+        </template>
         <template v-if="column.key === 'totalPrice'">
           <span class="font-semibold text-red-500">
             {{ formatCurrency(record.totalPrice) }}
           </span>
-        </template>
-        <template v-if="column.key === 'type'">
-          <span>{{ TYPE[record.type].label }}</span>
         </template>
         <template v-else-if="column.key === 'lastModified'">
           <div class="mb-1 flex items-center">
@@ -220,9 +211,6 @@
             <a-button type="link" @click="router.push(MENU.EDIT_DEBT.path + record.id)">
               <Iconify icon="mdi:file-document-edit" width="24px" />
             </a-button>
-            <a-button type="link" @click="downloadDebt([record.id])">
-              <Iconify icon="material-symbols:download" width="24px" />
-            </a-button>
           </div>
         </template>
       </template>
@@ -237,28 +225,29 @@ import { cloneDeep } from 'lodash'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
-import { CUSTOMER_TYPE_KEY, MSG, PAGING, TYPE } from '~/modules/constant'
+import { CUSTOMER_TYPE_KEY, PAGING } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
-import { LIST_DEBT_TABLE_COLUMNS } from '~/modules/table'
-import { downloadFromResponse, formatCurrency } from '~/modules/utils'
+import { LIST_INVOICE_TABLE_COLUMNS } from '~/modules/table'
+import { formatCurrency } from '~/modules/utils'
+import { useBranchStore } from '~/stores/branch'
 import { useCustomerStore } from '~/stores/customer'
-import { useDebtStore } from '~/stores/debt'
+import { useInvoiceStore } from '~/stores/invoice'
 
 const router = useRouter()
 
 // Store
 const mc = useMessage()
 const moment = useMoment()
-const debtStore = useDebtStore()
+const invoiceStore = useInvoiceStore()
 const customerStore = useCustomerStore()
+const branchStore = useBranchStore()
 
 // State
 const initialFilter = {
   search: '',
   date: [],
   customerId: [],
-  type: [],
-  customerSearch: ''
+  branchId: []
 }
 const filter = ref(cloneDeep(initialFilter))
 const currentPage = ref(PAGING.DEFAULT_PAGE)
@@ -272,64 +261,49 @@ const rowSelection = ref({
   }
 })
 
-const debts = computed(() => (debtStore.allDebt ? debtStore.allDebt.data : []))
-const selectedCustomer = computed(() =>
-  customerStore.allCustomer.data
-    .filter((item) => filter.value.customerId.includes(item.id))
-    .map((item) => item.name)
-    .join(', ')
-)
-const selectedType = computed(() =>
-  Object.values(TYPE)
-    .filter((item) => filter.value.type.includes(item.value))
-    .map((item) => item.label)
-    .join(', ')
-)
-const isFiltering = computed(() => {
-  const { search, date, customerId, type } = filter.value
-  return search || (date && date.length === 2) || customerId.length !== 0 || type.length !== 0
-})
+const invoices = computed(() => (invoiceStore.allInvoice ? invoiceStore.allInvoice.data : []))
+// const selectedCustomer = computed(() =>
+//   customerStore.allCustomerOptions.data
+//     .filter((item) => filter.value.customerId.includes(item.id))
+//     .map((item) => item.name)
+//     .join(', ')
+// )
+// const selectedBranch = computed(() =>
+//   branchStore.allBranch
+//     .filter((item) => filter.value.type.includes(item.id))
+//     .map((item) => item.name)
+//     .join(', ')
+// )
+// const isFiltering = computed(() => {
+//   const { search, date, customerId, branchId } = filter.value
+//   return search || (date && date.length === 2) || customerId.length !== 0 || branchId.length !== 0
+// })
 
 // Methods
 const init = async (page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_SIZE) => {
   currentPage.value = page
 
-  const { search, date, customerId, type } = filter.value
-  await debtStore.getAll({
+  const { search, date, customerId, branchId } = filter.value
+  await invoiceStore.getAll({
     search,
     fromDate: date && date.length === 2 ? date[0] : '',
     toDate: date && date.length === 2 ? date[1] : '',
-    customerId: customerId.join(','),
-    type: type.join(','),
+    customerId: '',
+    branchId: '',
     page,
     pageSize
   })
 }
-const downloadDebt = async (ids) => {
-  try {
-    const { headers, data } = await debtStore.download({ ids: ids.join(',') })
-    downloadFromResponse(headers, data)
 
-    mc.success(MSG.DOWNLOAD_SUCCESS)
-  } catch (error) {
-    mc.error(MSG.DOWNLOAD_FAILED)
-  }
-}
-
-const reset = () => {
-  filter.value = cloneDeep(initialFilter)
-
-  init()
-}
+// const reset = () => {
+//   filter.value = cloneDeep(initialFilter)
+//   init()
+// }
 
 onMounted(async () => {
   await init(currentPage.value)
-  await customerStore.getAll({
-    page: 1,
-    pageSize: 1000,
-    type: CUSTOMER_TYPE_KEY.SUPPLIER,
-    search: filter.value.customerSearch
-  })
+  await branchStore.getAll()
+  await customerStore.getAllOption({ type: CUSTOMER_TYPE_KEY.CUSTOMER })
 })
 </script>
 

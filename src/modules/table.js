@@ -426,3 +426,68 @@ export const LIST_PRODUCT_TABLE_COLUMNS = [
     width: 100
   }
 ]
+
+export const UPSERT_INVOICE_TABLE_COLUMNS = [
+  {
+    title: 'Sản phẩm',
+    dataIndex: 'productId',
+    key: 'productId',
+    width: 300
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: 'Đơn giá',
+    dataIndex: 'unitPrice',
+    key: 'unitPrice'
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'action',
+    key: 'action',
+    width: 200
+  }
+]
+
+export const LIST_INVOICE_TABLE_COLUMNS = [
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id',
+    width: 200
+  },
+  {
+    title: 'Ngày tạo',
+    dataIndex: 'date',
+    key: 'date'
+  },
+  {
+    title: 'Khách hàng',
+    dataIndex: 'customer',
+    key: 'customer'
+  },
+  {
+    title: 'Chi nhánh',
+    dataIndex: 'branch',
+    key: 'branch'
+  },
+  {
+    title: 'Tổng giá trị',
+    dataIndex: 'totalPrice',
+    key: 'totalPrice'
+  },
+  {
+    title: 'Chỉnh sửa gần đây',
+    dataIndex: 'lastModified',
+    key: 'lastModified'
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'action',
+    key: 'action',
+    width: 100
+  }
+]

@@ -1,7 +1,7 @@
 <template>
   <section>
     <analysis />
-
+<!-- 
     <div class="flex items-center space-x-8 mt-10">
       <a-button type="primary" @click="saveDebt()">Save Debt</a-button>
       <a-button type="primary" danger @click="saveDebt(true)">Delete & Save Debt</a-button>
@@ -10,7 +10,7 @@
     <div class="flex items-center space-x-8 mt-10">
       <a-button type="primary" @click="saveProduct()">Save Product</a-button>
       <a-button type="primary" danger @click="saveProduct(true)">Delete & Save Product</a-button>
-    </div>
+    </div> -->
   </section>
 </template>
 

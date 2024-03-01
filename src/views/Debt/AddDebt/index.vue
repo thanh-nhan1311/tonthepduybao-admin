@@ -251,18 +251,18 @@
 <script setup>
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { Modal } from 'ant-design-vue'
+import { cloneDeep, isEmpty } from 'lodash'
 import { computed, createVNode, onMounted, ref } from 'vue'
-import { DEBT_FULL_TABLE_COLUMNS, DEBT_SCREW_TABLE_COLUMNS } from '~/modules/table'
-import { useCustomerStore } from '~/stores/customer'
-import { usePropertyStore } from '~/stores/property'
-import { useDebtStore } from '~/stores/debt'
-import { isEmpty, cloneDeep } from 'lodash'
-import { useMessage, useMoment } from '~/composables'
-import { CUSTOMER_TYPE_KEY, TYPE, TYPE_KEY, MSG } from '~/modules/constant'
-import { customFilter, formatCurrency } from '~/modules/utils'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { useMessage, useMoment } from '~/composables'
+import { CUSTOMER_TYPE_KEY, MSG, TYPE, TYPE_KEY } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
+import { DEBT_FULL_TABLE_COLUMNS, DEBT_SCREW_TABLE_COLUMNS } from '~/modules/table'
+import { customFilter, formatCurrency } from '~/modules/utils'
 import { useBranchStore } from '~/stores/branch'
+import { useCustomerStore } from '~/stores/customer'
+import { useDebtStore } from '~/stores/debt'
+import { usePropertyStore } from '~/stores/property'
 
 const router = useRouter()
 
@@ -318,7 +318,7 @@ const isFormChange = computed(() => {
 // Methods
 const initFormOptions = async () => {
   await branchStore.getAll()
-  await customerStore.getAll({ search: '', type: CUSTOMER_TYPE_KEY.SUPPLIER })
+  await customerStore.getAllOption({ type: CUSTOMER_TYPE_KEY.SUPPLIER })
 
   await changeType()
 }

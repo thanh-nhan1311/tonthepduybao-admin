@@ -25,12 +25,17 @@ export default () => {
     return await instance.get('/product/all', { params })
   }
 
+  const getAllOption = async (params) => {
+    return await instance.get('/product/all-option', { params })
+  }
+
   return {
     create,
     createAll,
     get,
     del,
     deleteAll,
-    getAll
+    getAll,
+    getAllOption
   }
 }

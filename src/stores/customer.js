@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { useCustomerAPI } from '../api'
 import { PAGING } from '~/modules/constant'
+import { useCustomerAPI } from '../api'
 
 const customerAPI = useCustomerAPI()
 
@@ -12,12 +12,13 @@ export const useCustomerStore = defineStore('customerStore', {
       pageSize: PAGING.DEFAULT_PAGE_SIZE,
       totalPages: 0,
       totalItems: 0
-    }
+    },
+    allCustomerOptions: []
   }),
 
   getters: {
     customerOptions() {
-      return this.allCustomer.data.map((item) => ({
+      return this.allCustomerOptions.map((item) => ({
         label: item.name,
         value: item.id
       }))
@@ -37,6 +38,11 @@ export const useCustomerStore = defineStore('customerStore', {
     async getAll(payload) {
       const { data } = await customerAPI.getAll(payload)
       this.allCustomer = data
+    },
+
+    async getAllOption(payload) {
+      const { data } = await customerAPI.getAllOption(payload)
+      this.allCustomerOptions = data
     },
 
     async upsert(payload) {

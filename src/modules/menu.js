@@ -118,6 +118,38 @@ export const MENU = {
     implicit: true
   },
 
+
+  INVOICE: {
+    id: 'InvoiceList',
+    path: '/invoice/list',
+    name: 'Hoá đơn',
+    icon: 'la:file-invoice-dollar',
+    subMenu: null,
+    permission: USER_PERMISSION.A_ACCESS,
+    implicit: false
+  },
+  INVOICE_DETAIL: {
+    id: 'InvoiceDetail',
+    path: '/invoice/detail/',
+    name: 'Thông tin hoá đơn',
+    permission: USER_PERMISSION.FULL_ACCESS,
+    implicit: true
+  },
+  ADD_INVOICE: {
+    id: 'AddInvoice',
+    path: '/invoice/add',
+    name: 'Tạo hoá đơn',
+    permission: USER_PERMISSION.AM_ACCESS,
+    implicit: true
+  },
+  EDIT_INVOICE: {
+    id: 'EditInvoice',
+    path: '/invoice/edit/',
+    name: 'Chỉnh sửa hoá đơn',
+    permission: USER_PERMISSION.AM_ACCESS,
+    implicit: true
+  },
+
   CUSTOMER: {
     id: 'Customer',
     path: '/customer',

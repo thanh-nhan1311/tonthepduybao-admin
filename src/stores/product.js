@@ -13,7 +13,8 @@ export const useProductStore = defineStore('productStore', {
       pageSize: PAGING.DEFAULT_PAGE_SIZE,
       totalPages: 0,
       totalItems: 0
-    }
+    },
+    allProductOptions: []
   }),
 
   actions: {
@@ -43,6 +44,11 @@ export const useProductStore = defineStore('productStore', {
     async getAll(payload) {
       const { data } = await productAPI.getAll(payload)
       this.allProduct = data
+    },
+
+    async getAllOption(payload) {
+      const { data } = await productAPI.getAllOption(payload)
+      this.allProductOptions = data
     }
   }
 })

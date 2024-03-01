@@ -25,6 +25,10 @@ import DebtDetail from '~/views/Debt/DebtDetail/index.vue'
 import EditDebt from '~/views/Debt/EditDebt/index.vue'
 import ListDebt from '~/views/Debt/ListDebt/index.vue'
 
+
+import AddInvoice from '~/views/Invoice/AddInvoice/index.vue'
+import ListInvoice from '~/views/Invoice/ListInvoice/index.vue'
+
 export default [
   {
     path: '',
@@ -130,6 +134,40 @@ export default [
       }
     ]
   },
+
+  {
+    name: 'Invoice',
+    children: [
+      {
+        path: '/invoice/list',
+        name: 'InvoiceList',
+        component: ListInvoice,
+        meta: { breadcrumbs: [MENU.INVOICE], permission: USER_PERMISSION.A_ACCESS }
+      },
+      {
+        path: '/invoice/detail/:id',
+        name: 'InvoiceDetail',
+        component: DebtDetail,
+        meta: { permission: USER_PERMISSION.A_ACCESS }
+      },
+      {
+        path: '/invoice/add',
+        name: 'AddInvoice',
+        component: AddInvoice,
+        meta: {
+          breadcrumbs: [MENU.INVOICE, MENU.ADD_INVOICE],
+          permission: USER_PERMISSION.A_ACCESS
+        }
+      },
+      {
+        path: '/invoice/edit/:id',
+        name: 'EditInvoice',
+        component: EditDebt,
+        meta: { permission: USER_PERMISSION.A_ACCESS }
+      }
+    ]
+  },
+
   {
     path: '/customer',
     name: 'Customer',
