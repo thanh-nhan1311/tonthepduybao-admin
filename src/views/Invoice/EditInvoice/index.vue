@@ -1,6 +1,6 @@
 <template>
   <section class="add-invoice">
-    <heading :title="MENU.ADD_INVOICE.name" class="items-start">
+    <heading :title="MENU.EDIT_INVOICE.name" class="items-start">
       <div class="flex items-center mb-4">
         <a-button
           type="default"
@@ -16,7 +16,7 @@
           @click="submit"
         >
           <Iconify icon="mdi:content-save" />
-          <span class="ml-2">Tạo</span>
+          <span class="ml-2">Cập nhật</span>
         </a-button>
       </div>
     </heading>
@@ -137,6 +137,7 @@
           </template>
           <template v-if="column.key === 'product'">
             <a-select
+              :value="formState.items[index].product.id"
               :options="productStore.allProductOptions.map(item => ({ value: item.id, label: item.name }))"
               placeholder="Chọn sản phẩm"
               class="w-full"
@@ -194,30 +195,36 @@
 
 <script setup>
 import { cloneDeep, isEmpty } from 'lodash'
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
-import { CUSTOMER_TYPE_KEY, MSG } from '~/modules/constant'
+import { CUSTOMER_TYPE_KEY, MSG, NOT_FOUND_PATH } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { UPSERT_INVOICE_TABLE_COLUMNS } from '~/modules/table'
 import { customFilter, formatCurrency } from '~/modules/utils'
 import { useBranchStore } from '~/stores/branch'
+import { useCommonStore } from '~/stores/common'
 import { useCustomerStore } from '~/stores/customer'
 import { useInvoiceStore } from '~/stores/invoice'
 import { useProductStore } from '~/stores/product'
 
+const route = useRoute()
 const router = useRouter()
 
 // Store
 const mc = useMessage()
 const moment = useMoment()
+const commonStore = useCommonStore()
 const branchStore = useBranchStore()
 const customerStore = useCustomerStore()
 const productStore = useProductStore()
 const invoiceStore = useInvoiceStore()
 
+const invoice = computed(() => invoiceStore.invoice)
+
 // State
 const initFormState = {
+  id: null,
   date: '',
   customerId: null,
   branchId: null,
@@ -225,6 +232,7 @@ const initFormState = {
   items: []
 }
 const productItem = {
+  id: null,
   product: null,
   quantity: 0,
   unitPrice: 0,
@@ -352,13 +360,13 @@ const submit = async () => {
     })
 
     try {
-      await invoiceStore.create({
-        date,
-        branchId,
-        customerId,
-        note,
-        items
-      }) 
+      // await invoiceStore.create({
+      //   date,
+      //   branchId,
+      //   customerId,
+      //   note,
+      //   items
+      // }) 
 
       formState.value = cloneDeep(initFormState)
       mc.success(MSG.SAVE_SUCCESS)
@@ -383,7 +391,41 @@ const upsertCustomer = async (payload) => {
 
 // Hooks
 onMounted(async () => {
+  const { id } = route.params
+  if (!id) router.push(NOT_FOUND_PATH)
+
   await initFormOptions()
+  
+  try {
+    await invoiceStore.get(id)
+    await productStore.getAllOption({ branchId: invoice.value.branch.id })
+
+    // Update breadcrumb
+    commonStore.setBreadcrumbs([
+      MENU.DEBT,
+      { name: MENU.EDIT_INVOICE.name, path: MENU.EDIT_INVOICE.path + invoice.value.id }
+    ])
+
+    const items = (invoice.value.invoiceProducts || []).map(item => ({
+      id: item.id,
+      product: { ...item.product, quantity: item.product.quantity + item.quantity },
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+    }))
+
+    formState.value = {
+      id: invoice.value.id,
+      date: invoice.value.date,
+      branchId: invoice.value.branch.id,
+      customerId: invoice.value.customer.id,
+      note: invoice.value.note,
+      items
+    }
+
+    calPrice()
+  } catch (error) {
+    router.push(MENU.INVOICE.path)
+  }
 })
 </script>
 

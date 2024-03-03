@@ -27,6 +27,8 @@ import ListDebt from '~/views/Debt/ListDebt/index.vue'
 
 
 import AddInvoice from '~/views/Invoice/AddInvoice/index.vue'
+import EditInvoice from '~/views/Invoice/EditInvoice/index.vue'
+import InvoiceDetail from '~/views/Invoice/InvoiceDetail/index.vue'
 import ListInvoice from '~/views/Invoice/ListInvoice/index.vue'
 
 export default [
@@ -147,7 +149,7 @@ export default [
       {
         path: '/invoice/detail/:id',
         name: 'InvoiceDetail',
-        component: DebtDetail,
+        component: InvoiceDetail,
         meta: { permission: USER_PERMISSION.A_ACCESS }
       },
       {
@@ -162,7 +164,7 @@ export default [
       {
         path: '/invoice/edit/:id',
         name: 'EditInvoice',
-        component: EditDebt,
+        component: EditInvoice,
         meta: { permission: USER_PERMISSION.A_ACCESS }
       }
     ]

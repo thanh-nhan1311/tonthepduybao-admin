@@ -6,6 +6,7 @@ const invoiceAPI = useInvoiceAPI()
 
 export const useInvoiceStore = defineStore('invoiceStore', {
   state: () => ({
+    invoice: null,
     allInvoice: {
       data: [],
       page: PAGING.DEFAULT_PAGE,
@@ -21,8 +22,17 @@ export const useInvoiceStore = defineStore('invoiceStore', {
       await invoiceAPI.create(payload)
     },
 
+    async get(payload) {
+      const { data } = await invoiceAPI.get(payload)
+      this.invoice = data
+    },
+
+    async delete(payload) {
+      await invoiceAPI.del(payload)
+    },
+
     async getAll(payload) {
-      const { data } =await invoiceAPI.getAll(payload)
+      const { data } = await invoiceAPI.getAll(payload)
       this.allInvoice = data.allInvoice
       this.allInvoiceTotalPrice = data.totalPrice
     },

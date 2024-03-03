@@ -252,7 +252,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { Modal } from 'ant-design-vue'
 import { cloneDeep, isEmpty } from 'lodash'
 import { computed, createVNode, onMounted, onUnmounted, ref } from 'vue'
-import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useMessage, useMoment } from '~/composables'
 import { CUSTOMER_TYPE_KEY, MSG, NOT_FOUND_PATH, TYPE, TYPE_KEY } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
@@ -304,7 +304,6 @@ const deletedItems = ref([])
 const selectedProperties = ref([])
 const totalPrice = ref(0)
 const totalUnitPrice = ref(0)
-const isSubmitted = ref(false)
 
 const debt = computed(() => debtStore.debt)
 const tableColumns = computed(() =>
@@ -504,7 +503,6 @@ const submit = async () => {
         deletedItems: deletedItems.value.map((item) => item.id)
       })
 
-      isSubmitted.value = true
       mc.success(MSG.SAVE_SUCCESS)
       router.push(MENU.DEBT_DETAIL.path + id)
     } catch (error) {
@@ -574,15 +572,6 @@ onMounted(async () => {
 
 onUnmounted(() => {
   commonStore.setBreadcrumbs([])
-})
-
-onBeforeRouteLeave((to, from, next) => {
-  // if (isSubmitted.value) {
-  //   if (confirm('Bạn có chắc muốn rời khỏi trang này không?')) next()
-  //   else next(false)
-  // } else
-
-  next()
 })
 </script>
 

@@ -427,12 +427,54 @@ export const LIST_PRODUCT_TABLE_COLUMNS = [
   }
 ]
 
-export const UPSERT_INVOICE_TABLE_COLUMNS = [
+export const INVOICE_PRODUCTS_TABLE_COLUMNS = [
+  {
+    title: 'STT',
+    dataIndex: 'no',
+    key: 'no',
+    width: 65
+  },
   {
     title: 'Sản phẩm',
-    dataIndex: 'productId',
-    key: 'productId',
+    dataIndex: 'product',
+    key: 'product',
     width: 300
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity',
+    key: 'quantity'
+  },
+  {
+    title: 'Đơn giá',
+    dataIndex: 'unitPrice',
+    key: 'unitPrice'
+  },
+  {
+    title: 'Thành tiền',
+    dataIndex: 'totalPrice',
+    key: 'totalPrice'
+  }
+]
+
+export const UPSERT_INVOICE_TABLE_COLUMNS = [
+  {
+    title: 'STT',
+    dataIndex: 'no',
+    key: 'no',
+    width: 65
+  },
+  {
+    title: 'Sản phẩm',
+    dataIndex: 'product',
+    key: 'product',
+    width: 300
+  },
+  {
+    title: 'Số lượng tồn',
+    dataIndex: 'productQuantity',
+    key: 'productQuantity',
+    width: 100
   },
   {
     title: 'Số lượng',

@@ -4,6 +4,7 @@
       <div class="flex items-center">
         <a-input-search
           v-model:value="filter.search"
+          type="number"
           placeholder="Nhập ID hoá đơn để tìm kiếm ..."
           class="mr-4 w-[480px]"
           @keypress.enter="init(currentPage)"
@@ -205,18 +206,16 @@
         </template>
         <template v-else-if="column.key === 'action'">
           <div class="flex items-center">
-            <a-button type="link" @click="router.push(MENU.DEBT_DETAIL.path + record.id)">
+            <a-button type="link" @click="router.push(MENU.INVOICE_DETAIL.path + record.id)">
               <Iconify icon="mdi:eye" width="24px" />
             </a-button>
-            <a-button type="link" @click="router.push(MENU.EDIT_DEBT.path + record.id)">
+            <a-button type="link" @click="router.push(MENU.EDIT_INVOICE.path + record.id)">
               <Iconify icon="mdi:file-document-edit" width="24px" />
             </a-button>
           </div>
         </template>
       </template>
     </a-table>
-
-    <select-way-to-add-debt v-if="isShowModal" @callback="init" @close="isShowModal = false" />
   </section>
 </template>
 
@@ -252,7 +251,6 @@ const initialFilter = {
 const filter = ref(cloneDeep(initialFilter))
 const currentPage = ref(PAGING.DEFAULT_PAGE)
 const selectedDebt = ref([])
-const isShowModal = ref(false)
 
 const rowSelection = ref({
   key: 'id',
