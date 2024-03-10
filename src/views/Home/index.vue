@@ -2,7 +2,7 @@
   <section>
     <analysis />
 
-    <div class="flex items-center space-x-8 mt-10">
+    <!-- <div class="flex items-center space-x-8 mt-10">
       <a-button type="primary" @click="saveDebt()">Save Debt</a-button>
       <a-button type="primary" danger @click="saveDebt(true)">Delete & Save Debt</a-button>
     </div>
@@ -15,7 +15,7 @@
     <div class="flex items-center space-x-8 mt-10">
       <a-button type="primary" @click="saveProduct('STEEL', false)">Save Steel Product</a-button>
       <a-button type="primary" danger @click="saveProduct('STEEL', true)">Delete & Save Steel Product</a-button>
-    </div>
+    </div> -->
   </section>
 </template>
 
