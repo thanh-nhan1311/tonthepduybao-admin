@@ -45,3 +45,144 @@ html {
     }
   }
 }
+
+
+// Printer
+// .print-container {
+//   min-width: calc(148px * 4);
+//   min-height: calc(210px * 3);
+//   max-height: calc(210px * 5);
+// }
+
+// .pi-section1 {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+// }
+// .pi-section1 h3 {
+//   font-weight: 600;
+//   margin-bottom: 0.5em;
+// }
+// .pi-section1 p {
+//   margin-bottom: 0;
+// }
+
+// .pi-section2 {
+//   display: flex;
+//   align-items: center;
+//   border: solid 1px #e5e7eb;
+//   margin-top: 2em; 
+//   width: 100%;
+// }
+// .pi-section2 > div {
+//   display: flex;
+//   flex-direction: column;
+//   width: 50%;
+//   padding: 1em;
+// }
+// .pi-section2 > div:first-child {
+//   border-right: 1px solid #e5e7eb;
+// }
+// .pi-section2 > div:first-child p {
+//   margin-bottom: 0;
+// }
+// .pi-section2 > div:first-child p:nth-child(1) {
+//   margin-bottom: 0.75em;
+//   font-weight: 600;
+// }
+// .pi-section2 > div:first-child p:nth-child(2) {
+//   margin-bottom: 0.25em;
+//   font-weight: 600;
+// }
+// .pi-section2 > div:first-child p span {
+//   font-weight: 600;
+// }
+// .pi-section2 > div:last-child p {
+//   font-weight: 600;
+//   margin-bottom: 0.1em;
+// }
+// .pi-section2 > div:last-child p:nth-child(2) {
+//   margin-bottom: 1em;
+// }
+
+// .pi-section3 {
+//   margin-top: 1em;
+// }
+// .pi-section3 p {
+//   margin-bottom: 0.5em;
+// }
+
+// .print-table {
+//   width: 100%;
+//   border: 1px solid #e5e7eb;
+//   border-right: none;
+//   border-bottom: none;
+// }
+// .print-table thead tr th,
+// .print-table tbody tr td {
+//   padding: 0.25em 1em;
+//   border-right: 1px solid #e5e7eb;
+//   border-bottom: 1px solid #e5e7eb;
+//   text-align: center;
+// }
+// .print-table thead tr th:nth-child(1),
+// .print-table tbody tr td:nth-child(1) { width: 10%; }
+// .print-table thead tr th:nth-child(2),
+// .print-table tbody tr td:nth-child(2) { width: 30%; }
+// .print-table thead tr th:nth-child(3),
+// .print-table tbody tr td:nth-child(3) { width: 20%; }
+// .print-table thead tr th:nth-child(4),
+// .print-table tbody tr td:nth-child(4) { width: 20%; }
+// .print-table thead tr th:nth-child(5),
+// .print-table tbody tr td:nth-child(5) { width: 20%; }
+// .print-table tbody tr td.td-total-label {
+//   padding-left: 3em;
+//   font-weight: 600;
+//   text-align: left;
+// }
+// .print-table tbody tr td.td-total-price {
+//   font-weight: 600;
+// }
+
+// .pi-section4 {
+//   margin-top: 1em;
+// }
+// .pi-section4 p {
+//   margin-bottom: 0.1em;
+//   font-style: italic;
+//   font-weight: 600;
+// }
+// .pi-section4 ul {
+//   padding: 0 0 0 3em;
+//   margin: 0;
+//   list-style-type: none;
+// }
+
+// .pi-section5 {
+//   width: 100%;
+//   display: flex;
+//   justify-content: space-between;
+//   margin-top: 2em;
+//   padding-bottom: 6em;
+// }
+// .pi-section5 span {
+//   width: 33%;
+//   text-align: center;
+//   font-weight: 600;
+// }
+
+// @media print {
+//   body {
+//     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+//   }
+// 	.pi-section1 *,
+//   .pi-section3 *,
+//   .pi-section4 *,
+//   .pi-section5 * {
+//     font-size: 12pt !important;
+//   }
+//   .pi-section2 * {
+//     font-size: 10pt !important;
+//   }
+// }
+

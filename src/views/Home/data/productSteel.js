@@ -963,16 +963,16 @@ export const getSteelProducts = () => {
       const piItem = product.items[pi]
 
       const arr = []
-      if (piItem[129]) arr.push({ pId: 129, pQuantity: piItem[129] })
-      if (piItem[130]) arr.push({ pId: 130, pQuantity: piItem[130] })
-      if (piItem[133]) arr.push({ pId: 133, pQuantity: piItem[133] })
-      if (piItem[134]) arr.push({ pId: 134, pQuantity: piItem[134] })
+      if (piItem[129]) arr.push({ pId: 129, name: '1.0 ly', pQuantity: piItem[129] })
+      if (piItem[130]) arr.push({ pId: 130, name: '1.1 ly', pQuantity: piItem[130] })
+      if (piItem[133]) arr.push({ pId: 133, name: '1.4 ly', pQuantity: piItem[133] })
+      if (piItem[134]) arr.push({ pId: 134, name: '1.7 ly', pQuantity: piItem[134] })
 
       for (let ai = 0; ai < arr.length; ai++) {
         const arrItem = arr[ai]
 
         results.push({
-          name: piItem.name.trim(),
+          name: `${piItem.name.trim()} 6m ${arrItem.name}`,
           type: 'STEEL',
           properties: {
             12: 107,

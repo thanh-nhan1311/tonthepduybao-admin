@@ -13,9 +13,19 @@ export default () => {
     await instance.post('/customer/upsert', payload)
   }
 
+  const del = async (id) => {
+    await instance.delete(`/customer/delete/${id}`)
+  }
+
+  const undel = async (id) => {
+    await instance.delete(`/customer/undelete/${id}`)
+  }
+
   return {
     getAll,
     getAllOption,
-    upsert
+    upsert,
+    del,
+    undel
   }
 }

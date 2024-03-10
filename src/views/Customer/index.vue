@@ -1,6 +1,6 @@
 <template>
   <section>
-    <heading :title="`Danh sách ${CUSTOMER_TYPE[type].label.toLowerCase()}`">
+    <heading :title="`Danh sách ${type === 'DELETED' ? 'bị xoá' : CUSTOMER_TYPE[type].label.toLowerCase()}`">
       <div class="flex items-center">
         <a-input-search
           v-model:value="search"
@@ -16,23 +16,38 @@
       </div>
     </heading>
 
-    <a-tabs v-model:activeKey="type" class="mt-8" @change="init()">
-      <a-tab-pane :key="CUSTOMER_TYPE_KEY.CUSTOMER" :tab="CUSTOMER_TYPE.CUSTOMER.label">
+    <a-tabs v-model:activeKey="type" class="mt-8" @change="activeKey => init(activeKey)">
+      <a-tab-pane :key="CUSTOMER_TYPE_KEY.CUSTOMER" :tab="`${CUSTOMER_TYPE.CUSTOMER.label} (${allCustomer.data.totalCustomer})`">
         <customer-table
-          @init="(page) => init(page)"
+          :data="customerStore.allCustomerTableData"
+          :total="allCustomer.totalElements"
+          :page-size="allCustomer.pageSize"
+          :is-delete="authStore.isAdmin"
+          @init="(page) => init(type, page)"
           @edit="(customer) => openModal(customer)"
           @delete="(id) => deleteCustomer(id)"
         />
       </a-tab-pane>
-      <a-tab-pane :key="CUSTOMER_TYPE_KEY.SUPPLIER" :tab="CUSTOMER_TYPE.SUPPLIER.label">
+      <a-tab-pane :key="CUSTOMER_TYPE_KEY.SUPPLIER" :tab="`${CUSTOMER_TYPE.SUPPLIER.label} (${allCustomer.data.totalSupplier})`">
         <customer-table
           :data="customerStore.allCustomerTableData"
-          :total="customerStore.allCustomer.totalElements"
-          :page-size="customerStore.customerStore.pageSize"
+          :total="allCustomer.totalElements"
+          :page-size="allCustomer.pageSize"
           :is-delete="authStore.isAdmin"
-          @init="(page) => init(page)"
+          @init="(page) => init(type, page)"
           @edit="(customer) => openModal(customer)"
           @delete="(id) => deleteCustomer(id)"
+        />
+      </a-tab-pane>
+      <a-tab-pane key="DELETED" :tab="`Đã xoá (${allCustomer.data.totalDeleted})`">
+        <customer-table
+          :data="customerStore.allCustomerTableData"
+          :total="allCustomer.totalElements"
+          :page-size="allCustomer.pageSize"
+          :is-undelete="true"
+          @init="(page) => init(type, page)"
+          @edit="(customer) => openModal(customer)"
+          @undelete="(id) => undeleteCustomer(id)"
         />
       </a-tab-pane>
     </a-tabs>
@@ -47,7 +62,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useMessage } from '~/composables'
 import { CUSTOMER_TYPE, CUSTOMER_TYPE_KEY, MSG, PAGING } from '~/modules/constant'
 import { useAuthStore } from '~/stores/auth'
@@ -65,13 +80,20 @@ const selectedCustomer = ref(null)
 const isShowModal = ref(false)
 const currentPage = ref(PAGING.DEFAULT_PAGE)
 
+const allCustomer = computed(() => customerStore.allCustomer)
+
 // Methods
-const init = async (page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_SIZE) => {
+const init = async (activeKey, page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_SIZE) => {
   currentPage.value = page
+  type.value = activeKey
+  const deleted = activeKey === 'DELETED'
+
+  console.log(activeKey);
 
   await customerStore.getAll({
     search: search.value,
-    type: type.value,
+    type: deleted ? '' : activeKey,
+    deleted,
     page,
     pageSize
   })
@@ -87,7 +109,7 @@ const closeModal = () => {
 const upsertCustomer = async (payload) => {
   try {
     await customerStore.upsert(payload)
-    await init(currentPage.value)
+    await init(type.value, currentPage.value)
 
     closeModal()
     mc.success(MSG.UPDATE_SUCCESS)
@@ -96,11 +118,18 @@ const upsertCustomer = async (payload) => {
   }
 }
 
-// TODO: delete customer
-const deleteCustomer = () => {}
+const deleteCustomer = async (id) => {
+  await customerStore.delete(id)
+  await init(type.value)
+}
+
+const undeleteCustomer = async (id) => {
+  await customerStore.undelete(id)
+  await init(type.value)
+}
 
 // Hooks
 onMounted(async () => {
-  await init(currentPage.value)
+  await init(type.value, currentPage.value)
 })
 </script>

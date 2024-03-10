@@ -37,8 +37,8 @@ export const useProductStore = defineStore('productStore', {
       await productAPI.delete(payload)
     },
     
-    async deleteAll() {
-      await productAPI.deleteAll()
+    async deleteAll(payload) {
+      await productAPI.deleteAll(payload)
     },
 
     async getAll(payload) {

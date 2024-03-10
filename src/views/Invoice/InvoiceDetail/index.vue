@@ -1,15 +1,27 @@
 <template>
   <section v-if="invoice" class="invoice-detail">
-    <heading :title="`Mã hoá đơn: [${invoice.id}]`">
+    <heading 
+      :title="`Mã hoá đơn: [${invoice.id}] - ${moment.dFormat(invoice.date)}`"
+      :sub-title="`Chỉnh sửa gần đây ${moment.mFormat(invoice.updatedAt)} bởi ${invoice.updatedBy}`"
+    >
       <div class="flex items-center">
         <a-button
           type="primary"
           danger
           class="flex items-center px-8"
-          @click="isShowConfirm = true"
+          @click="isShowConfirmModal = true"
         >
           <Iconify icon="mdi:trash-can" />
           <span class="ml-2">Xoá</span>
+        </a-button>
+
+        <a-button
+          type="primary"
+          class="flex items-center px-8 ml-4"
+          @click="togglePrintInvoice(invoice)"
+        >
+          <Iconify icon="mdi:printer" />
+          <span class="ml-2">In hoá đơn</span>
         </a-button>
 
         <a-button
@@ -25,38 +37,39 @@
 
     <div class="grid grid-cols-12 gap-x-8 mt-8">
       <div
-        class="grid grid-cols-2 gap-8 col-span-8 border border-solid border-gray-200 rounded-md p-4"
+        class="grid grid-cols-12 gap-8 col-span-8 border border-solid border-gray-200 rounded-md p-4"
       >
-        <div>
-          <div class="flex items-center mb-2">
+        <div class="col-span-5 space-y-3">
+          <div class="flex items-center">
             <Iconify icon="mdi:calendar" class="mr-2" />
             <span class="mr-2">Ngày tạo:</span>
             <span class="font-semibold">{{ moment.dFormat(invoice.date) }}</span>
           </div>
 
-          <div class="flex items-center mb-2">
+          <div class="flex items-center">
             <Iconify icon="mdi:format-list-bulleted-type" class="mr-2" />
             <span class="mr-2">Chi nhánh:</span>
             <span class="font-semibold">{{ invoice.branch.name }}</span>
           </div>
+        </div>
 
+        <div class="col-span-7 space-y-3">
           <div class="flex items-center">
             <Iconify icon="mdi:account" class="mr-2" />
             <span class="mr-2">Khách hàng:</span>
             <span class="font-semibold">{{ invoice.customer.name }}</span>
           </div>
-        </div>
 
-        <div class="font-medium">
-          <div class="flex mb-2">
-            <div class="flex">
-              <Iconify icon="mdi:calendar" class="mr-2 mt-2" />
-              <span class="mr-2">Chỉnh sửa gần đây:</span>
+          <div class="flex flex-col">
+            <div class="flex items-center">
+              <Iconify icon="mdi:address-marker" class="mr-2" />
+              <span class="mr-2">Địa chỉ giao hàng:</span>
             </div>
-            <div class="font-semibold italic">
-              {{ moment.mFormat(invoice.updatedAt) }} <br />
-              bởi {{ invoice.updatedBy }}
-            </div>
+            <ul class="m-0 pl-7 list-none">
+              <li>- <span class="font-semibold">Tên:</span> {{ invoice.shippingAddress.name }}</li>
+              <li>- <span class="font-semibold">Số ĐT:</span> {{ invoice.shippingAddress.phone }}</li>
+              <li>- <span class="font-semibold">Địa chỉ:</span> {{ invoice.shippingAddress.address }}</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -65,8 +78,8 @@
         <table class="summary-table w-full h-full">
           <tbody>
             <tr>
-              <td class="font-medium">Tổng giá trị</td>
-              <td>{{ formatCurrency(invoice.totalPrice) }}</td>
+              <td class="font-medium text-4xl">Tổng giá trị</td>
+              <td class="text-4xl font-bold">{{ formatCurrency(invoice.totalPrice) }}</td>
             </tr>
           </tbody>
         </table>
@@ -103,7 +116,7 @@
     </a-table>
 
     <a-modal
-      v-model:visible="isShowConfirm"
+      v-model:visible="isShowConfirmModal"
       ok-text="Có"
       cancel-text="Không"
       :centered="true"
@@ -119,6 +132,8 @@
         <span>Bạn có chắc muốn xoá hoá đơn này không?</span>
       </div>
     </a-modal>
+
+    <print-invoice-modal :invoice="selectedInvoice" @close="togglePrintInvoice(undefined)" />
   </section>
 </template>
 
@@ -144,7 +159,8 @@ const invoiceStore = useInvoiceStore()
 
 // State
 const search = ref('')
-const isShowConfirm = ref(false)
+const isShowConfirmModal = ref(false)
+const selectedInvoice = ref(undefined)
 
 const invoice = computed(() => invoiceStore.invoice)
 const invoiceProducts = computed(() => {
@@ -155,15 +171,18 @@ const invoiceProducts = computed(() => {
 })
 
 // Methods
+const togglePrintInvoice = (value) => {
+  selectedInvoice.value = value
+}
+
 const deleteInvoice = async () => {
   try {
     await invoiceStore.delete(invoice.value.id)
-    isShowConfirm.value = false
+    isShowConfirmModal.value = false
 
     mc.success(MSG.DELETE_SUCCESS)
     router.push(MENU.INVOICE.path)
   } catch (error) {
-    console.log(error);
     mc.error(MSG.DELETE_FAILED)
   }
 }

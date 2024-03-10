@@ -1,16 +1,21 @@
 <template>
   <section>
     <analysis />
-<!-- 
+
     <div class="flex items-center space-x-8 mt-10">
       <a-button type="primary" @click="saveDebt()">Save Debt</a-button>
       <a-button type="primary" danger @click="saveDebt(true)">Delete & Save Debt</a-button>
     </div>
 
     <div class="flex items-center space-x-8 mt-10">
-      <a-button type="primary" @click="saveProduct()">Save Product</a-button>
-      <a-button type="primary" danger @click="saveProduct(true)">Delete & Save Product</a-button>
-    </div> -->
+      <a-button type="primary" @click="saveProduct('ALL', false)">Save Product</a-button>
+      <a-button type="primary" danger @click="saveProduct('ALL', true)">Delete & Save Product</a-button>
+    </div>
+
+    <div class="flex items-center space-x-8 mt-10">
+      <a-button type="primary" @click="saveProduct('STEEL', false)">Save Steel Product</a-button>
+      <a-button type="primary" danger @click="saveProduct('STEEL', true)">Delete & Save Steel Product</a-button>
+    </div>
   </section>
 </template>
 
@@ -117,20 +122,26 @@ const saveDebt = async (isDelete = false) => {
   }
 }
 
-const saveProduct = async (isDelete = false) => {
+const saveProduct = async (type = 'ALL', isDelete = false) => {
   if (isDelete) {
     try {
-      await productStore.deleteAll()
+      await productStore.deleteAll({ type })
       console.log(`Delete OK`);
     } catch (error) {
       console.log(`Delete FAILED`);
     }
   }
 
+  let products = []
   const steelProducts = getSteelProducts()
   const screwProducts = getScrewProducts()
+
+  if (type === 'ALL') products = [...steelProducts, ...screwProducts]
+  else if (type === 'STEEL') products = [...steelProducts]
+  else if (type === 'SCREW') products = [...screwProducts]
+
   try {
-    await productStore.createAll({ data: [...steelProducts, ...screwProducts] })
+    await productStore.createAll({ data: products })
     console.log('Save OK')
   } catch (error) {
     console.log('Save FAILED')

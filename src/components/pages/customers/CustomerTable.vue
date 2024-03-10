@@ -37,6 +37,7 @@
       <template v-else-if="column.key === 'action'">
         <div>
           <a-button type="link" @click="emits('edit', record)"> Sửa </a-button>
+
           <a-popconfirm
             v-if="isDelete"
             title="Bạn có chắc muốn xoá khách hàng này không?"
@@ -46,6 +47,16 @@
           >
             <a-button type="text" danger class="ml-4"> Xoá </a-button>
           </a-popconfirm>
+
+          <a-popconfirm
+            v-if="isUndelete"
+            title="Bạn có chắc muốn gỡ bỏ việc xoá khách hàng này không?"
+            ok-text="Có"
+            cancel-text="Không"
+            @confirm="emits('undelete', record.id)"
+          >
+            <a-button type="text" danger class="ml-4"> Gỡ xoá </a-button>
+          </a-popconfirm>
         </div>
       </template>
     </template>
@@ -53,14 +64,15 @@
 </template>
 
 <script setup>
-import { CUSTOMER_TYPE, PROP_DEF } from '~/modules/constant'
-import { CUSTOMER_TABLE_COLUMNS } from '~/modules/table'
+import { CUSTOMER_TYPE, PROP_DEF } from '~/modules/constant';
+import { CUSTOMER_TABLE_COLUMNS } from '~/modules/table';
 
 defineProps({
   data: PROP_DEF.OBJECT_REQUIRED,
   total: PROP_DEF.NUMBER,
   pageSize: PROP_DEF.NUMBER,
-  isDelete: PROP_DEF.BOOLEAN
+  isDelete: PROP_DEF.BOOLEAN,
+  isUndelete: PROP_DEF.BOOLEAN
 })
-const emits = defineEmits(['init', 'delete', 'edit'])
+const emits = defineEmits(['init', 'delete', 'undelete', 'edit'])
 </script>

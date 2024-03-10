@@ -17,8 +17,8 @@ export default () => {
     await instance.delete(`/product/${id}`)
   }
 
-  const deleteAll = async () => {
-    await instance.delete(`/product/delete-all`)
+  const deleteAll = async (params) => {
+    await instance.delete(`/product/delete-all`, { params })
   }
 
   const getAll = async (params) => {

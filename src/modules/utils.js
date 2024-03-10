@@ -26,3 +26,15 @@ export const downloadFromResponse = (headers, data) => {
 
 export const customFilter = (value, option) =>
   normalize(option.label.toLowerCase()).includes(normalize(value.trim().toLowerCase()))
+
+export const windowPrint = (printContent) => {
+  var win = window.open('', 'PrintWindow');
+  win.document.write(printContent);
+
+  setTimeout(function () {
+      win.document.close();
+      win.focus();
+      win.print();
+      win.close(); 
+  }, 500);
+}

@@ -6,6 +6,7 @@ import useInvoiceAPI from './invoiceApi'
 import useProductAPI from './productApi'
 import useProductCategoryAPI from './productCategoryApi'
 import usePropertyAPI from './propertyApi'
+import useShippingAddressAPI from './shippingAddressApi'
 import useSiteManagementAPI from './siteManagementApi'
 import useSystemLogAPI from './systemLogApi'
 import useUploadAPI from './uploadApi'
@@ -20,8 +21,10 @@ export {
   useProductAPI,
   useProductCategoryAPI,
   usePropertyAPI,
+  useShippingAddressAPI,
   useSiteManagementAPI,
   useSystemLogAPI,
   useUploadAPI,
   useUserAPI
 }
+
