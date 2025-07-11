@@ -11,46 +11,46 @@ export const MENU = {
     implicit: false
   },
 
-  SITE_MANAGEMENT: {
-    id: 'SiteManagement',
-    path: null,
-    name: 'Quản lý trang',
-    icon: 'ant-design:global-outlined',
-    permission: USER_PERMISSION.FULL_ACCESS,
-    implicit: false,
-    subMenu: {
-      SM_PRODUCT: {
-        id: 'SiteContact',
-        path: '/sm/product',
-        name: 'Sản phẩm',
-        implicit: false
-      },
-      SM_PRODUCT_CATEGORY: {
-        id: 'SiteProductCategory',
-        path: '/sm/product-category',
-        name: 'Danh mục sản phẩm',
-        implicit: false
-      },
-      SM_CONTACT: {
-        id: 'SiteContact',
-        path: '/sm/contact',
-        name: 'Liên hệ',
-        implicit: false
-      },
-      SM_PARTNER: {
-        id: 'SitePartner',
-        path: '/sm/partner',
-        name: 'Đối tác',
-        implicit: false
-      },
-      SM_SETTING: {
-        id: 'SiteSetting',
-        path: '/sm/setting',
-        name: 'Cài đặt chung',
-        implicit: false
-      }
-    }
-  },
+  // SITE_MANAGEMENT: {
+  //   id: 'SiteManagement',
+  //   path: null,
+  //   name: 'Quản lý trang',
+  //   icon: 'ant-design:global-outlined',
+  //   permission: USER_PERMISSION.FULL_ACCESS,
+  //   implicit: false,
+  //   subMenu: {
+  //     SM_PRODUCT: {
+  //       id: 'SiteContact',
+  //       path: '/sm/product',
+  //       name: 'Sản phẩm',
+  //       implicit: false
+  //     },
+  //     SM_PRODUCT_CATEGORY: {
+  //       id: 'SiteProductCategory',
+  //       path: '/sm/product-category',
+  //       name: 'Danh mục sản phẩm',
+  //       implicit: false
+  //     },
+  //     SM_CONTACT: {
+  //       id: 'SiteContact',
+  //       path: '/sm/contact',
+  //       name: 'Liên hệ',
+  //       implicit: false
+  //     },
+  //     SM_PARTNER: {
+  //       id: 'SitePartner',
+  //       path: '/sm/partner',
+  //       name: 'Đối tác',
+  //       implicit: false
+  //     },
+  //     SM_SETTING: {
+  //       id: 'SiteSetting',
+  //       path: '/sm/setting',
+  //       name: 'Cài đặt chung',
+  //       implicit: false
+  //     }
+  //   }
+  // },
 
   PRODUCT: {
     id: 'Product',

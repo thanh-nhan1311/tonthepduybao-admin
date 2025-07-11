@@ -130,12 +130,13 @@ const product = computed(() => productStore.product)
 
 const deleteProduct = async () => {
   try {
-    await productStore.delete(product.value.id)
+    await productStore.del(product.value.id)
     isShowConfirm.value = false
 
     mc.success(MSG.DELETE_SUCCESS)
     router.push(MENU.PRODUCT.path)
   } catch (error) {
+    console.log(error)
     mc.error(MSG.DELETE_FAILED)
   }
 }

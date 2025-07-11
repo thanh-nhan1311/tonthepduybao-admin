@@ -6,7 +6,7 @@
           v-model:value="search"
           placeholder="Tìm kiếm ..."
           class="mr-4 w-[400px]"
-          @keypress.enter="init(1)"
+          @keypress.enter="init(type, 1)"
         />
 
         <a-button type="primary" class="flex items-center" @click="isShowModal = true">
@@ -20,7 +20,7 @@
       <a-tab-pane :key="CUSTOMER_TYPE_KEY.CUSTOMER" :tab="`${CUSTOMER_TYPE.CUSTOMER.label} (${allCustomer.data.totalCustomer})`">
         <customer-table
           :data="customerStore.allCustomerTableData"
-          :total="allCustomer.totalElements"
+          :total="allCustomer.totalItems"
           :page-size="allCustomer.pageSize"
           :is-delete="authStore.isAdmin"
           @init="(page) => init(type, page)"
@@ -31,7 +31,7 @@
       <a-tab-pane :key="CUSTOMER_TYPE_KEY.SUPPLIER" :tab="`${CUSTOMER_TYPE.SUPPLIER.label} (${allCustomer.data.totalSupplier})`">
         <customer-table
           :data="customerStore.allCustomerTableData"
-          :total="allCustomer.totalElements"
+          :total="allCustomer.totalItems"
           :page-size="allCustomer.pageSize"
           :is-delete="authStore.isAdmin"
           @init="(page) => init(type, page)"
@@ -42,7 +42,7 @@
       <a-tab-pane key="DELETED" :tab="`Đã xoá (${allCustomer.data.totalDeleted})`">
         <customer-table
           :data="customerStore.allCustomerTableData"
-          :total="allCustomer.totalElements"
+          :total="allCustomer.totalItems"
           :page-size="allCustomer.pageSize"
           :is-undelete="true"
           @init="(page) => init(type, page)"
@@ -87,8 +87,6 @@ const init = async (activeKey, page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEF
   currentPage.value = page
   type.value = activeKey
   const deleted = activeKey === 'DELETED'
-
-  console.log(activeKey);
 
   await customerStore.getAll({
     search: search.value,
