@@ -43,6 +43,7 @@
         <label for="type"><span class="text-red-500">*</span> Danh mục</label>
         <a-select
           v-model:value="formState.type"
+          allow-clear
           :options="Object.values(TYPE)"
           placeholder="Chọn loại sản phẩm"
           class="w-full"
@@ -57,6 +58,7 @@
         <label for="type">Sản phẩm gốc</label>
         <a-select
           v-model:value="formState.parent"
+          allow-clear
           :options="[]"
           placeholder="Chọn sản phẩm gốc"
           class="w-full"
@@ -86,6 +88,7 @@
         <label for="branch"><span class="text-red-500">*</span> Chi nhánh</label>
         <a-select
           v-model:value="formState.branch"
+          allow-clear
           :options="branchStore.branchOptions"
           placeholder="Chọn chi nhánh"
           class="w-full"
@@ -141,6 +144,7 @@
           <span class="mr-4 w-[160px] font-semibold">{{ prop.name }}:</span>
           <a-select
             v-model:value="formState.properties[prop.id]"
+            allow-clear
             :options="prop.items.map((item) => ({ label: item.name, value: item.id }))"
             :placeholder="`Chọn ${prop.name}`"
             :show-search="true"

@@ -93,6 +93,7 @@
           </div>
           <a-select
             v-model:value="formState.customerId"
+            allow-clear
             :options="customerStore.customerOptions"
             :filter-option="customFilter"
             :show-search="true"
@@ -196,6 +197,7 @@
           </template>
           <template v-if="column.key === 'product'">
             <a-select
+              allow-clear
               :options="productStore.allProductOptions.map(item => ({ value: item.id, label: item.name }))"
               placeholder="Chọn sản phẩm"
               class="w-full"
@@ -228,7 +230,7 @@
               @change="calPrice"
             />
           </template>
-          
+
           <template v-else-if="column.key === 'action'">
             <div class="flex items-center">
               <a-button type="link" danger @click="deleteProductItem(index, record)">

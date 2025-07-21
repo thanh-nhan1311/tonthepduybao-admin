@@ -42,6 +42,7 @@
         <label for="type"><span class="text-red-500">*</span> Danh mục</label>
         <a-select
           v-model:value="formState.type"
+          allow-clear
           :options="Object.values(TYPE)"
           placeholder="Chọn loại sản phẩm"
           class="w-full mt-1"
@@ -75,6 +76,7 @@
         <label for="customerId"><span class="text-red-500">*</span> Nhà cung cấp</label>
         <a-select
           v-model:value="formState.customerId"
+          allow-clear
           :options="customerStore.customerOptions"
           :show-search="true"
           placeholder="Chọn nhà cung cấp"
@@ -91,6 +93,7 @@
         <a-select
           id="propertyIds"
           v-model:value="formState.propertyIds"
+          allow-clear
           :options="propertyStore.propertyOptions"
           placeholder="Chọn thuộc tính"
           max-tag-count="responsive"
@@ -184,6 +187,7 @@
         <template v-else-if="column.key === 'branch'">
           <a-select
             v-model:value="formState.items[index].branch"
+            allow-clear
             :options="branchStore.branchOptions"
             placeholder="Chọn chi nhánh"
             class="w-full"
@@ -196,7 +200,7 @@
             :key="prop.id"
             v-model:value="formState.items[index].properties[prop.id]"
             :options="prop.items.map((item) => ({ label: item.name, value: item.id }))"
-            :allow-clear="true"
+            allow-clear
             :show-search="true"
             :placeholder="`Chọn ${prop.name}`"
             :class="['w-full min-w-[120px]', propIndex !== 0 && 'mt-2']"

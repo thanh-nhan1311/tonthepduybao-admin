@@ -33,7 +33,12 @@
         name="type"
         :rules="[{ required: true, validator: defEmptyCategory, trigger: 'change' }]"
       >
-        <a-select v-model:value="formState.type" :options="Object.values(TYPE)" :tabindex="0" />
+        <a-select
+          v-model:value="formState.type"
+          allow-clear
+          :options="Object.values(TYPE)"
+          :tabindex="0"
+        />
       </a-form-item>
 
       <div class="max-h-[400px] overflow-y-auto custom-scroll">
@@ -79,16 +84,16 @@
 </template>
 
 <script setup>
+import { cloneDeep, isNil } from 'lodash'
 import { onMounted, ref, toRef } from 'vue'
+import { useMessage } from '~/composables'
+import { MSG, PROP_DEF, TYPE_KEY } from '~/modules/constant'
 import {
   defEmptyCategory,
-  defEmptyPropertyName,
-  defEmptyPropertyDetailName
+  defEmptyPropertyDetailName,
+  defEmptyPropertyName
 } from '~/modules/formRule'
-import { cloneDeep, isNil } from 'lodash'
-import { MSG, PROP_DEF, TYPE, TYPE_KEY } from '~/modules/constant'
 import { usePropertyStore } from '~/stores/property'
-import { useMessage } from '~/composables'
 
 const emits = defineEmits(['close', 'callback'])
 const props = defineProps({

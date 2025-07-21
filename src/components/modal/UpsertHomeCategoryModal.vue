@@ -22,6 +22,7 @@
       <a-form-item has-feedback label="Chọn danh mục" name="categoryId">
         <a-select
           v-model:value="formState.categoryId"
+          allow-clear
           show-search
           :options="siteCategoryStore.parentOptions"
           :filter-option="filterParentOptions"
@@ -40,11 +41,11 @@
 </template>
 
 <script setup>
+import { cloneDeep, isNil } from 'lodash'
 import { defineComponent, onMounted, ref, toRef } from 'vue'
 import { defEmptyCategory, defEmptyCategoryImage } from '~/modules/formRule'
 import { useSiteCategoryStore } from '~/stores/siteManagement/siteCategory'
 import { useUploadStore } from '~/stores/upload'
-import { isNil, cloneDeep } from 'lodash'
 
 const emits = defineEmits(['close'])
 const props = defineProps({
@@ -135,8 +136,8 @@ onMounted(async () => {
 <script>
 import ImagePicker from '~/components/ImagePicker.vue'
 import { SITE_SETTING } from '~/modules/constant'
-import { useSiteSettingStore } from '~/stores/siteManagement/siteSetting'
 import { S3_URL } from '~/modules/http'
+import { useSiteSettingStore } from '~/stores/siteManagement/siteSetting'
 
 export default defineComponent({
   components: { ImagePicker }

@@ -60,6 +60,7 @@
           <label for="branchId"><span class="text-red-500">*</span> Chi nhánh</label>
           <a-select
             v-model:value="formState.branchId"
+            allow-clear
             :options="branchStore.branchOptions"
             placeholder="Chọn chi nhánh"
             class="w-full"
@@ -93,6 +94,7 @@
           </div>
           <a-select
             v-model:value="formState.customerId"
+            allow-clear
             :options="customerStore.customerOptions"
             :filter-option="customFilter"
             :show-search="true"
@@ -196,6 +198,7 @@
           </template>
           <template v-if="column.key === 'product'">
             <a-select
+              allow-clear
               :value="formState.items[index].product.id"
               :options="productStore.allProductOptions.map(item => ({ value: item.id, label: item.name }))"
               placeholder="Chọn sản phẩm"
