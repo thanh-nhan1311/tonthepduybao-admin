@@ -1,35 +1,56 @@
-# tonthepduybao-admin
+# Tonthepduybao Admin Dashboard
 
-This template should help get you started developing with Vue 3 in Vite.
+A comprehensive Vue.js-based admin dashboard for business management, featuring customer management, product catalog, invoice processing, debt tracking, and site management capabilities.
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- **Customer Management** - Complete customer database with contact information
+- **Product Management** - Product catalog with categories and inventory
+- **Invoice System** - Invoice creation, editing, and printing
+- **Debt Management** - Debt tracking and analysis
+- **Property Management** - Property database tools
+- **User Management** - User accounts and permissions
+- **Branch Management** - Multi-branch business support
+- **Site Management** - Website content management
 
-## Customize configuration
+## Technology Stack
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- Vue.js 3
+- Vite
+- Tailwind CSS
+- Ant Design Vue
+- Pinia (State Management)
+- Axios (HTTP Client)
+- Vue Router
 
-## Project Setup
+## Installation
 
-```sh
-npm install
-```
+1. Install dependencies:
+   ```bash
+   yarn install
+   ```
 
-### Compile and Hot-Reload for Development
+2. Start development server:
+   ```bash
+   yarn dev
+   ```
 
-```sh
-npm run dev
-```
+3. Build for production:
+   ```bash
+   yarn build
+   ```
 
-### Compile and Minify for Production
+## Project Structure
 
-```sh
-npm run build
-```
+- `src/api/` - API service modules
+- `src/components/` - Reusable Vue components
+- `src/views/` - Page components
+- `src/stores/` - Pinia state management
+- `src/router/` - Vue Router configuration
 
-### Lint with [ESLint](https://eslint.org/)
+## Deployment
 
-```sh
-npm run lint
+Use the deployment script:
+```bash
+./deploy.sh
 ```
