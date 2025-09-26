@@ -10,7 +10,7 @@ BUILD_DIR=dist
 TARGET_DIR=/var/www/html/tonthepduybao.com/
 
 printf "\n>>>>> Fetching\n"
-git fetch && git pull
+git fetch && git pull develop develop
 
 printf "\n\n>>>>> Building\n"
 yarn build
