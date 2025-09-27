@@ -28,7 +28,7 @@
         <label for="name"><span class="text-red-500">*</span> Tên sản phẩm</label>
         <a-input
           id="name"
-          v-model:value="formState.name"
+          v-model="formState.name"
           placeholder="Nhập tên sản phẩm"
           :maxlength="500"
           :show-count="true"
@@ -42,7 +42,7 @@
       <div class="col-span-3">
         <label for="type"><span class="text-red-500">*</span> Danh mục</label>
         <a-select
-          v-model:value="formState.type"
+          v-model="formState.type"
           allow-clear
           :options="Object.values(TYPE)"
           placeholder="Chọn loại sản phẩm"
@@ -57,7 +57,7 @@
       <div class="col-span-3">
         <label for="type">Sản phẩm gốc</label>
         <a-select
-          v-model:value="formState.parent"
+          v-model="formState.parent"
           allow-clear
           :options="[]"
           placeholder="Chọn sản phẩm gốc"
@@ -73,7 +73,7 @@
       <div class="col-span-3">
         <label for="date"><span class="text-red-500">*</span> Ngày nhập</label>
         <a-date-picker
-          v-model:value="formState.date"
+          v-model="formState.date"
           placeholder="Chọn ngày"
           :format="moment.MOMENT_FORMAT.YYYY_MM_DD"
           :value-format="moment.MOMENT_FORMAT.YYYYMMDD"
@@ -87,7 +87,7 @@
       <div class="col-span-3">
         <label for="branch"><span class="text-red-500">*</span> Chi nhánh</label>
         <a-select
-          v-model:value="formState.branch"
+          v-model="formState.branch"
           allow-clear
           :options="branchStore.branchOptions"
           placeholder="Chọn chi nhánh"
@@ -101,7 +101,7 @@
       <div class="col-span-3">
         <label for="quantity"><span class="text-red-500">*</span> Số lượng</label>
         <a-input
-          v-model:value="formState.quantity"
+          v-model="formState.quantity"
           type="number"
           :min="0"
           @change="calSizeCalculator()"
@@ -116,7 +116,7 @@
       <div class="col-span-3">
         <label for="name">Khổ/quy cách (mm)</label>
         <a-input
-          v-model:value="formState.size"
+          v-model="formState.size"
           type="number"
           :min="0"
           @change="calSizeCalculator(index)"
@@ -125,7 +125,7 @@
       <div class="col-span-3">
         <label for="name">Diện tích (m2)</label>
         <a-input
-          v-model:value="formState.sizeCalculator"
+          v-model="formState.sizeCalculator"
           :disabled="true"
         />
       </div>
@@ -143,7 +143,7 @@
         >
           <span class="mr-4 w-[160px] font-semibold">{{ prop.name }}:</span>
           <a-select
-            v-model:value="formState.properties[prop.id]"
+            v-model="formState.properties[prop.id]"
             allow-clear
             :options="prop.items.map((item) => ({ label: item.name, value: item.id }))"
             :placeholder="`Chọn ${prop.name}`"
@@ -225,7 +225,7 @@ const initFormOptions = async () => {
     await branchStore.getAll()
     await changeType(product.properties.map(item => item.id))
   } catch (error) {
-    console.log(error);
+    if (import.meta.env && import.meta.env.MODE === 'development') console.log(error);
     // router.push(MENU.PRODUCT.path)
   }
 }
@@ -240,7 +240,7 @@ const changeType = async (propDetailIds = []) => {
   sortedProperties.forEach((prop) => {
     let val = null
     if (propDetailIds.length !== 0) {
-      console.log(propDetailIds);
+        if (import.meta.env && import.meta.env.MODE === 'development') console.log(propDetailIds);
       const findPropDetail = prop.items.find(propItem => propDetailIds.includes(propItem.id))
       if (findPropDetail) val = findPropDetail.id
     } 

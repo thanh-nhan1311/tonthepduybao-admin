@@ -17,10 +17,15 @@ export default () => {
     return await instance.get('/invoice/all', { params })
   }
 
+  const update = async (id, payload) => {
+    return await instance.put(`/invoice/${id}`, payload)
+  }
+
   return {
     create,
     del,
     get,
-    getAll
+    getAll,
+    update
   }
 }

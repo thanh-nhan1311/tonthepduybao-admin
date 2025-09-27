@@ -21,6 +21,11 @@ export const useInvoiceStore = defineStore('invoiceStore', {
     async create(payload) {
       await invoiceAPI.create(payload)
     },
+    
+    async update(payload) {
+      const { id, ...rest } = payload
+      await invoiceAPI.update(id, rest)
+    },
 
     async get(payload) {
       const { data } = await invoiceAPI.get(payload)

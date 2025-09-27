@@ -29,7 +29,7 @@
           <label for="id"><span class="text-red-500">*</span> Số hoá đơn</label>
           <a-input
             id="id"
-            v-model:value="formState.id"
+            v-model="formState.id"
             placeholder="Nhập số hoá đơn"
             :max-length="100"
             :disabled="true"
@@ -44,7 +44,7 @@
           <label for="date"><span class="text-red-500">*</span> Ngày nhập hoá đơn</label>
           <a-date-picker
             id="date"
-            v-model:value="formState.date"
+            v-model="formState.date"
             placeholder="Chọn ngày"
             :format="moment.MOMENT_FORMAT.YYYY_MM_DD"
             :value-format="moment.MOMENT_FORMAT.YYYYMMDD"
@@ -59,7 +59,7 @@
         <div class="col-span-4">
           <label for="branchId"><span class="text-red-500">*</span> Chi nhánh</label>
           <a-select
-            v-model:value="formState.branchId"
+            v-model="formState.branchId"
             allow-clear
             :options="branchStore.branchOptions"
             placeholder="Chọn chi nhánh"
@@ -75,7 +75,7 @@
       <div class="mt-6">
         <label for="id">Ghi chú</label>
         <a-textarea
-          v-model:value="formState.note"
+          v-model="formState.note"
           placeholder="Nhập ghi chú"
           @change="clearValidate('note')"
         />
@@ -93,7 +93,7 @@
             </a-button>
           </div>
           <a-select
-            v-model:value="formState.customerId"
+            v-model="formState.customerId"
             allow-clear
             :options="customerStore.customerOptions"
             :filter-option="customFilter"
@@ -116,7 +116,7 @@
           </div>
           <p v-if="shippingAddressStore.shippingAddresses.length === 0" class="text-right w-full text-gray-400 italic mt-2 text-lg">Chưa có địa chỉ giao hàng!</p>
           <div v-else class="mt-1 max-h-[320px] overflow-y-auto">
-            <a-radio-group v-model:value="formState.shippingAddressId" class="grid grid-cols-1 gap-4">
+            <a-radio-group v-model="formState.shippingAddressId" class="grid grid-cols-1 gap-4">
               <a-radio
                 v-for="item of shippingAddressStore.shippingAddresses"
                 :key="item.id" :value="item.id" 
@@ -216,7 +216,7 @@
           </template>
           <template v-else-if="column.key === 'quantity'">
             <a-input
-              v-model:value="formState.items[index].quantity"
+              v-model="formState.items[index].quantity"
               type="number"
               :min="0"
               :disabled="!formState.items[index].product"
@@ -225,7 +225,7 @@
           </template>
           <template v-else-if="column.key === 'unitPrice'">
             <a-input
-              v-model:value="formState.items[index].unitPrice"
+              v-model="formState.items[index].unitPrice"
               type="number"
               :min="0"
               :disabled="!formState.items[index].product"
@@ -423,8 +423,8 @@ const submit = async () => {
   const isValid = validate()
 
   if (isValid) {
-    const { date, branchId, customerId, note } = formState.value
-
+    //const { date, branchId, customerId, note } = formState.value
+    const { id, date, branchId, customerId, shippingAddressId, note } = formState.value
     const items = cloneDeep(formState.value.items).map((item) => {
       return {
         productId: item.product.id,
@@ -441,7 +441,15 @@ const submit = async () => {
       //   note,
       //   items
       // }) 
-
+   await invoiceStore.update({
+        id,
+        date,
+        branchId,
+        customerId,
+        shippingAddressId,
+        note,
+        items
+      })
       formState.value = cloneDeep(initFormState)
       mc.success(MSG.SAVE_SUCCESS)
       router.push(MENU.INVOICE.path)
@@ -470,9 +478,20 @@ const changeCustomer = async (customerId) => {
 }
 
 const initShippingAddress = async () => {
+  const currentShippingAddressId = formState.value.shippingAddressId
   await shippingAddressStore.getAll({ customerId: formState.value.customerId })
 
-  const defaultAddress = shippingAddressStore.shippingAddresses.find(item => item.defaultAddress)
+  //const defaultAddress = shippingAddressStore.shippingAddresses.find(item => item.defaultAddress)
+  const isCurrentAddressStillExist = shippingAddressStore.shippingAddresses.some(
+    (item) => item.id === currentShippingAddressId
+  )
+
+  if (currentShippingAddressId && isCurrentAddressStillExist) {
+    formState.value.shippingAddressId = currentShippingAddressId
+    return
+  }
+
+  const defaultAddress = shippingAddressStore.shippingAddresses.find((item) => item.defaultAddress)
   formState.value.shippingAddressId = defaultAddress ? defaultAddress.id : null
 }
 

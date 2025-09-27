@@ -3,7 +3,7 @@
     <heading :title="MENU.INVOICE.name">
       <div class="flex items-center">
         <a-input-search
-          v-model:value="filter.search"
+          v-model="filter.search"
           type="number"
           placeholder="Nhập ID hoá đơn để tìm kiếm ..."
           class="mr-4 w-[480px]"
@@ -163,7 +163,7 @@
             <a-popover trigger="click" placement="bottom">
               <template #content>
                 <a-range-picker
-                  v-model:value="filter.date"
+                  v-model="filter.date"
                   :format="moment.MOMENT_FORMAT.YYYY_MM_DD"
                   :value-format="moment.MOMENT_FORMAT.YYYYMMDD"
                   :input-read-only="true"
@@ -223,7 +223,8 @@
 import { cloneDeep } from 'lodash'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useMessage, useMoment } from '~/composables'
+//import { useMessage, useMoment } from '~/composables'
+import { useMoment } from '~/composables'
 import { CUSTOMER_TYPE_KEY, PAGING } from '~/modules/constant'
 import { MENU } from '~/modules/menu'
 import { LIST_INVOICE_TABLE_COLUMNS } from '~/modules/table'
@@ -235,7 +236,7 @@ import { useInvoiceStore } from '~/stores/invoice'
 const router = useRouter()
 
 // Store
-const mc = useMessage()
+// const mc = useMessage()
 const moment = useMoment()
 const invoiceStore = useInvoiceStore()
 const customerStore = useCustomerStore()
@@ -281,7 +282,8 @@ const invoices = computed(() => (invoiceStore.allInvoice ? invoiceStore.allInvoi
 const init = async (page = PAGING.DEFAULT_PAGE, pageSize = PAGING.DEFAULT_PAGE_SIZE) => {
   currentPage.value = page
 
-  const { search, date, customerId, branchId } = filter.value
+  //const { search, date, customerId, branchId } = filter.value
+  const { search, date } = filter.value
   await invoiceStore.getAll({
     search,
     fromDate: date && date.length === 2 ? date[0] : '',

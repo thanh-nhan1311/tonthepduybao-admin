@@ -28,7 +28,7 @@
         <label for="id"><span class="text-red-500">*</span> Mã công nợ</label>
         <a-input
           id="id"
-          v-model:value="formState.id"
+          v-model="formState.id"
           placeholder="Nhập mã công nợ"
           @keyup="changeID"
           @change="clearValidate('id')"
@@ -41,7 +41,7 @@
       <div class="col-span-3">
         <label for="type"><span class="text-red-500">*</span> Danh mục</label>
         <a-select
-          v-model:value="formState.type"
+          v-model="formState.type"
           allow-clear
           :options="Object.values(TYPE)"
           placeholder="Chọn loại sản phẩm"
@@ -60,7 +60,7 @@
         <label for="date"><span class="text-red-500">*</span> Ngày nhập công nợ</label>
         <a-date-picker
           id="date"
-          v-model:value="formState.date"
+          v-model="formState.date"
           placeholder="Chọn ngày"
           :format="moment.MOMENT_FORMAT.YYYY_MM_DD"
           :value-format="moment.MOMENT_FORMAT.YYYYMMDD"
@@ -75,7 +75,7 @@
       <div class="col-span-3 mb-4">
         <label for="customerId"><span class="text-red-500">*</span> Nhà cung cấp</label>
         <a-select
-          v-model:value="formState.customerId"
+          v-model="formState.customerId"
           :options="customerStore.customerOptions"
           :filter-option="customFilter"
           :show-search="true"
@@ -92,7 +92,7 @@
         <label for="propertyIds"><span class="text-red-500">*</span> Thuộc tính</label>
         <a-select
           id="propertyIds"
-          v-model:value="formState.propertyIds"
+          v-model="formState.propertyIds"
           allow-clear
           :options="propertyStore.propertyOptions"
           placeholder="Chọn thuộc tính"
@@ -179,14 +179,14 @@
           <div class="flex items-center">
             <span class="mr-4">{{ index + 1 }}.</span>
             <a-input
-              v-model:value="formState.items[index].name"
+              v-model="formState.items[index].name"
               @change="clearValidate('items', index)"
             />
           </div>
         </template>
         <template v-else-if="column.key === 'branch'">
           <a-select
-            v-model:value="formState.items[index].branch"
+            v-model="formState.items[index].branch"
             allow-clear
             :options="branchStore.branchOptions"
             placeholder="Chọn chi nhánh"
@@ -198,7 +198,8 @@
           <a-select
             v-for="(prop, propIndex) of selectedProperties"
             :key="prop.id"
-            v-model:value="formState.items[index].properties[prop.id]"
+            :value="formState.items[index].properties[prop.id]"
+            @update:value="val => (formState.items[index].properties[prop.id] = val)"
             :options="prop.items.map((item) => ({ label: item.name, value: item.id }))"
             allow-clear
             :show-search="true"
@@ -208,7 +209,7 @@
         </template>
         <template v-else-if="column.key === 'weight'">
           <a-input
-            v-model:value="formState.items[index].weight"
+            v-model="formState.items[index].weight"
             type="number"
             :min="0"
             @change="changeAvgProportion(index)"
@@ -216,7 +217,7 @@
         </template>
         <template v-else-if="column.key === 'quantity'">
           <a-input
-            v-model:value="formState.items[index].quantity"
+            v-model="formState.items[index].quantity"
             type="number"
             :min="0"
             @change="changeAvgProportion(index)"
@@ -224,17 +225,17 @@
         </template>
         <template v-else-if="column.key === 'unitPrice'">
           <a-input
-            v-model:value="formState.items[index].unitPrice"
+            v-model="formState.items[index].unitPrice"
             type="number"
             :min="0"
             @change="changeUnitPrice(index)"
           />
         </template>
         <template v-else-if="column.key === 'totalUnitPrice'">
-          <a-input v-model:value="formState.items[index].totalUnitPrice" type="number" :min="0" />
+          <a-input v-model="formState.items[index].totalUnitPrice" type="number" :min="0" />
         </template>
         <template v-else-if="column.key === 'totalPrice'">
-          <a-input v-model:value="formState.items[index].totalPrice" type="number" :min="0" />
+          <a-input v-model="formState.items[index].totalPrice" type="number" :min="0" />
         </template>
         <template v-else-if="column.key === 'action'">
           <div class="flex items-center">

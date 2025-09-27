@@ -3,7 +3,7 @@
     <heading :title="`Danh sách ${type === 'DELETED' ? 'bị xoá' : CUSTOMER_TYPE[type].label.toLowerCase()}`">
       <div class="flex items-center">
         <a-input-search
-          v-model:value="search"
+          v-model="search"
           placeholder="Tìm kiếm ..."
           class="mr-4 w-[400px]"
           @keypress.enter="init(type, 1)"
@@ -16,7 +16,7 @@
       </div>
     </heading>
 
-    <a-tabs v-model:activeKey="type" class="mt-8" @change="activeKey => init(activeKey)">
+    <a-tabs :activeKey="type" class="mt-8" @change="(activeKey) => { type = activeKey; init(activeKey) }">
       <a-tab-pane :key="CUSTOMER_TYPE_KEY.CUSTOMER" :tab="`${CUSTOMER_TYPE.CUSTOMER.label} (${allCustomer.data.totalCustomer})`">
         <customer-table
           :data="customerStore.allCustomerTableData"

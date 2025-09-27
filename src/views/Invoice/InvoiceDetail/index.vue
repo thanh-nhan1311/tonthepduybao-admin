@@ -91,7 +91,7 @@
         <b>Danh sách sản phẩm:</b>
         <span class="font-normal ml-2">{{ invoiceProducts.length }} sản phẩm</span>
       </div>
-      <a-input-search v-model:value="search" placeholder="Tìm kiếm ..." class="mr-4 w-[400px]" />
+      <a-input-search :value="search" @update:value="search = $event" placeholder="Tìm kiếm ..." class="mr-4 w-[400px]" />
     </div>
 
     <a-table
@@ -116,7 +116,8 @@
     </a-table>
 
     <a-modal
-      v-model:visible="isShowConfirmModal"
+      :visible="isShowConfirmModal"
+      @update:visible="val => isShowConfirmModal = val"
       ok-text="Có"
       cancel-text="Không"
       :centered="true"

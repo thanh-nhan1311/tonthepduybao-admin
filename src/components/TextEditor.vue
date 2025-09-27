@@ -1,6 +1,6 @@
 <template>
   <QuillEditor
-    v-model:content="content"
+    v-model="content"
     content-type="html"
     :theme="theme"
     :toolbar="toolbar"
@@ -49,7 +49,8 @@ const modules = {
   module: ImageUploader,
   options: {
     upload: (file) => {
-      return new Promise((resolve, reject) => {
+      //return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const formData = new FormData()
         formData.append('image', file)
 

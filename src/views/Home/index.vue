@@ -61,7 +61,7 @@ const saveDebt = async (isDelete = false) => {
 
       return null
     } catch (error) {
-      console.log(index);
+      if (import.meta.env && import.meta.env.MODE === 'development') console.log(index);
     }
   }).filter(item => !!item)
 
@@ -107,17 +107,17 @@ const saveDebt = async (isDelete = false) => {
     if (isDelete) {
       try {
         await debtStore.delete(debtItem.id)
-        console.log(`Delete OK ==> ${i} - ${debtItem.date}`);
+        if (import.meta.env && import.meta.env.MODE === 'development') console.log(`Delete OK ==> ${i} - ${debtItem.date}`);
       } catch (error) {
-        console.log(`Delete FAILED ==> ${i} - ${debtItem.date}`);
+        if (import.meta.env && import.meta.env.MODE === 'development') console.log(`Delete FAILED ==> ${i} - ${debtItem.date}`);
       }
     }
 
     try {
       await debtStore.create(debtItem)
-      console.log(`Save OK ==> ${i} - ${debtItem.date}`);
+      if (import.meta.env && import.meta.env.MODE === 'development') console.log(`Save OK ==> ${i} - ${debtItem.date}`);
     } catch (error) {
-      console.log(`Save FAILED ==> ${i} - ${debtItem.date}`, debtItem);
+      if (import.meta.env && import.meta.env.MODE === 'development') console.log(`Save FAILED ==> ${i} - ${debtItem.date}`, debtItem);
     }
   }
 }
@@ -140,11 +140,11 @@ const saveProduct = async (type = 'ALL', isDelete = false) => {
   else if (type === 'STEEL') products = [...steelProducts]
   else if (type === 'SCREW') products = [...screwProducts]
 
-  try {
+    try {
     await productStore.createAll({ data: products })
-    console.log('Save OK')
+    if (import.meta.env && import.meta.env.MODE === 'development') console.log('Save OK')
   } catch (error) {
-    console.log('Save FAILED')
+    if (import.meta.env && import.meta.env.MODE === 'development') console.log('Save FAILED')
   }
 }
 </script>

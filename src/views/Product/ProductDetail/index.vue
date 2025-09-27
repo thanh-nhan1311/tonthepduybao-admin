@@ -86,7 +86,8 @@
     </div>
 
     <a-modal
-      v-model:visible="isShowConfirm"
+      :visible="isShowConfirm"
+      @update:visible="isShowConfirm = $event"
       ok-text="Có"
       cancel-text="Không"
       :centered="true"
@@ -136,7 +137,7 @@ const deleteProduct = async () => {
     mc.success(MSG.DELETE_SUCCESS)
     router.push(MENU.PRODUCT.path)
   } catch (error) {
-    console.log(error)
+    if (import.meta.env && import.meta.env.MODE === 'development') console.log(error)
     mc.error(MSG.DELETE_FAILED)
   }
 }

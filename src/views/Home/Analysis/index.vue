@@ -2,13 +2,13 @@
   <div>
     <heading title="Thống kê">
       <div class="flex items-center">
-        <a-radio-group v-model:value="viewMode" button-style="solid" @change="changeViewMode">
+        <a-radio-group v-model="viewMode" button-style="solid" @change="changeViewMode">
           <a-radio-button value="month">Theo tháng</a-radio-button>
           <a-radio-button value="quarter">Theo quý</a-radio-button>
         </a-radio-group>
-        <a-select v-model:value="year" :options="yearOptions" class="ml-4" />
+        <a-select v-model="year" :options="yearOptions" class="ml-4" />
         <a-select
-          v-model:value="branch"
+          v-model="branch"
           placeholder="Chọn chi nhánh"
           class="w-[240px] ml-4"
           :options="branchStore.allBranchOptions"
@@ -74,15 +74,18 @@ const testData = computed(() => ({
 
 // Methods
 const changeViewMode = () => {
-  let totalItems = viewMode.value === 'quarter' ? 4 : 12
-
+  //let totalItems = viewMode.value === 'quarter' ? 4 : 12
+  const totalItems = viewMode.value === 'quarter' ? 4 : 12
   chartLabels.value = [...Array(totalItems).keys()].map(
     (i) => `${viewMode.value === 'quarter' ? 'Quý' : 'Tháng'} ${i + 1}`
   )
   chartData.value = {
-    debt: [...Array(totalItems).keys()].map((i) => random(0, 100)),
+    /*debt: [...Array(totalItems).keys()].map((i) => random(0, 100)),
     revenue: [...Array(totalItems).keys()].map((i) => random(0, 100)),
-    profit: [...Array(totalItems).keys()].map((i) => random(0, 100))
+    profit: [...Array(totalItems).keys()].map((i) => random(0, 100))*/
+    debt: [...Array(totalItems).keys()].map(() => random(0, 100)),
+    revenue: [...Array(totalItems).keys()].map(() => random(0, 100)),
+    profit: [...Array(totalItems).keys()].map(() => random(0, 100))
   }
 }
 
