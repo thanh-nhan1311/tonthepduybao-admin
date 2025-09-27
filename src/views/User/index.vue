@@ -3,7 +3,7 @@
     <heading title="Danh sách nhân viên">
       <div class="flex items-center">
         <a-input-search
-          v-model:value="search"
+          v-model="search"
           placeholder="Tìm kiếm ..."
           class="mr-4 w-[400px]"
           @keypress.enter="init"
@@ -23,7 +23,7 @@
             <a-popover trigger="click" placement="bottom">
               <template #content>
                 <a-checkbox-group
-                  v-model:value="role"
+                  v-model="role"
                   :options="userStore.roleOptions"
                   class="flex flex-col"
                   @change="init"
@@ -39,7 +39,7 @@
             <a-popover trigger="click" placement="bottom">
               <template #content>
                 <a-checkbox-group
-                  v-model:value="status"
+                  v-model="status"
                   :options="statusOptions"
                   class="flex flex-col"
                   @change="init"
