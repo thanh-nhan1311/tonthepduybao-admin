@@ -17,6 +17,17 @@ export default defineConfig({
       resolvers: [AntDesignVueResolver()]
     })
   ],
+  server: {
+    // Proxy API calls during development to the backend server
+    proxy: {
+      '/ttdb/api': {
+        target: 'http://localhost:7700',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
